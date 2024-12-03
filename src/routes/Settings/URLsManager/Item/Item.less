@@ -4,10 +4,10 @@
 
 .item {
     display: flex;
-    padding: 1rem 1.5rem;
-    border-radius: var(--border-radius);
+    padding: 0.7rem 1.5rem;
+    border-radius: 2rem;
     transition: 0.3s all ease-in-out;
-    background-color: transparent;
+    background-color: var(--overlay-color);
     border: 2px solid transparent;
     justify-content: space-between;
     position: relative;
@@ -76,7 +76,7 @@
             justify-content: center;
             background-color: transparent;
             transition: 0.3s all ease-in-out;
-            border-radius: var(--border-radius);
+            border-radius: 1.5rem;
             transform: translateY(-50%);
             width: 3rem;
 
@@ -85,7 +85,7 @@
                 height: 1.5rem;
                 opacity: 0;
                 transition: 0.3s all ease-in-out;
-                color: var(--primary-foreground-color);
+                color: var(--color-trakt);
             }
 
             &:hover, &:focus {
@@ -100,7 +100,7 @@
     }
 
     &:hover {
-        background-color: var(--overlay-color);
+        border: 2px solid var(--overlay-color);
     
         .actions {
             .delete {
@@ -114,7 +114,7 @@
 
 @media only screen and (max-width: @minimum) {
     .item {
-        padding: 1rem 0.5rem;
+        padding: 0.7rem 0.5rem;
 
         .actions {
             margin-right: 4rem;
