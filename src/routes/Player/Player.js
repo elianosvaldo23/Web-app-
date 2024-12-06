@@ -15,9 +15,7 @@ const Error = require('./Error');
 const ControlBar = require('./ControlBar');
 const NextVideoPopup = require('./NextVideoPopup');
 const StatisticsMenu = require('./StatisticsMenu');
-const InfoMenu = require('./InfoMenu');
 const OptionsMenu = require('./OptionsMenu');
-const VideosMenu = require('./VideosMenu');
 const SubtitlesMenu = require('./SubtitlesMenu');
 const SpeedMenu = require('./SpeedMenu');
 const usePlayer = require('./usePlayer');
@@ -26,6 +24,8 @@ const useStatistics = require('./useStatistics');
 const useVideo = require('./useVideo');
 const styles = require('./styles');
 const Video = require('./Video');
+const { default: SideDrawer } = require('./SideDrawer/SideDrawer');
+const { default: Icon } = require('@stremio/stremio-icons/react');
 
 const Player = ({ urlParams, queryParams }) => {
     const { t } = useTranslation();
@@ -54,27 +54,24 @@ const Player = ({ urlParams, queryParams }) => {
 
     const [optionsMenuOpen, , closeOptionsMenu, toggleOptionsMenu] = useBinaryState(false);
     const [subtitlesMenuOpen, , closeSubtitlesMenu, toggleSubtitlesMenu] = useBinaryState(false);
-    const [infoMenuOpen, , closeInfoMenu, toggleInfoMenu] = useBinaryState(false);
     const [speedMenuOpen, , closeSpeedMenu, toggleSpeedMenu] = useBinaryState(false);
-    const [videosMenuOpen, , closeVideosMenu, toggleVideosMenu] = useBinaryState(false);
     const [statisticsMenuOpen, , closeStatisticsMenu, toggleStatisticsMenu] = useBinaryState(false);
     const [nextVideoPopupOpen, openNextVideoPopup, closeNextVideoPopup] = useBinaryState(false);
+    const [sideDrawerOpen, openSideDrawer, closeSideDrawer, toggleSideDrawer] = useBinaryState(false);
 
     const menusOpen = React.useMemo(() => {
-        return optionsMenuOpen || subtitlesMenuOpen || infoMenuOpen || speedMenuOpen || videosMenuOpen || statisticsMenuOpen;
-    }, [optionsMenuOpen, subtitlesMenuOpen, infoMenuOpen, speedMenuOpen, videosMenuOpen, statisticsMenuOpen]);
+        return optionsMenuOpen || subtitlesMenuOpen || speedMenuOpen || statisticsMenuOpen;
+    }, [optionsMenuOpen, subtitlesMenuOpen, speedMenuOpen, statisticsMenuOpen]);
 
     const closeMenus = React.useCallback(() => {
         closeOptionsMenu();
         closeSubtitlesMenu();
-        closeInfoMenu();
         closeSpeedMenu();
-        closeVideosMenu();
         closeStatisticsMenu();
     }, []);
 
     const overlayHidden = React.useMemo(() => {
-        return immersed && !casting && video.state.paused !== null && !video.state.paused && !menusOpen && !nextVideoPopupOpen;
+        return immersed && !casting && video.state.paused !== null && !video.state.paused && !menusOpen && !nextVideoPopupOpen && !sideDrawerOpen;
     }, [immersed, casting, video.state.paused, menusOpen, nextVideoPopupOpen]);
 
     const nextVideoPopupDismissed = React.useRef(false);
@@ -237,14 +234,8 @@ const Player = ({ urlParams, queryParams }) => {
         if (!event.nativeEvent.subtitlesMenuClosePrevented) {
             closeSubtitlesMenu();
         }
-        if (!event.nativeEvent.infoMenuClosePrevented) {
-            closeInfoMenu();
-        }
         if (!event.nativeEvent.speedMenuClosePrevented) {
             closeSpeedMenu();
-        }
-        if (!event.nativeEvent.videosMenuClosePrevented) {
-            closeVideosMenu();
         }
         if (!event.nativeEvent.statisticsMenuClosePrevented) {
             closeStatisticsMenu();
@@ -413,17 +404,17 @@ const Player = ({ urlParams, queryParams }) => {
     }, [video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks]);
 
     React.useEffect(() => {
-        if (player.metaItem === null || player.metaItem.type !== 'Ready') {
-            closeInfoMenu();
-            closeVideosMenu();
-        }
-    }, [player.metaItem]);
-
-    React.useEffect(() => {
         if (video.state.playbackSpeed === null) {
             closeSpeedMenu();
         }
     }, [video.state.playbackSpeed]);
+
+    React.useEffect(() => {
+        if (sideDrawerOpen) {
+            closeMenus();
+            setImmersed(true);
+        }
+    }, [sideDrawerOpen]);
 
     React.useEffect(() => {
         const toastFilter = (item) => item?.dataset?.type === 'CoreEvent';
@@ -521,7 +512,7 @@ const Player = ({ urlParams, queryParams }) => {
                 case 'KeyI': {
                     closeMenus();
                     if (player.metaItem !== null && player.metaItem.type === 'Ready') {
-                        toggleInfoMenu();
+                        toggleSideDrawer();
                     }
 
                     break;
@@ -530,14 +521,6 @@ const Player = ({ urlParams, queryParams }) => {
                     closeMenus();
                     if (video.state.playbackSpeed !== null) {
                         toggleSpeedMenu();
-                    }
-
-                    break;
-                }
-                case 'KeyV': {
-                    closeMenus();
-                    if (player.metaItem !== null && player.metaItem.type === 'Ready' && player.metaItem?.content?.videos?.length > 0) {
-                        toggleVideosMenu();
                     }
 
                     break;
@@ -563,11 +546,11 @@ const Player = ({ urlParams, queryParams }) => {
         };
         const onWheel = ({ deltaY }) => {
             if (deltaY > 0) {
-                if (!menusOpen && video.state.volume !== null) {
+                if (!menusOpen && !sideDrawerOpen && video.state.volume !== null) {
                     onVolumeChangeRequested(video.state.volume - 5);
                 }
             } else {
-                if (!menusOpen && video.state.volume !== null) {
+                if (!menusOpen && !sideDrawerOpen && video.state.volume !== null) {
                     onVolumeChangeRequested(video.state.volume + 5);
                 }
             }
@@ -582,7 +565,7 @@ const Player = ({ urlParams, queryParams }) => {
             window.removeEventListener('keyup', onKeyUp);
             window.removeEventListener('wheel', onWheel);
         };
-    }, [player.metaItem, player.selected, streamingServer.statistics, settings.seekTimeDuration, settings.seekShortTimeDuration, routeFocused, menusOpen, nextVideoPopupOpen, video.state.paused, video.state.time, video.state.volume, video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks, video.state.playbackSpeed, toggleSubtitlesMenu, toggleInfoMenu, toggleVideosMenu, toggleStatisticsMenu]);
+    }, [player.metaItem, player.selected, streamingServer.statistics, settings.seekTimeDuration, settings.seekShortTimeDuration, routeFocused, menusOpen, nextVideoPopupOpen, video.state.paused, video.state.time, video.state.volume, video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks, video.state.playbackSpeed, toggleSubtitlesMenu, toggleStatisticsMenu, toggleSideDrawer]);
 
     React.useEffect(() => {
         video.events.on('error', onError);
@@ -691,10 +674,9 @@ const Player = ({ urlParams, queryParams }) => {
                 onSeekRequested={onSeekRequested}
                 onToggleOptionsMenu={toggleOptionsMenu}
                 onToggleSubtitlesMenu={toggleSubtitlesMenu}
-                onToggleInfoMenu={toggleInfoMenu}
                 onToggleSpeedMenu={toggleSpeedMenu}
-                onToggleVideosMenu={toggleVideosMenu}
                 onToggleStatisticsMenu={toggleStatisticsMenu}
+                onToggleSideDrawer={toggleSideDrawer}
                 onMouseMove={onBarMouseMove}
                 onMouseOver={onBarMouseMove}
             />
@@ -718,6 +700,22 @@ const Player = ({ urlParams, queryParams }) => {
                     />
                     :
                     null
+            }
+            {
+                player.metaItem !== null && player.metaItem.type === 'Ready' ?
+                    <>
+                        <div className={classnames(styles['layer'], styles['side-drawer-button'], { [styles['open']]: sideDrawerOpen })} onClick={openSideDrawer}>
+                            <Icon name={'chevron-back'} className={styles['icon']} />
+                        </div>
+                        <SideDrawer
+                            metaItem={player.metaItem.content}
+                            seriesInfo={player.seriesInfo}
+                            className={classnames(styles['layer'], styles['side-drawer-layer'], { [styles['open']]: sideDrawerOpen })}
+                            closeSideBar={closeSideDrawer}
+                            sideDrawerOpen={sideDrawerOpen}
+                        />
+                    </>
+                    : null
             }
             {
                 subtitlesMenuOpen ?
@@ -747,32 +745,11 @@ const Player = ({ urlParams, queryParams }) => {
                     null
             }
             {
-                infoMenuOpen ?
-                    <InfoMenu
-                        className={classnames(styles['layer'], styles['menu-layer'])}
-                        stream={player.selected !== null ? player.selected.stream : null}
-                        addon={player.addon}
-                        metaItem={player.metaItem !== null && player.metaItem.type === 'Ready' ? player.metaItem.content : null}
-                    />
-                    :
-                    null
-            }
-            {
                 speedMenuOpen ?
                     <SpeedMenu
                         className={classnames(styles['layer'], styles['menu-layer'])}
                         playbackSpeed={video.state.playbackSpeed}
                         onPlaybackSpeedChanged={onPlaybackSpeedChanged}
-                    />
-                    :
-                    null
-            }
-            {
-                videosMenuOpen ?
-                    <VideosMenu
-                        className={classnames(styles['layer'], styles['menu-layer'])}
-                        metaItem={player.metaItem !== null && player.metaItem.type === 'Ready' ? player.metaItem.content : null}
-                        seriesInfo={player.seriesInfo}
                     />
                     :
                     null
