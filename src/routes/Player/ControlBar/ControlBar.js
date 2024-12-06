@@ -35,7 +35,6 @@ const ControlBar = ({
     onVolumeChangeRequested,
     onSeekRequested,
     onToggleSubtitlesMenu,
-    // onToggleInfoMenu,
     onToggleSpeedMenu,
     onToggleSideDrawer,
     onToggleOptionsMenu,
@@ -48,9 +47,6 @@ const ControlBar = ({
     const onSubtitlesButtonMouseDown = React.useCallback((event) => {
         event.nativeEvent.subtitlesMenuClosePrevented = true;
     }, []);
-    // const onInfoButtonMouseDown = React.useCallback((event) => {
-    //     event.nativeEvent.infoMenuClosePrevented = true;
-    // }, []);
     const onSpeedButtonMouseDown = React.useCallback((event) => {
         event.nativeEvent.speedMenuClosePrevented = true;
     }, []);
@@ -151,9 +147,6 @@ const ControlBar = ({
                     <Button className={classnames(styles['control-bar-button'], { 'disabled': playbackSpeed === null })} tabIndex={-1} onMouseDown={onSpeedButtonMouseDown} onClick={onToggleSpeedMenu}>
                         <Icon className={styles['icon']} name={'speed'} />
                     </Button>
-                    {/* <Button className={classnames(styles['control-bar-button'], { 'disabled': metaItem === null || metaItem.type !== 'Ready' })} tabIndex={-1} onMouseDown={onInfoButtonMouseDown} onClick={onToggleInfoMenu}>
-                        <Icon className={styles['icon']} name={'about'} />
-                    </Button> */}
                     <Button className={classnames(styles['control-bar-button'], { 'disabled': !chromecastServiceActive })} tabIndex={-1} onClick={onChromecastButtonClick}>
                         <Icon className={styles['icon']} name={'cast'} />
                     </Button>
@@ -200,7 +193,6 @@ ControlBar.propTypes = {
     onVolumeChangeRequested: PropTypes.func,
     onSeekRequested: PropTypes.func,
     onToggleSubtitlesMenu: PropTypes.func,
-    onToggleInfoMenu: PropTypes.func,
     onToggleSpeedMenu: PropTypes.func,
     onToggleSideDrawer: PropTypes.func,
     onToggleOptionsMenu: PropTypes.func,
