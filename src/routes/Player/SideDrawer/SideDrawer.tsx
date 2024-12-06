@@ -17,7 +17,7 @@ type Props = {
 const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...props }: Props) => {
     const [season, setSeason] = React.useState<number>(seriesInfo?.season);
     const metaItem = React.useMemo(() => {
-        return props.metaItem !== null && Array.isArray(props.metaItem.videos) && seriesInfo ?
+        return seriesInfo ?
             {
                 ...props.metaItem,
                 links: props.metaItem.links.filter(({ category }) => category === CONSTANTS.SHARE_LINK_CATEGORY)
@@ -26,19 +26,16 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
             props.metaItem;
     }, [props.metaItem]);
     const videos = React.useMemo(() => {
-        return props.metaItem && Array.isArray(props.metaItem.videos) ?
+        return Array.isArray(props.metaItem.videos) ?
             props.metaItem.videos.filter((video) => video.season === season)
             :
             props.metaItem.videos;
     }, [props.metaItem, season]);
     const seasons = React.useMemo(() => {
-        return props.metaItem && props.metaItem.videos
+        return props.metaItem.videos
             .map(({ season }) => season)
             .filter((season, index, seasons) => {
-                return season !== null && season !== undefined &&
-                    !isNaN(season) &&
-                    typeof season === 'number' &&
-                    seasons.indexOf(season) === index;
+                return seasons.indexOf(season) === index;
             })
             .sort((a, b) => (a || Number.MAX_SAFE_INTEGER) - (b || Number.MAX_SAFE_INTEGER));
     }, [props.metaItem.videos]);
@@ -52,24 +49,19 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
             <div className={classNames(styles['overlay'], { [styles['open']]: sideDrawerOpen })} onClick={closeSideBar} />
             <div className={classNames(styles['side-drawer'], className)}>
                 <div className={styles['info']}>
-                    {
-                        metaItem !== null ?
-                            <MetaPreview
-                                compact={true}
-                                name={metaItem.name}
-                                logo={metaItem.logo}
-                                runtime={metaItem.runtime}
-                                releaseInfo={metaItem.releaseInfo}
-                                released={metaItem.released}
-                                description={metaItem.description}
-                                links={metaItem.links}
-                            />
-                            :
-                            null
-                    }
+                    <MetaPreview
+                        compact={true}
+                        name={metaItem.name}
+                        logo={metaItem.logo}
+                        runtime={metaItem.runtime}
+                        releaseInfo={metaItem.releaseInfo}
+                        released={metaItem.released}
+                        description={metaItem.description}
+                        links={metaItem.links}
+                    />
                 </div>
                 {
-                    videos !== null && seriesInfo ?
+                    seriesInfo ?
                         <>
                             <SeasonsBar
                                 season={season}
