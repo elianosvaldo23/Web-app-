@@ -1,10 +1,10 @@
 import React from 'react';
+import { CONSTANTS } from 'stremio/common';
 import MetaPreview from 'stremio/common/MetaPreview/MetaPreview';
 import Video from '../../MetaDetails/VideosList/Video/Video';
-import styles from './SideDrawer.less';
-import classNames from 'classnames';
-import { CONSTANTS } from 'stremio/common';
 import SeasonsBar from 'stremio/routes/MetaDetails/VideosList/SeasonsBar';
+import classNames from 'classnames';
+import styles from './SideDrawer.less';
 
 type Props = {
     seriesInfo: any;
@@ -26,11 +26,11 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
             props.metaItem;
     }, [props.metaItem]);
     const videos = React.useMemo(() => {
-        return Array.isArray(props.metaItem.videos) ?
-            props.metaItem.videos.filter((video) => video.season === season)
+        return Array.isArray(metaItem.videos) ?
+            metaItem.videos.filter((video) => video.season === season)
             :
-            props.metaItem.videos;
-    }, [props.metaItem, season]);
+            metaItem.videos;
+    }, [metaItem, season]);
     const seasons = React.useMemo(() => {
         return props.metaItem.videos
             .map(({ season }) => season)

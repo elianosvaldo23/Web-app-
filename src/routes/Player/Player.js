@@ -71,7 +71,7 @@ const Player = ({ urlParams, queryParams }) => {
     }, []);
 
     const overlayHidden = React.useMemo(() => {
-        return immersed && !casting && video.state.paused !== null && !video.state.paused && !menusOpen && !nextVideoPopupOpen && !sideDrawerOpen;
+        return immersed && !casting && video.state.paused !== null && !video.state.paused && !menusOpen && !nextVideoPopupOpen;
     }, [immersed, casting, video.state.paused, menusOpen, nextVideoPopupOpen]);
 
     const nextVideoPopupDismissed = React.useRef(false);
@@ -486,14 +486,14 @@ const Player = ({ urlParams, queryParams }) => {
                     break;
                 }
                 case 'ArrowUp': {
-                    if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
+                    if (!menusOpen && !nextVideoPopupOpen && !sideDrawerOpen && video.state.volume !== null) {
                         onVolumeChangeRequested(video.state.volume + 5);
                     }
 
                     break;
                 }
                 case 'ArrowDown': {
-                    if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
+                    if (!menusOpen && !nextVideoPopupOpen && !sideDrawerOpen && video.state.volume !== null) {
                         onVolumeChangeRequested(video.state.volume - 5);
                     }
 
