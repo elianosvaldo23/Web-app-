@@ -194,16 +194,12 @@ html:not(.active-slider-within) {
                 max-width: 40%;
             }
 
-            @media screen and (max-width: @xsmall) {
+            @media (orientation: landscape) and (max-width: @xsmall) {
                 max-width: 50%;
             }
 
-            @media screen and (max-width: @xxsmall) {
-                max-width: 60%;
-            }
-
-            @media screen and (max-width: @minimum) {
-                max-width: 70%;
+            @media (orientation: portrait) and (max-width: @xsmall) {
+                max-width: 90%;
             }
         }
     }
