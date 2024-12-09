@@ -170,36 +170,20 @@ html:not(.active-slider-within) {
             right: 0;
             left: initial;
             bottom: initial;
-            max-width: 30%;
-            height: 100dvh;
             border-top-left-radius: var(--border-radius);
             border-bottom-left-radius: var(--border-radius);
             background-color: var(--modal-background-color);
             box-shadow: 0 1.35rem 2.7rem var(--color-background-dark5-40),
                         0 1.1rem 0.85rem var(--color-background-dark5-20);
             backdrop-filter: blur(15px);
-            overflow-y: auto;
-            z-index: 1;
-            padding: 1rem;
             transition: transform 0.3s ease-in-out;
             transform: translateX(100%);
             pointer-events: none;
+            z-index: 1;
 
             &.open {
                 transform: translateX(0);
                 pointer-events: all;
-            }
-
-            @media screen and (max-width: @small) {
-                max-width: 40%;
-            }
-
-            @media (orientation: landscape) and (max-width: @xsmall) {
-                max-width: 50%;
-            }
-
-            @media (orientation: portrait) and (max-width: @xsmall) {
-                max-width: 90%;
             }
         }
     }
