@@ -1,5 +1,9 @@
 // Copyright (C) 2017-2024 Smart code 203358507
 
+@import (reference) '~stremio/common/screen-sizes.less';
+
+@seasons-bar-height: 5rem;
+
 .overlay {
     display: none;
 
@@ -16,17 +20,20 @@
 }
 
 .side-drawer {
-    position: relative;
-    height: 100%;
-    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 
     .info {
-        overflow: hidden;
         padding: 1rem;
     }
 
     .content {
-        overflow: auto;
-        max-height: 57%;
+        max-height: 60%;
+
+        .videos {
+            overflow-y: auto;
+            height: calc(100% - @seasons-bar-height);
+        }
     }
 }

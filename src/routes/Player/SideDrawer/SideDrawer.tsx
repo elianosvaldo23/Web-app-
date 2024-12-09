@@ -63,13 +63,13 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
                 </div>
                 {
                     seriesInfo ?
-                        <>
+                        <div className={styles['content']}>
                             <SeasonsBar
                                 season={season}
                                 seasons={seasons}
                                 onSelect={seasonOnSelect}
                             />
-                            <div className={styles['content']}>
+                            <div className={styles['videos']}>
                                 {videos.map((video, index) => (
                                     <Video
                                         key={index}
@@ -87,7 +87,7 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
                                     />
                                 ))}
                             </div>
-                        </>
+                        </div>
                         : null
                 }
 
