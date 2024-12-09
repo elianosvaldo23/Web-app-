@@ -19,7 +19,7 @@ html:not(.active-slider-within) {
     .player-container.overlayHidden {
         cursor: none;
 
-        .nav-bar-layer, .control-bar-layer, .menu-layer {
+        .nav-bar-layer, .control-bar-layer, .menu-layer, .side-drawer-button-layer {
             opacity: 0;
             transition: opacity 200ms;
         }
@@ -114,7 +114,7 @@ html:not(.active-slider-within) {
             overflow: auto;
         }
 
-        &.side-drawer-button {
+        &.side-drawer-button-layer {
             right: -4rem;
             top: 50%;
             left: initial;
@@ -140,7 +140,6 @@ html:not(.active-slider-within) {
                 opacity: 0.6;
                 margin-right: 4rem;
                 transition: all 0.3s ease-in-out;
-    
             }
 
             &.open {
@@ -150,6 +149,18 @@ html:not(.active-slider-within) {
             &:hover {
                 .icon {
                     opacity: 1;
+                }
+            }
+
+            @media screen and (max-width: @xsmall) {
+                height: 8rem;
+                width: 4.5rem;
+                right: -2.5rem;
+
+                .icon {
+                    width: 2rem;
+                    height: 2rem;
+                    margin-right: 2.5rem;
                 }
             }
         }
@@ -167,7 +178,7 @@ html:not(.active-slider-within) {
             box-shadow: 0 1.35rem 2.7rem var(--color-background-dark5-40),
                         0 1.1rem 0.85rem var(--color-background-dark5-20);
             backdrop-filter: blur(15px);
-            overflow: visible;
+            overflow-y: auto;
             z-index: 1;
             padding: 1rem;
             transition: transform 0.3s ease-in-out;

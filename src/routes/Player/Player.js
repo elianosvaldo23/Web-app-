@@ -704,7 +704,7 @@ const Player = ({ urlParams, queryParams }) => {
             {
                 player.metaItem !== null && player.metaItem.type === 'Ready' ?
                     <>
-                        <div className={classnames(styles['layer'], styles['side-drawer-button'], { [styles['open']]: sideDrawerOpen })} onClick={openSideDrawer}>
+                        <div className={classnames(styles['layer'], styles['side-drawer-button-layer'], { [styles['open']]: sideDrawerOpen })} onClick={openSideDrawer}>
                             <Icon name={'chevron-back'} className={styles['icon']} />
                         </div>
                         <SideDrawer
