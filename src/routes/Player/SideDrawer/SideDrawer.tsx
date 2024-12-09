@@ -47,7 +47,8 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
     return (
         <>
             <div className={classNames(styles['overlay'], { [styles['open']]: sideDrawerOpen })} onClick={closeSideBar} />
-            <div className={classNames(styles['side-drawer'], className)}>
+            {/* @ts-expect-error inert is not recognisable on div element; we need it to not focus the sideDrawer when closed */}
+            <div className={classNames(styles['side-drawer'], className)} inert={!sideDrawerOpen ? '' : undefined}>
                 <div className={styles['info']}>
                     <MetaPreview
                         compact={true}

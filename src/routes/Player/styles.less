@@ -168,13 +168,15 @@ html:not(.active-slider-within) {
                         0 1.1rem 0.85rem var(--color-background-dark5-20);
             backdrop-filter: blur(15px);
             overflow: visible;
-            padding: 1rem;
             z-index: 1;
+            padding: 1rem;
             transition: transform 0.3s ease-in-out;
             transform: translateX(100%);
+            pointer-events: none;
 
             &.open {
                 transform: translateX(0);
+                pointer-events: all;
             }
 
             @media screen and (max-width: @small) {
