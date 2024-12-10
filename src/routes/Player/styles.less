@@ -102,7 +102,7 @@ html:not(.active-slider-within) {
         &.menu-layer {
             top: initial;
             left: initial;
-            right: 2rem;
+            right: 4rem;
             bottom: 8rem;
             max-height: calc(100% - 13.5rem);
             max-width: calc(100% - 4rem);
@@ -185,6 +185,17 @@ html:not(.active-slider-within) {
             &.open {
                 transform: translateX(0);
                 pointer-events: all;
+            }
+        }
+    }
+}
+
+@media (orientation: portrait) and (max-width: @minimum) {
+    .player-container {
+        .layer {
+            &.menu-layer {
+                right: 2.5rem;
+                bottom: 11rem;
             }
         }
     }
