@@ -19,6 +19,7 @@ const InfoMenu = require('./InfoMenu');
 const OptionsMenu = require('./OptionsMenu');
 const VideosMenu = require('./VideosMenu');
 const SubtitlesMenu = require('./SubtitlesMenu');
+const { default: AudioMenu } = require('./AudioMenu');
 const SpeedMenu = require('./SpeedMenu');
 const usePlayer = require('./usePlayer');
 const useSettings = require('./useSettings');
@@ -54,6 +55,7 @@ const Player = ({ urlParams, queryParams }) => {
 
     const [optionsMenuOpen, , closeOptionsMenu, toggleOptionsMenu] = useBinaryState(false);
     const [subtitlesMenuOpen, , closeSubtitlesMenu, toggleSubtitlesMenu] = useBinaryState(false);
+    const [audioMenuOpen, , closeAudioMenu, toggleAudioMenu] = useBinaryState(false);
     const [infoMenuOpen, , closeInfoMenu, toggleInfoMenu] = useBinaryState(false);
     const [speedMenuOpen, , closeSpeedMenu, toggleSpeedMenu] = useBinaryState(false);
     const [videosMenuOpen, , closeVideosMenu, toggleVideosMenu] = useBinaryState(false);
@@ -61,12 +63,13 @@ const Player = ({ urlParams, queryParams }) => {
     const [nextVideoPopupOpen, openNextVideoPopup, closeNextVideoPopup] = useBinaryState(false);
 
     const menusOpen = React.useMemo(() => {
-        return optionsMenuOpen || subtitlesMenuOpen || infoMenuOpen || speedMenuOpen || videosMenuOpen || statisticsMenuOpen;
-    }, [optionsMenuOpen, subtitlesMenuOpen, infoMenuOpen, speedMenuOpen, videosMenuOpen, statisticsMenuOpen]);
+        return optionsMenuOpen || subtitlesMenuOpen || audioMenuOpen|| infoMenuOpen || speedMenuOpen || videosMenuOpen || statisticsMenuOpen;
+    }, [optionsMenuOpen, subtitlesMenuOpen, audioMenuOpen, infoMenuOpen, speedMenuOpen, videosMenuOpen, statisticsMenuOpen]);
 
     const closeMenus = React.useCallback(() => {
         closeOptionsMenu();
         closeSubtitlesMenu();
+        closeAudioMenu();
         closeInfoMenu();
         closeSpeedMenu();
         closeVideosMenu();
@@ -237,6 +240,7 @@ const Player = ({ urlParams, queryParams }) => {
         if (!event.nativeEvent.subtitlesMenuClosePrevented) {
             closeSubtitlesMenu();
         }
+        closeAudioMenu();
         if (!event.nativeEvent.infoMenuClosePrevented) {
             closeInfoMenu();
         }
@@ -406,11 +410,16 @@ const Player = ({ urlParams, queryParams }) => {
 
     React.useEffect(() => {
         if ((!Array.isArray(video.state.subtitlesTracks) || video.state.subtitlesTracks.length === 0) &&
-            (!Array.isArray(video.state.extraSubtitlesTracks) || video.state.extraSubtitlesTracks.length === 0) &&
-            (!Array.isArray(video.state.audioTracks) || video.state.audioTracks.length === 0)) {
+            (!Array.isArray(video.state.extraSubtitlesTracks) || video.state.extraSubtitlesTracks.length === 0)) {
             closeSubtitlesMenu();
         }
-    }, [video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks]);
+    }, [video.state.subtitlesTracks, video.state.extraSubtitlesTracks]);
+
+    React.useEffect(() => {
+        if (!Array.isArray(video.state.audioTracks) || video.state.audioTracks.length === 0) {
+            closeAudioMenu();
+        }
+    }, [video.state.audioTracks]);
 
     React.useEffect(() => {
         if (player.metaItem === null || player.metaItem.type !== 'Ready') {
@@ -511,9 +520,16 @@ const Player = ({ urlParams, queryParams }) => {
                 case 'KeyS': {
                     closeMenus();
                     if ((Array.isArray(video.state.subtitlesTracks) && video.state.subtitlesTracks.length > 0) ||
-                        (Array.isArray(video.state.extraSubtitlesTracks) && video.state.extraSubtitlesTracks.length > 0) ||
-                        (Array.isArray(video.state.audioTracks) && video.state.audioTracks.length > 0)) {
+                        (Array.isArray(video.state.extraSubtitlesTracks) && video.state.extraSubtitlesTracks.length > 0)) {
                         toggleSubtitlesMenu();
+                    }
+
+                    break;
+                }
+                case 'KeyA': {
+                    closeMenus();
+                    if (Array.isArray(video.state.audioTracks) && video.state.audioTracks.length > 0) {
+                        toggleAudioMenu();
                     }
 
                     break;
@@ -691,6 +707,7 @@ const Player = ({ urlParams, queryParams }) => {
                 onSeekRequested={onSeekRequested}
                 onToggleOptionsMenu={toggleOptionsMenu}
                 onToggleSubtitlesMenu={toggleSubtitlesMenu}
+                onToggleAudioMenu={toggleAudioMenu}
                 onToggleInfoMenu={toggleInfoMenu}
                 onToggleSpeedMenu={toggleSpeedMenu}
                 onToggleVideosMenu={toggleVideosMenu}
@@ -723,8 +740,6 @@ const Player = ({ urlParams, queryParams }) => {
                 subtitlesMenuOpen ?
                     <SubtitlesMenu
                         className={classnames(styles['layer'], styles['menu-layer'])}
-                        audioTracks={video.state.audioTracks}
-                        selectedAudioTrackId={video.state.selectedAudioTrackId}
                         subtitlesTracks={video.state.subtitlesTracks}
                         selectedSubtitlesTrackId={video.state.selectedSubtitlesTrackId}
                         subtitlesOffset={video.state.subtitlesOffset}
@@ -736,12 +751,22 @@ const Player = ({ urlParams, queryParams }) => {
                         extraSubtitlesSize={video.state.extraSubtitlesSize}
                         onSubtitlesTrackSelected={onSubtitlesTrackSelected}
                         onExtraSubtitlesTrackSelected={onExtraSubtitlesTrackSelected}
-                        onAudioTrackSelected={onAudioTrackSelected}
                         onSubtitlesOffsetChanged={onSubtitlesOffsetChanged}
                         onSubtitlesSizeChanged={onSubtitlesSizeChanged}
                         onExtraSubtitlesOffsetChanged={onSubtitlesOffsetChanged}
                         onExtraSubtitlesDelayChanged={onExtraSubtitlesDelayChanged}
                         onExtraSubtitlesSizeChanged={onSubtitlesSizeChanged}
+                    />
+                    :
+                    null
+            }
+            {
+                audioMenuOpen ?
+                    <AudioMenu
+                        className={classnames(styles['layer'], styles['menu-layer'])}
+                        audioTracks={video.state.audioTracks}
+                        selectedAudioTrackId={video.state.selectedAudioTrackId}
+                        onAudioTrackSelected={onAudioTrackSelected}
                     />
                     :
                     null
