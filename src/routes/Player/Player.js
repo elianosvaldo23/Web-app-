@@ -702,7 +702,7 @@ const Player = ({ urlParams, queryParams }) => {
             }
             {
                 player.metaItem !== null && player.metaItem.type === 'Ready' ?
-                    <>
+                    <React.Fragment>
                         <div className={classnames(styles['layer'], styles['side-drawer-button-layer'], { [styles['open']]: sideDrawerOpen })} onClick={openSideDrawer}>
                             <Icon name={'chevron-back'} className={styles['icon']} />
                         </div>
@@ -713,7 +713,7 @@ const Player = ({ urlParams, queryParams }) => {
                             closeSideBar={closeSideDrawer}
                             sideDrawerOpen={sideDrawerOpen}
                         />
-                    </>
+                    </React.Fragment>
                     : null
             }
             {

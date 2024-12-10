@@ -1,10 +1,11 @@
 import React from 'react';
 import { CONSTANTS } from 'stremio/common';
 import MetaPreview from 'stremio/common/MetaPreview/MetaPreview';
-import Video from '../../MetaDetails/VideosList/Video/Video';
+import Video from 'stremio/common/Video/Video';
 import SeasonsBar from 'stremio/routes/MetaDetails/VideosList/SeasonsBar';
 import classNames from 'classnames';
 import styles from './SideDrawer.less';
+import { useServices } from 'stremio/services';
 
 type Props = {
     seriesInfo: any;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...props }: Props) => {
+    const { core } = useServices();
     const [season, setSeason] = React.useState<number>(seriesInfo?.season);
     const metaItem = React.useMemo(() => {
         return seriesInfo ?
@@ -43,6 +45,16 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
     const seasonOnSelect = React.useCallback((event: { value: string }) => {
         setSeason(parseInt(event.value));
     }, []);
+
+    const onMarkVideoAsWatched = (video: Video, watched: boolean) => {
+        core.transport.dispatch({
+            action: 'Player',
+            args: {
+                action: 'MarkVideoAsWatched',
+                args: [video, !watched]
+            }
+        });
+    };
 
     return (
         <>
@@ -84,6 +96,7 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
                                         progress={video.progress}
                                         deepLinks={video.deepLinks}
                                         scheduled={video.scheduled}
+                                        onMarkVideoAsWatched={onMarkVideoAsWatched}
                                     />
                                 ))}
                             </div>
