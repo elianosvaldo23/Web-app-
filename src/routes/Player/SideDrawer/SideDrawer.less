@@ -2,6 +2,11 @@
 
 @import (reference) '~stremio/common/screen-sizes.less';
 
+:import('~stremio/common/MetaPreview/styles.less') {
+    action-buttons-container: action-buttons-container;
+}
+
+
 @seasons-bar-height: 6rem;
 @padding: 1rem;
 @videos-height: 60%;
@@ -33,6 +38,12 @@
     .info {
         padding: @padding;
         overflow-y: auto;
+
+        .side-drawer-meta-preview {
+            .action-buttons-container {
+                padding-top: 0;
+            }
+        }
     }
 
     .content {

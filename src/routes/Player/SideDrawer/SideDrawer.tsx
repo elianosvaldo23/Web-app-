@@ -63,6 +63,7 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
             <div className={classNames(styles['side-drawer'], className)} inert={!sideDrawerOpen ? '' : undefined}>
                 <div className={styles['info']}>
                     <MetaPreview
+                        className={styles['side-drawer-meta-preview']}
                         compact={true}
                         name={metaItem.name}
                         logo={metaItem.logo}
