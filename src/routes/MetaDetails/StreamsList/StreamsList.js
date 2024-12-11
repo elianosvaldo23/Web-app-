@@ -23,7 +23,7 @@ const StreamsList = ({ className, video, ...props }) => {
         if (video.deepLinks && typeof video.deepLinks.metaDetailsVideos === 'string') {
             window.location.replace(video.deepLinks.metaDetailsVideos + (
                 typeof video.season === 'number' ?
-                    `?${new URLSearchParams({ 'season': video.season })}`
+                    `?${new URLSearchParams({'season': video.season})}`
                     :
                     null
             ));
