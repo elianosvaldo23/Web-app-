@@ -157,15 +157,20 @@ const StreamsList = ({ className, video, ...props }) => {
                                             onClick={stream.onClick}
                                         />
                                     ))}
-                                    <Button className={classnames(styles['install-button-container'], styles['streams'])} title={t('ADDON_CATALOGUE_MORE')} href={'#/addons'}>
-                                        <Icon className={styles['icon']} name={'addons'} />
-                                        <div className={styles['label']}>{t('ADDON_CATALOGUE_MORE')}</div>
-                                    </Button>
+                                    {
+                                        Object.keys(streamsByAddon).length > 1 ?
+                                            <Button className={classnames(styles['install-button-container'], styles['streams'])} title={t('ADDON_CATALOGUE_MORE')} href={'#/addons'}>
+                                                <Icon className={styles['icon']} name={'addons'} />
+                                                <div className={styles['label']}>{t('ADDON_CATALOGUE_MORE')}</div>
+                                            </Button>
+                                            :
+                                            null
+                                    }
                                 </div>
                             </React.Fragment>
             }
             {
-                Object.keys(streamsByAddon).length < 2 && props.streams.every((streams) => streams.content.type === 'Ready') ?
+                Object.keys(streamsByAddon).length < 2 && countLoadingAddons === 0 ?
                     <Button className={styles['install-button-container']} title={t('ADDON_CATALOGUE_MORE')} href={'#/addons'}>
                         <Icon className={styles['icon']} name={'addons'} />
                         <div className={styles['label']}>{t('ADDON_CATALOGUE_MORE')}</div>
