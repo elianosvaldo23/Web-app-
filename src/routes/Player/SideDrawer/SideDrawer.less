@@ -9,7 +9,6 @@
 
 @seasons-bar-height: 6rem;
 @padding: 1rem;
-@videos-height: 60%;
 
 .overlay {
     visibility: hidden;
@@ -38,6 +37,7 @@
     .info {
         padding: @padding;
         overflow-y: auto;
+        flex: 1;
 
         .side-drawer-meta-preview {
             .action-buttons-container {
@@ -48,8 +48,7 @@
     }
 
     .content {
-        min-height: @videos-height;
-        max-height: @videos-height;
+        flex: 2;
 
         .videos {
             overflow-y: auto;
@@ -73,11 +72,6 @@
 @media (orientation: landscape) and (max-width: @xsmall) {
     .side-drawer {
         max-width: 50dvw;
-
-        .content {
-            min-height: calc(@videos-height * 1.2);
-            max-height: calc(@videos-height * 1.2);
-        }
     }
 }
 
