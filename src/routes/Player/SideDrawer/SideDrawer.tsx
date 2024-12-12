@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import { CONSTANTS } from 'stremio/common';
 import MetaPreview from 'stremio/common/MetaPreview/MetaPreview';
 import Video from 'stremio/common/Video/Video';
@@ -8,7 +8,7 @@ import styles from './SideDrawer.less';
 import { useServices } from 'stremio/services';
 
 type Props = {
-    seriesInfo: any;
+    seriesInfo: { season: number, episode: number };
     metaItem: MetaItem;
     className?: string;
     closeSideBar: () => void;
@@ -17,8 +17,8 @@ type Props = {
 
 const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...props }: Props) => {
     const { core } = useServices();
-    const [season, setSeason] = React.useState<number>(seriesInfo?.season);
-    const metaItem = React.useMemo(() => {
+    const [season, setSeason] = useState<number>(seriesInfo?.season);
+    const metaItem = useMemo(() => {
         return seriesInfo ?
             {
                 ...props.metaItem,
@@ -27,13 +27,13 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
             :
             props.metaItem;
     }, [props.metaItem]);
-    const videos = React.useMemo(() => {
+    const videos = useMemo(() => {
         return Array.isArray(metaItem.videos) ?
             metaItem.videos.filter((video) => video.season === season)
             :
             metaItem.videos;
     }, [metaItem, season]);
-    const seasons = React.useMemo(() => {
+    const seasons = useMemo(() => {
         return props.metaItem.videos
             .map(({ season }) => season)
             .filter((season, index, seasons) => {
@@ -42,11 +42,11 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
             .sort((a, b) => (a || Number.MAX_SAFE_INTEGER) - (b || Number.MAX_SAFE_INTEGER));
     }, [props.metaItem.videos]);
 
-    const seasonOnSelect = React.useCallback((event: { value: string }) => {
+    const seasonOnSelect = useCallback((event: { value: string }) => {
         setSeason(parseInt(event.value));
     }, []);
 
-    const onMarkVideoAsWatched = (video: Video, watched: boolean) => {
+    const onMarkVideoAsWatched = useCallback((video: Video, watched: boolean) => {
         core.transport.dispatch({
             action: 'Player',
             args: {
@@ -54,7 +54,7 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
                 args: [video, !watched]
             }
         });
-    };
+    }, []);
 
     return (
         <>
