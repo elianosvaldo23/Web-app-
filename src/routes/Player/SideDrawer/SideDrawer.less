@@ -32,7 +32,7 @@
     justify-content: space-around;
     padding: @padding;
     height: 100dvh;
-    max-width: 30%;
+    max-width: 35rem;
     overflow-y: auto;
 
     .info {
@@ -60,19 +60,19 @@
 
 @media screen and (max-width: @small) {
     .side-drawer {
-        max-width: 40%;
+        max-width: 40dvw;
     }
 }
 
 @media (orientation: portrait) and (max-width: @xsmall) {
     .side-drawer {
-        max-width: 90%;
+        max-width: 90dvw;
     }
 }
 
 @media (orientation: landscape) and (max-width: @xsmall) {
     .side-drawer {
-        max-width: 50%;
+        max-width: 50dvw;
 
         .content {
             min-height: calc(@videos-height * 1.2);
