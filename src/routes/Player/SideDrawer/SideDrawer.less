@@ -34,6 +34,7 @@
     position: relative;
 
     .close-button {
+        display: none;
         position: absolute;
         top: 1.3rem;
         left: 1.3rem;
@@ -94,13 +95,21 @@
 
 @media (orientation: portrait) and (max-width: @xsmall) {
     .side-drawer {
-        max-width: 90dvw;
+        max-width: 100dvw;
+
+        .close-button {
+            display: block;
+        }
     }
 }
 
 @media (orientation: landscape) and (max-width: @xsmall) {
     .side-drawer {
         max-width: 50dvw;
+
+        .info {
+            max-height: 30dvh;
+        }
     }
 }
 
