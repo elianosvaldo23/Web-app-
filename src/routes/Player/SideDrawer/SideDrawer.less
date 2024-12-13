@@ -31,6 +31,36 @@
     height: 100dvh;
     max-width: 35rem;
     overflow-y: auto;
+    position: relative;
+
+    .close-button {
+        position: absolute;
+        top: 1.3rem;
+        left: 1.3rem;
+        padding: 0.5rem;
+        background-color: transparent;
+        cursor: pointer;
+        z-index: 2;
+        border-radius: var(--border-radius);
+        transition: 0.3s all ease-in-out;
+        -webkit-tap-highlight-color: transparent;
+
+        .icon {
+            color: var(--primary-foreground-color);
+            width: 2rem;
+            height: 2rem;
+            opacity: 0.6;
+            transition: 0.3s opacity ease-in-out;
+        }
+
+        &:hover {
+            background-color: var(--overlay-color);
+
+            .icon {
+                opacity: 1;
+            }
+        }
+    }
 
     .info {
         padding: @padding;

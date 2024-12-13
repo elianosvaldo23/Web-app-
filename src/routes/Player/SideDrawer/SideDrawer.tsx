@@ -6,6 +6,7 @@ import SeasonsBar from 'stremio/routes/MetaDetails/VideosList/SeasonsBar';
 import classNames from 'classnames';
 import styles from './SideDrawer.less';
 import { useServices } from 'stremio/services';
+import Icon from '@stremio/stremio-icons/react';
 
 type Props = {
     seriesInfo: { season: number, episode: number };
@@ -61,6 +62,9 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
             <div className={classNames(styles['overlay'], { [styles['open']]: sideDrawerOpen })} onClick={closeSideBar} />
             {/* @ts-expect-error inert is not recognisable on div element; we need it to not focus the sideDrawer when closed */}
             <div className={classNames(styles['side-drawer'], className)} inert={!sideDrawerOpen ? '' : undefined}>
+                <div className={styles['close-button']} onClick={closeSideBar}>
+                    <Icon className={styles['icon']} name={'chevron-forward'} />
+                </div>
                 <div className={styles['info']}>
                     <MetaPreview
                         className={styles['side-drawer-meta-preview']}
