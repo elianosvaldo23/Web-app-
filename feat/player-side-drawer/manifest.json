@@ -1,30 +1,30 @@
 {
   "icons": [
     {
-      "src": "./f1dabe48e9de8fa0d8c914994c35d3f5eace5051/favicons/icon_256x256.ico",
+      "src": "./cd54ad9635ad16a56a682c4941f5ee1ca21e2052/favicons/icon_256x256.ico",
       "sizes": "256x256",
       "type": "image/vnd.microsoft.icon"
     },
     {
-      "src": "./f1dabe48e9de8fa0d8c914994c35d3f5eace5051/images/icon_512x512.png",
+      "src": "./cd54ad9635ad16a56a682c4941f5ee1ca21e2052/images/icon_512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "./f1dabe48e9de8fa0d8c914994c35d3f5eace5051/images/icon_196x196.png",
+      "src": "./cd54ad9635ad16a56a682c4941f5ee1ca21e2052/images/icon_196x196.png",
       "sizes": "196x196",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "./f1dabe48e9de8fa0d8c914994c35d3f5eace5051/images/icon_512x512.png",
+      "src": "./cd54ad9635ad16a56a682c4941f5ee1ca21e2052/images/icon_512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./f1dabe48e9de8fa0d8c914994c35d3f5eace5051/images/icon_196x196.png",
+      "src": "./cd54ad9635ad16a56a682c4941f5ee1ca21e2052/images/icon_196x196.png",
       "sizes": "196x196",
       "type": "image/png",
       "purpose": "any"
@@ -44,14 +44,14 @@
   "scope": "./",
   "screenshots": [
     {
-      "src": "f1dabe48e9de8fa0d8c914994c35d3f5eace5051/screenshots/board_wide.webp",
+      "src": "cd54ad9635ad16a56a682c4941f5ee1ca21e2052/screenshots/board_wide.webp",
       "sizes": "1440x900",
       "type": "image/webp",
       "form_factor": "wide",
       "label": "Homescreen of Stremio"
     },
     {
-      "src": "f1dabe48e9de8fa0d8c914994c35d3f5eace5051/screenshots/board_narrow.webp",
+      "src": "cd54ad9635ad16a56a682c4941f5ee1ca21e2052/screenshots/board_narrow.webp",
       "sizes": "414x896",
       "type": "image/webp",
       "form_factor": "narrow",
