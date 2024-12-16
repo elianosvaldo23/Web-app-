@@ -14,7 +14,6 @@ type Props = {
     className?: string;
     openSideDrawer: () => void;
     closeSideBar: () => void;
-    toggleSideDrawer: () => void;
     sideDrawerOpen: boolean;
 };
 
