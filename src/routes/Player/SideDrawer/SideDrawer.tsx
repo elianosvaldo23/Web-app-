@@ -12,11 +12,13 @@ type Props = {
     seriesInfo: { season: number, episode: number };
     metaItem: MetaItem;
     className?: string;
+    openSideDrawer: () => void;
     closeSideBar: () => void;
+    toggleSideDrawer: () => void;
     sideDrawerOpen: boolean;
 };
 
-const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...props }: Props) => {
+const SideDrawer = ({ seriesInfo, className, openSideDrawer, closeSideBar, sideDrawerOpen, ...props }: Props) => {
     const { core } = useServices();
     const [season, setSeason] = useState<number>(seriesInfo?.season);
     const metaItem = useMemo(() => {
@@ -58,10 +60,13 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
     }, []);
 
     return (
-        <>
-            <div className={classNames(styles['overlay'], { [styles['open']]: sideDrawerOpen })} onClick={closeSideBar} />
+        <div className={classNames(styles['side-drawer'], className, { [styles['open']]: sideDrawerOpen })}>
+            <div className={styles['overlay']} onClick={closeSideBar} />
+            <div className={styles['open-button']} onClick={openSideDrawer}>
+                <Icon name={'chevron-back'} className={styles['icon']} />
+            </div>
             {/* @ts-expect-error inert is not recognisable on div element; we need it to not focus the sideDrawer when closed */}
-            <div className={classNames(styles['side-drawer'], className)} inert={!sideDrawerOpen ? '' : undefined}>
+            <div className={styles['content']} inert={!sideDrawerOpen ? '' : undefined}>
                 <div className={styles['close-button']} onClick={closeSideBar}>
                     <Icon className={styles['icon']} name={'chevron-forward'} />
                 </div>
@@ -80,7 +85,7 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
                 </div>
                 {
                     seriesInfo ?
-                        <div className={styles['content']}>
+                        <div className={styles['series-content']}>
                             <SeasonsBar
                                 season={season}
                                 seasons={seasons}
@@ -110,7 +115,8 @@ const SideDrawer = ({ seriesInfo, className, closeSideBar, sideDrawerOpen, ...pr
                 }
 
             </div>
-        </>
+
+        </div>
     );
 };
 

@@ -8,116 +8,204 @@
 
 @padding: 1rem;
 
-.overlay {
-    visibility: hidden;
-
-    &.open {
-        visibility: visible;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.2);
-        z-index: 1;
-    }
-}
-
 .side-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
     display: flex;
-    flex-direction: column;
-    padding: @padding;
-    height: 100dvh;
-    max-width: 35rem;
-    overflow-y: auto;
+    justify-content: flex-end;
+    overflow: visible;
     position: relative;
 
-    .close-button {
-        display: none;
+    .overlay {
         position: absolute;
-        top: 1.3rem;
-        right: 1.3rem;
-        padding: 0.5rem;
-        background-color: transparent;
+        top: 0;
+        right: 0;
+        width: 100dvw;
+        height: 100dvh;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: none;
+    }
+
+    .open-button {
+        position: absolute;
+        right: -4rem;
+        top: 50%;
+        height: 12.5rem;
+        width: 7.5rem;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--modal-background-color);
         cursor: pointer;
-        z-index: 2;
-        border-radius: var(--border-radius);
-        transition: 0.3s all ease-in-out;
+        border-radius: 50%;
         -webkit-tap-highlight-color: transparent;
+        vertical-align: middle;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: opacity 0.3s ease-in-out, border-radius 0.3s ease-in-out;
+        will-change: transform, opacity;
+        opacity: 1;
 
         .icon {
+            width: 2.5rem;
+            height: 2.5rem;
             color: var(--primary-foreground-color);
-            width: 2rem;
-            height: 2rem;
             opacity: 0.6;
-            transition: 0.3s opacity ease-in-out;
+            margin-right: 4rem;
         }
 
         &:hover {
-            background-color: var(--overlay-color);
-
             .icon {
                 opacity: 1;
             }
         }
     }
 
-    .info {
+    .content {
+        display: flex;
+        flex-direction: column;
         padding: @padding;
+        height: 100dvh;
+        max-width: 35rem;
         overflow-y: auto;
-        flex: none;
+        position: relative;
+        border-top-left-radius: var(--border-radius);
+        border-bottom-left-radius: var(--border-radius);
+        background-color: var(--modal-background-color);
+        box-shadow: 0 1.35rem 2.7rem var(--color-background-dark5-40), 0 1.1rem 0.85rem var(--color-background-dark5-20);
+        backdrop-filter: blur(15px);
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(100%);
+        pointer-events: none;
+        z-index: 1;
 
-        .side-drawer-meta-preview {
-            .action-buttons-container {
-                padding-top: 0;
-                margin-top: 0;
+        .close-button {
+            display: none;
+            position: absolute;
+            top: 1.3rem;
+            right: 1.3rem;
+            padding: 0.5rem;
+            background-color: transparent;
+            cursor: pointer;
+            z-index: 2;
+            border-radius: var(--border-radius);
+            transition: 0.3s all ease-in-out;
+            -webkit-tap-highlight-color: transparent;
+
+            .icon {
+                color: var(--primary-foreground-color);
+                width: 2rem;
+                height: 2rem;
+                opacity: 0.6;
+                transition: 0.3s opacity ease-in-out;
+            }
+
+            &:hover {
+                background-color: var(--overlay-color);
+
+                .icon {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .info {
+            padding: @padding;
+            overflow-y: auto;
+            flex: none;
+
+            .side-drawer-meta-preview {
+                .action-buttons-container {
+                    padding-top: 0;
+                    margin-top: 0;
+                }
+            }
+        }
+
+        .series-content {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+
+            .videos {
+                overflow-y: auto;
             }
         }
     }
 
-    .content {
-        flex: 2;
-        display: flex;
-        flex-direction: column;
+    &.open {
+        .overlay {
+            display: block;
+        }
 
-        .videos {
-            overflow-y: auto;
+        .content {
+            transform: translateX(0);
+            pointer-events: auto;
+
+            .open-button {
+                opacity: 0;
+            }
         }
     }
 }
 
 @media screen and (max-width: @small) {
     .side-drawer {
-        max-width: 40dvw;
+        .content {
+            max-width: 40dvw;
+        }
     }
 }
 
 @media (orientation: portrait) and (max-width: @xsmall) {
     .side-drawer {
-        max-width: 100dvw;
+        .content {
+            max-width: 100dvw;
 
-        .close-button {
-            display: block;
+            .close-button {
+                display: block;
+            }
         }
     }
 }
 
 @media (orientation: landscape) and (max-width: @xsmall) {
     .side-drawer {
-        max-width: 50dvw;
+        .content {
+            max-width: 50dvw;
 
-        .info {
-            max-height: 30dvh;
+            .close-button {
+                display: block;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: @xsmall) {
+    .side-drawer {
+        .open-button {
+            height: 8rem;
+            width: 4.5rem;
+            right: -2.5rem;
+
+            .icon {
+                width: 2rem;
+                height: 2rem;
+                margin-right: 2.5rem;
+            }
         }
     }
 }
 
 @media screen and (max-width: @xxsmall) {
     .side-drawer {
-        padding: calc(@padding / 2);
-
-        .info {
+        .content {
             padding: calc(@padding / 2);
+
+            .info {
+                padding: calc(@padding / 2);
+            }
         }
     }
 }

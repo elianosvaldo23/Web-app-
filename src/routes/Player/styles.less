@@ -19,7 +19,7 @@ html:not(.active-slider-within) {
     .player-container.overlayHidden {
         cursor: none;
 
-        .nav-bar-layer, .control-bar-layer, .menu-layer, .side-drawer-button-layer {
+        .nav-bar-layer, .control-bar-layer, .menu-layer, .side-drawer-layer {
             opacity: 0;
             transition: opacity 200ms;
         }
@@ -114,78 +114,11 @@ html:not(.active-slider-within) {
             overflow: auto;
         }
 
-        &.side-drawer-button-layer {
-            right: -4rem;
-            top: 50%;
-            left: initial;
-            bottom: initial;
-            height: 12.5rem;
-            width: 7.5rem;
-            transform: translateY(-50%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--modal-background-color);
-            cursor: pointer;
-            border-radius: 50%;
-            -webkit-tap-highlight-color: transparent;
-            vertical-align: middle;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: opacity 0.3s ease-in-out, border-radius 0.3s ease-in-out;
-            will-change: transform, opacity;
-            opacity: 1;
-            
-            .icon {
-                width: 2.5rem;
-                height: 2.5rem;
-                color: var(--primary-foreground-color);
-                opacity: 0.6;
-                margin-right: 4rem;
-            }
-
-            &.open {
-                opacity: 0;
-            }
-
-            &:hover {
-                .icon {
-                    opacity: 1;
-                }
-            }
-
-            @media screen and (max-width: @xsmall) {
-                height: 8rem;
-                width: 4.5rem;
-                right: -2.5rem;
-
-                .icon {
-                    width: 2rem;
-                    height: 2rem;
-                    margin-right: 2.5rem;
-                }
-            }
-        }
-
         &.side-drawer-layer {
             top: 0;
             right: 0;
             left: initial;
             bottom: initial;
-            border-top-left-radius: var(--border-radius);
-            border-bottom-left-radius: var(--border-radius);
-            background-color: var(--modal-background-color);
-            box-shadow: 0 1.35rem 2.7rem var(--color-background-dark5-40),
-                        0 1.1rem 0.85rem var(--color-background-dark5-20);
-            backdrop-filter: blur(15px);
-            transition: transform 0.3s ease-in-out;
-            transform: translateX(100%);
-            pointer-events: none;
-            z-index: 1;
-
-            &.open {
-                transform: translateX(0);
-                pointer-events: all;
-            }
         }
     }
 }

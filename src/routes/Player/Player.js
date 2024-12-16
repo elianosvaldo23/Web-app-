@@ -25,7 +25,6 @@ const useVideo = require('./useVideo');
 const styles = require('./styles');
 const Video = require('./Video');
 const { default: SideDrawer } = require('./SideDrawer/SideDrawer');
-const { default: Icon } = require('@stremio/stremio-icons/react');
 
 const Player = ({ urlParams, queryParams }) => {
     const { t } = useTranslation();
@@ -409,13 +408,6 @@ const Player = ({ urlParams, queryParams }) => {
     }, [video.state.playbackSpeed]);
 
     React.useEffect(() => {
-        if (sideDrawerOpen) {
-            closeMenus();
-            setImmersed(true);
-        }
-    }, [sideDrawerOpen]);
-
-    React.useEffect(() => {
         const toastFilter = (item) => item?.dataset?.type === 'CoreEvent';
         toast.addFilter(toastFilter);
         const onCastStateChange = () => {
@@ -702,18 +694,14 @@ const Player = ({ urlParams, queryParams }) => {
             }
             {
                 player.metaItem !== null && player.metaItem.type === 'Ready' ?
-                    <React.Fragment>
-                        <div className={classnames(styles['layer'], styles['side-drawer-button-layer'], { [styles['open']]: sideDrawerOpen })} onClick={openSideDrawer}>
-                            <Icon name={'chevron-back'} className={styles['icon']} />
-                        </div>
-                        <SideDrawer
-                            metaItem={player.metaItem.content}
-                            seriesInfo={player.seriesInfo}
-                            className={classnames(styles['layer'], styles['side-drawer-layer'], { [styles['open']]: sideDrawerOpen })}
-                            closeSideBar={closeSideDrawer}
-                            sideDrawerOpen={sideDrawerOpen}
-                        />
-                    </React.Fragment>
+                    <SideDrawer
+                        metaItem={player.metaItem.content}
+                        seriesInfo={player.seriesInfo}
+                        className={classnames(styles['layer'], styles['side-drawer-layer'])}
+                        openSideDrawer={openSideDrawer}
+                        closeSideBar={closeSideDrawer}
+                        sideDrawerOpen={sideDrawerOpen}
+                    />
                     : null
             }
             {
