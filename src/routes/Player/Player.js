@@ -408,6 +408,13 @@ const Player = ({ urlParams, queryParams }) => {
     }, [video.state.playbackSpeed]);
 
     React.useEffect(() => {
+        if (sideDrawerOpen) {
+            closeMenus();
+            setImmersed(true);
+        }
+    }, [sideDrawerOpen]);
+
+    React.useEffect(() => {
         const toastFilter = (item) => item?.dataset?.type === 'CoreEvent';
         toast.addFilter(toastFilter);
         const onCastStateChange = () => {
