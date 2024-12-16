@@ -56,7 +56,7 @@ const Player = ({ urlParams, queryParams }) => {
     const [speedMenuOpen, , closeSpeedMenu, toggleSpeedMenu] = useBinaryState(false);
     const [statisticsMenuOpen, , closeStatisticsMenu, toggleStatisticsMenu] = useBinaryState(false);
     const [nextVideoPopupOpen, openNextVideoPopup, closeNextVideoPopup] = useBinaryState(false);
-    const [sideDrawerOpen, openSideDrawer, closeSideDrawer, toggleSideDrawer] = useBinaryState(false);
+    const [sideDrawerOpen, , closeSideDrawer, toggleSideDrawer] = useBinaryState(false);
 
     const menusOpen = React.useMemo(() => {
         return optionsMenuOpen || subtitlesMenuOpen || speedMenuOpen || statisticsMenuOpen;
@@ -67,6 +67,7 @@ const Player = ({ urlParams, queryParams }) => {
         closeSubtitlesMenu();
         closeSpeedMenu();
         closeStatisticsMenu();
+        closeSideDrawer();
     }, []);
 
     const overlayHidden = React.useMemo(() => {
@@ -408,13 +409,6 @@ const Player = ({ urlParams, queryParams }) => {
     }, [video.state.playbackSpeed]);
 
     React.useEffect(() => {
-        if (sideDrawerOpen) {
-            closeMenus();
-            setImmersed(true);
-        }
-    }, [sideDrawerOpen]);
-
-    React.useEffect(() => {
         const toastFilter = (item) => item?.dataset?.type === 'CoreEvent';
         toast.addFilter(toastFilter);
         const onCastStateChange = () => {
@@ -700,14 +694,12 @@ const Player = ({ urlParams, queryParams }) => {
                     null
             }
             {
-                player.metaItem !== null && player.metaItem.type === 'Ready' ?
+                player.metaItem !== null && player.metaItem.type === 'Ready' && sideDrawerOpen ?
                     <SideDrawer
                         metaItem={player.metaItem.content}
                         seriesInfo={player.seriesInfo}
                         className={classnames(styles['layer'], styles['side-drawer-layer'])}
-                        openSideDrawer={openSideDrawer}
-                        closeSideBar={closeSideDrawer}
-                        sideDrawerOpen={sideDrawerOpen}
+                        closeSideDrawer={closeSideDrawer}
                     />
                     : null
             }
