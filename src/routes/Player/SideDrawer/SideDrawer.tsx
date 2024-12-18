@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback, useState, forwardRef, memo } from 'react';
 import classNames from 'classnames';
 import Icon from '@stremio/stremio-icons/react';
 import { useServices } from 'stremio/services';
@@ -15,7 +15,7 @@ type Props = {
     closeSideDrawer: () => void;
 };
 
-const SideDrawer = ({ seriesInfo, className, closeSideDrawer, ...props }: Props) => {
+const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, className, closeSideDrawer, ...props }: Props, ref) => {
     const { core } = useServices();
     const [season, setSeason] = useState<number>(seriesInfo?.season);
     const metaItem = useMemo(() => {
@@ -61,7 +61,7 @@ const SideDrawer = ({ seriesInfo, className, closeSideDrawer, ...props }: Props)
     };
 
     return (
-        <div className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown}>
+        <div ref={ref} className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown}>
             <div className={styles['close-button']} onClick={closeSideDrawer}>
                 <Icon className={styles['icon']} name={'chevron-forward'} />
             </div>
@@ -111,6 +111,6 @@ const SideDrawer = ({ seriesInfo, className, closeSideDrawer, ...props }: Props)
 
         </div>
     );
-};
+}));
 
 export default SideDrawer;

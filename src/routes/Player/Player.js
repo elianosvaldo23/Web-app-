@@ -8,7 +8,7 @@ const langs = require('langs');
 const { useTranslation } = require('react-i18next');
 const { useRouteFocused } = require('stremio-router');
 const { useServices } = require('stremio/services');
-const { HorizontalNavBar, useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender } = require('stremio/common');
+const { HorizontalNavBar, Transition, useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender } = require('stremio/common');
 const BufferingLoader = require('./BufferingLoader');
 const VolumeChangeIndicator = require('./VolumeChangeIndicator');
 const Error = require('./Error');
@@ -705,17 +705,14 @@ const Player = ({ urlParams, queryParams }) => {
                     :
                     null
             }
-            {
-                sideDrawerOpen ?
-                    <SideDrawer
-                        className={classnames(styles['layer'], styles['side-drawer-layer'])}
-                        metaItem={player.metaItem?.content}
-                        seriesInfo={player.seriesInfo}
-                        closeSideDrawer={closeSideDrawer}
-                    />
-                    :
-                    null
-            }
+            <Transition when={sideDrawerOpen} name={'slide-left'}>
+                <SideDrawer
+                    className={classnames(styles['layer'], styles['side-drawer-layer'])}
+                    metaItem={player.metaItem?.content}
+                    seriesInfo={player.seriesInfo}
+                    closeSideDrawer={closeSideDrawer}
+                />
+            </Transition>
             {
                 subtitlesMenuOpen ?
                     <SubtitlesMenu

@@ -39,3 +39,16 @@
         transform: translateY(0%);
     }
 }
+
+.slide-left-enter {
+    transform: translateX(100%);
+}
+
+.slide-left-active {
+    transform: translateX(0%);
+    transition: transform 0.3s ease-out;
+}
+
+.slide-left-exit {
+    transform: translateX(100%);
+}
