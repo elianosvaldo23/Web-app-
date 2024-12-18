@@ -1,25 +1,23 @@
 import React, { useMemo, useCallback, useState } from 'react';
+import classNames from 'classnames';
+import Icon from '@stremio/stremio-icons/react';
+import { useServices } from 'stremio/services';
 import { CONSTANTS } from 'stremio/common';
 import MetaPreview from 'stremio/common/MetaPreview/MetaPreview';
 import Video from 'stremio/common/Video/Video';
 import SeasonsBar from 'stremio/routes/MetaDetails/VideosList/SeasonsBar';
-import classNames from 'classnames';
 import styles from './SideDrawer.less';
-import { useServices } from 'stremio/services';
-import Icon from '@stremio/stremio-icons/react';
-import useOutsideClick from 'stremio/common/useOutsideClick';
 
 type Props = {
-    seriesInfo: { season: number, episode: number };
-    metaItem: MetaItem;
     className?: string;
+    seriesInfo: SeriesInfo;
+    metaItem: MetaItem;
     closeSideDrawer: () => void;
 };
 
 const SideDrawer = ({ seriesInfo, className, closeSideDrawer, ...props }: Props) => {
     const { core } = useServices();
     const [season, setSeason] = useState<number>(seriesInfo?.season);
-    const sideDrawerRef = useOutsideClick(() => closeSideDrawer());
     const metaItem = useMemo(() => {
         return seriesInfo ?
             {
@@ -58,8 +56,12 @@ const SideDrawer = ({ seriesInfo, className, closeSideDrawer, ...props }: Props)
         });
     }, []);
 
+    const onMouseDown = (event: React.MouseEvent) => {
+        event.stopPropagation();
+    };
+
     return (
-        <div className={classNames(styles['side-drawer'], className)} ref={sideDrawerRef}>
+        <div className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown}>
             <div className={styles['close-button']} onClick={closeSideDrawer}>
                 <Icon className={styles['icon']} name={'chevron-forward'} />
             </div>

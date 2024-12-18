@@ -18,13 +18,14 @@ const StatisticsMenu = require('./StatisticsMenu');
 const OptionsMenu = require('./OptionsMenu');
 const SubtitlesMenu = require('./SubtitlesMenu');
 const SpeedMenu = require('./SpeedMenu');
+const { default: SideDrawerButton } = require('./SideDrawerButton');
+const { default: SideDrawer } = require('./SideDrawer');
 const usePlayer = require('./usePlayer');
 const useSettings = require('./useSettings');
 const useStatistics = require('./useStatistics');
 const useVideo = require('./useVideo');
 const styles = require('./styles');
 const Video = require('./Video');
-const { default: SideDrawer } = require('./SideDrawer/SideDrawer');
 
 const Player = ({ urlParams, queryParams }) => {
     const { t } = useTranslation();
@@ -59,8 +60,8 @@ const Player = ({ urlParams, queryParams }) => {
     const [sideDrawerOpen, , closeSideDrawer, toggleSideDrawer] = useBinaryState(false);
 
     const menusOpen = React.useMemo(() => {
-        return optionsMenuOpen || subtitlesMenuOpen || speedMenuOpen || statisticsMenuOpen;
-    }, [optionsMenuOpen, subtitlesMenuOpen, speedMenuOpen, statisticsMenuOpen]);
+        return optionsMenuOpen || subtitlesMenuOpen || speedMenuOpen || statisticsMenuOpen || sideDrawerOpen;
+    }, [optionsMenuOpen, subtitlesMenuOpen, speedMenuOpen, statisticsMenuOpen, sideDrawerOpen]);
 
     const closeMenus = React.useCallback(() => {
         closeOptionsMenu();
@@ -240,6 +241,8 @@ const Player = ({ urlParams, queryParams }) => {
         if (!event.nativeEvent.statisticsMenuClosePrevented) {
             closeStatisticsMenu();
         }
+
+        closeSideDrawer();
     }, []);
 
     const onContainerMouseMove = React.useCallback((event) => {
@@ -478,14 +481,14 @@ const Player = ({ urlParams, queryParams }) => {
                     break;
                 }
                 case 'ArrowUp': {
-                    if (!menusOpen && !nextVideoPopupOpen && !sideDrawerOpen && video.state.volume !== null) {
+                    if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
                         onVolumeChangeRequested(video.state.volume + 5);
                     }
 
                     break;
                 }
                 case 'ArrowDown': {
-                    if (!menusOpen && !nextVideoPopupOpen && !sideDrawerOpen && video.state.volume !== null) {
+                    if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
                         onVolumeChangeRequested(video.state.volume - 5);
                     }
 
@@ -538,11 +541,11 @@ const Player = ({ urlParams, queryParams }) => {
         };
         const onWheel = ({ deltaY }) => {
             if (deltaY > 0) {
-                if (!menusOpen && !sideDrawerOpen && video.state.volume !== null) {
+                if (!menusOpen && video.state.volume !== null) {
                     onVolumeChangeRequested(video.state.volume - 5);
                 }
             } else {
-                if (!menusOpen && !sideDrawerOpen && video.state.volume !== null) {
+                if (!menusOpen && video.state.volume !== null) {
                     onVolumeChangeRequested(video.state.volume + 5);
                 }
             }
@@ -642,6 +645,15 @@ const Player = ({ urlParams, queryParams }) => {
                 onMouseMove={onBarMouseMove}
                 onMouseOver={onBarMouseMove}
             />
+            {
+                player.metaItem?.type === 'Ready' ?
+                    <SideDrawerButton
+                        className={classnames(styles['layer'], styles['side-drawer-button-layer'])}
+                        onClick={toggleSideDrawer}
+                    />
+                    :
+                    null
+            }
             <ControlBar
                 className={classnames(styles['layer'], styles['control-bar-layer'])}
                 paused={video.state.paused}
@@ -694,14 +706,15 @@ const Player = ({ urlParams, queryParams }) => {
                     null
             }
             {
-                player.metaItem !== null && player.metaItem.type === 'Ready' && sideDrawerOpen ?
+                sideDrawerOpen ?
                     <SideDrawer
-                        metaItem={player.metaItem.content}
-                        seriesInfo={player.seriesInfo}
                         className={classnames(styles['layer'], styles['side-drawer-layer'])}
+                        metaItem={player.metaItem?.content}
+                        seriesInfo={player.seriesInfo}
                         closeSideDrawer={closeSideDrawer}
                     />
-                    : null
+                    :
+                    null
             }
             {
                 subtitlesMenuOpen ?
