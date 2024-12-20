@@ -240,7 +240,9 @@ const Player = ({ urlParams, queryParams }) => {
         if (!event.nativeEvent.subtitlesMenuClosePrevented) {
             closeSubtitlesMenu();
         }
-        closeAudioMenu();
+        if (!event.nativeEvent.audioMenuClosePrevented) {
+            closeAudioMenu();
+        }
         if (!event.nativeEvent.infoMenuClosePrevented) {
             closeInfoMenu();
         }

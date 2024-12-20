@@ -14,14 +14,15 @@ type Props = {
 const AudioMenu = ({ className, selectedAudioTrackId, audioTracks, onAudioTrackSelected }: Props) => {
     const { t } = useTranslation();
 
-    const onMouseDown = (event: MouseEvent) => {
-        event.stopPropagation();
-    };
-
     const onAudioTrackClick = useCallback(({ currentTarget }: MouseEvent) => {
         const id = currentTarget.getAttribute('data-id')!;
         onAudioTrackSelected && onAudioTrackSelected(id);
     }, [onAudioTrackSelected]);
+
+    const onMouseDown = (event: MouseEvent) => {
+        // @ts-expect-error: Property 'audioMenuClosePrevented' does not exist on type 'MouseEvent'.
+        event.nativeEvent.audioMenuClosePrevented = true;
+    };
 
     return (
         <div className={classNames(className, styles['audio-menu'])} onMouseDown={onMouseDown}>

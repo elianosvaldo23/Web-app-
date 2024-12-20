@@ -50,7 +50,7 @@ const ControlBar = ({
         event.nativeEvent.subtitlesMenuClosePrevented = true;
     }, []);
     const onAudioButtonMouseDown = React.useCallback((event) => {
-        event.stopPropagation();
+        event.nativeEvent.audioMenuClosePrevented = true;
     }, []);
     const onInfoButtonMouseDown = React.useCallback((event) => {
         event.nativeEvent.infoMenuClosePrevented = true;
