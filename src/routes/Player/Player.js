@@ -63,7 +63,7 @@ const Player = ({ urlParams, queryParams }) => {
     const [nextVideoPopupOpen, openNextVideoPopup, closeNextVideoPopup] = useBinaryState(false);
 
     const menusOpen = React.useMemo(() => {
-        return optionsMenuOpen || subtitlesMenuOpen || audioMenuOpen|| infoMenuOpen || speedMenuOpen || videosMenuOpen || statisticsMenuOpen;
+        return optionsMenuOpen || subtitlesMenuOpen || audioMenuOpen || infoMenuOpen || speedMenuOpen || videosMenuOpen || statisticsMenuOpen;
     }, [optionsMenuOpen, subtitlesMenuOpen, audioMenuOpen, infoMenuOpen, speedMenuOpen, videosMenuOpen, statisticsMenuOpen]);
 
     const closeMenus = React.useCallback(() => {
