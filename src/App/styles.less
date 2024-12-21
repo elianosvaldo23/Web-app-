@@ -14,12 +14,12 @@
 }
 
 // iOS pads the bottom inset more than needed, so we deduce the actual inset size when using the webapp
-@calculated-bottom-safe-inset: ~"min(env(safe-area-inset-bottom, 0px), max(16px, calc(100lvh - 100svh - env(safe-area-inset-top, 0px))))";
-@html-height: ~"min(100lvh, calc(100% + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)))";
-@html-width: ~"min(100lvw, calc(100% + env(safe-area-inset-right, 0px) + env(safe-area-inset-left, 0px)))";
+@calculated-bottom-safe-inset: ~"min(env(safe-area-inset-bottom, 0rem), max(1rem, calc(100lvh - 100svh - env(safe-area-inset-top, 0rem))))";
+@html-height: ~"min(100lvh, calc(100% + env(safe-area-inset-top, 0rem) + env(safe-area-inset-bottom, 0rem)))";
+@html-width: ~"min(100lvw, calc(100% + env(safe-area-inset-right, 0rem) + env(safe-area-inset-left, 0rem)))";
 
 @top-overlay-size: 5.25rem;
-@bottom-overlay-size: calc(3rem + env(safe-area-inset-bottom, 0rem));
+@bottom-overlay-size: 0rem;
 @overlap-size: 3rem;
 @transparency-grandient-pad: 6rem;
 
@@ -210,5 +210,11 @@ html {
                 }
             }
         }
+    }
+}
+
+@media only screen and (max-width: @minimum) {
+    :root {
+        --bottom-overlay-size: 6rem;
     }
 }
