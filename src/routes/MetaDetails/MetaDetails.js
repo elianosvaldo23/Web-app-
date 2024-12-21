@@ -76,22 +76,29 @@ const MetaDetails = ({ urlParams, queryParams }) => {
         setSeason(event.value);
     }, [setSeason]);
     const renderBackgroundImageFallback = React.useCallback(() => null, []);
-
-    const canRenderBackground = metaPath !== null && metaDetails.metaItem !== null && metaDetails.metaItem.content.type !== 'Err' && metaDetails.metaItem.content.type !== 'Loading' &&
-        typeof metaDetails.metaItem.content.content.background === 'string' && metaDetails.metaItem.content.content.background.length > 0;
+    const renderBackground = React.useMemo(() => !!(
+        metaPath &&
+        metaDetails?.metaItem &&
+        metaDetails.metaItem.content?.type !== 'Err' &&
+        metaDetails.metaItem.content.type !== 'Loading' &&
+        typeof metaDetails.metaItem.content.content?.background === 'string' &&
+        metaDetails.metaItem.content.content.background.length > 0
+    ), [metaPath, metaDetails]);
 
     return (
         <div className={styles['metadetails-container']}>
             {
-                canRenderBackground &&
-                <div className={styles['background-image-layer']}>
-                    <Image
-                        className={styles['background-image']}
-                        src={metaDetails.metaItem.content.content.background}
-                        renderFallback={renderBackgroundImageFallback}
-                        alt={' '}
-                    />
-                </div>
+                renderBackground ?
+                    <div className={styles['background-image-layer']}>
+                        <Image
+                            className={styles['background-image']}
+                            src={metaDetails.metaItem.content.content.background}
+                            renderFallback={renderBackgroundImageFallback}
+                            alt={' '}
+                        />
+                    </div>
+                    :
+                    null
             }
             <HorizontalNavBar
                 className={styles['nav-bar']}
