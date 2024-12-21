@@ -10,7 +10,11 @@
     padding: 1.5rem;
     border-radius: var(--border-radius);
     background-color: var(--overlay-color);
-    cursor: inherit;
+    cursor: pointer;
+
+    &:hover {
+        outline: var(--focus-outline-size) solid var(--overlay-color);
+    }
 
     .logo-container {
         flex: none;
