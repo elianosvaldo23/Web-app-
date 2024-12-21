@@ -21,13 +21,6 @@
     background-color: transparent;
 
     .discover-content {
-        --selectable-inputs-assumed-height: 84px;
-        --top-overlay-size: var(--selectable-inputs-assumed-height);
-        --bottom-vertical-nav-bar-size: 0px;
-        --bottom-overlay-size: calc(var(--bottom-vertical-nav-bar-size) + env(safe-area-inset-bottom, 0px));
-        --overlap-size: 3rem;
-        --transparency-grandient-pad: 6rem;
-
         width: 100%;
         height: calc(100% + var(--bottom-overlay-size));
         margin-bottom: calc(var(--bottom-overlay-size) * -1);
@@ -44,7 +37,7 @@
                 margin-top: calc(var(--selectable-inputs-assumed-height) * -1);
                 padding: 0 1.5rem;
                 padding-top: var(--selectable-inputs-assumed-height);
-                padding-bottom: var(--bottom-overlay-size, 0px);
+                padding-bottom: var(--bottom-overlay-size);
     
                 mask: linear-gradient(
                     to bottom,
