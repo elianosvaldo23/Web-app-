@@ -2,6 +2,11 @@
 
 @import (reference) '~stremio/common/screen-sizes.less';
 
+@top-overlay-size: calc(var(--horizontal-nav-bar-size) + env(safe-area-inset-top, 0px));
+@bottom-overlay-size: calc(var(--vertical-nav-bar-size) + var(--calculated-bottom-safe-inset, 0px));
+@overlap-size: 3rem;
+@transparency-grandient-pad: 6rem;
+
 .main-nav-bars-container {
     position: relative;
     z-index: 0;
@@ -37,15 +42,10 @@
         z-index: 0;
         overflow: scroll;
 
-        --top-overlay-size: calc(var(--horizontal-nav-bar-size) + env(safe-area-inset-top, 0px));
-        --bottom-overlay-size: calc(var(--vertical-nav-bar-size) + var(--calculated-bottom-safe-inset, 0px));
-        --overlap-size: 3rem;
-        --transparency-grandient-pad: 6rem;
-
         mask: linear-gradient(
             to bottom,
-            transparent calc(var(--top-overlay-size) - var(--overlap-size)),
-            black calc(var(--top-overlay-size) + var(--transparency-grandient-pad)),
+            transparent calc(@top-overlay-size - @overlap-size),
+            black calc(@top-overlay-size + @transparency-grandient-pad),
             black 100%
         );
     }
@@ -59,10 +59,10 @@
 
             mask: linear-gradient(
                 to bottom,
-                transparent calc(var(--top-overlay-size) - var(--overlap-size)),
-                black calc(var(--top-overlay-size) + var(--transparency-grandient-pad)),
-                black calc(100% - var(--bottom-overlay-size) - var(--transparency-grandient-pad)),
-                transparent calc(100% - var(--bottom-overlay-size) + var(--overlap-size))
+                transparent calc(@top-overlay-size - @overlap-size),
+                black calc(@top-overlay-size + @transparency-grandient-pad),
+                black calc(100% - @bottom-overlay-size - @transparency-grandient-pad),
+                transparent calc(100% - @bottom-overlay-size + @overlap-size)
             );
         }
 
