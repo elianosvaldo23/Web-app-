@@ -1,6 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 @import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
+@import (reference) '~stremio/common/screen-sizes.less';
 
 .warning-container {
     display: flex;
@@ -8,9 +9,9 @@
     align-items: center;
     background-color: @color-accent5-dark3;
     padding: 1rem;
-    border-radius: 8px;
-    margin: 0px 8px;
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.48), 0px 8px 48px rgba(0, 0, 0, 0.64);
+    border-radius: 0.5rem 0.5rem 0 0;
+    margin: 0rem 0.5rem;
+    box-shadow: var(--outer-glow);
 
     .warning-statement {
         flex: 1;
@@ -22,12 +23,12 @@
 
     .warning-button {
         flex: none;
-        margin-left: 1.5rem;
         color: @color-surface-light5-90;
         background-color: rgba(0, 0, 0, 0.24);
-        padding: 8px 12px;
-        border-radius: 8px;
-        line-height: 18px;
+        padding: 0.5rem 1rem;
+        margin-left: 1.5rem;
+        border-radius: 0.5rem;
+        line-height: 1.2rem;
 
         &:first-child {
             margin-left: 0;
@@ -43,6 +44,7 @@
             font-size: 1.2rem;
             max-height: 1.2em;
             color: @color-surface-light5-90;
+            overflow: visible;
         }
     }
 
@@ -51,15 +53,18 @@
     }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: @minimum) {
     .warning-container {
         display: block;
         height: auto !important;
         text-align: center;
+        border-radius: 0.5rem;
+
         .warning-statement {
             margin-bottom: 1rem;
             margin-right: 0;
         }
+
         .warning-button {
             display: inline-block;
         }
