@@ -21,34 +21,28 @@
     filters-modal-content: modal-dialog-content;
 }
 
-@selectable-inputs-assumed-height: 5.25rem;
-@top-overlay-size: @selectable-inputs-assumed-height;
-@bottom-overlay-size: calc(1.5rem + env(safe-area-inset-bottom, 0rem));
-@overlap-size: 3rem;
-@transparency-grandient-pad: 6rem;
-
 .addons-container {
     height: 100%;
     background-color: transparent;
 
     .addons-content {
         width: 100%;
-        height: calc(100% + @bottom-overlay-size);
-        margin-bottom: calc(@bottom-overlay-size * -1);
+        height: calc(100% + var(--bottom-overlay-size));
+        margin-bottom: calc(var(--bottom-overlay-size) * -1);
         display: flex;
         flex-direction: column;
         align-self: stretch;
 
         .addons-list-container {
-            margin-top: calc(@selectable-inputs-assumed-height * -1);
+            margin-top: calc(var(--selectable-inputs-assumed-height) * -1);
             padding: 0 1.5rem;
-            padding-top: @selectable-inputs-assumed-height;
-            padding-bottom: @bottom-overlay-size;
+            padding-top: var(--selectable-inputs-assumed-height);
+            padding-bottom: var(--bottom-overlay-size);
 
             mask: linear-gradient(
                 to bottom,
-                transparent calc(@top-overlay-size - @overlap-size),
-                black calc(@top-overlay-size + @transparency-grandient-pad),
+                transparent calc(var(--top-overlay-size) - var(--overlap-size)),
+                black calc(var(--top-overlay-size) + var(--transparency-grandient-pad)),
                 black 100%
             );
             z-index: 1;
