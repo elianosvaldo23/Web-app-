@@ -1,4 +1,4 @@
-// Copyright (C) 2017-2023 Smart code 203358507
+// Copyright (C) 2017-2024 Smart code 203358507
 
 @import (reference) '~stremio/common/screen-sizes.less';
 @import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
@@ -12,6 +12,8 @@
     @import (once, less) '~stremio/common/animations.less';
     @import (once, less) '~stremio-router/styles.css';
 }
+
+// iOS pads the bottom inset more than needed, so we deduce the actual inset size when using the webapp
 @calculated-bottom-safe-inset: ~"min(env(safe-area-inset-bottom, 0px), max(16px, calc(100lvh - 100svh - env(safe-area-inset-top, 0px))))";
 @html-height: ~"min(100lvh, calc(100% + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)))";
 @html-width: ~"min(100lvw, calc(100% + env(safe-area-inset-right, 0px) + env(safe-area-inset-left, 0px)))";
@@ -43,7 +45,6 @@
     --modal-background-color: rgba(15, 13, 32, 1);
     --outer-glow: 0px 0px 15px rgba(123, 91, 245, 0.37);
     --border-radius: 0.75rem;
-    // iOS pads the bottom inset more than needed, so we deduce the actual inset size when using the webapp
     --calculated-bottom-safe-inset: @calculated-bottom-safe-inset;
 }
 
