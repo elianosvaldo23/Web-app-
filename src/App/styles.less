@@ -18,9 +18,8 @@
 @html-height: ~"min(100lvh, calc(100% + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)))";
 @html-width: ~"min(100lvw, calc(100% + env(safe-area-inset-right, 0px) + env(safe-area-inset-left, 0px)))";
 
-@selectable-inputs-assumed-height: 5.25rem;
-@top-overlay-size: @selectable-inputs-assumed-height;
-@bottom-overlay-size: calc(1rem + env(safe-area-inset-bottom, 0rem));
+@top-overlay-size: 5.25rem;
+@bottom-overlay-size: calc(3rem + env(safe-area-inset-bottom, 0rem));
 @overlap-size: 3rem;
 @transparency-grandient-pad: 6rem;
 
@@ -52,11 +51,10 @@
     --outer-glow: 0px 0px 15px rgba(123, 91, 245, 0.37);
     --border-radius: 0.75rem;
     --calculated-bottom-safe-inset: @calculated-bottom-safe-inset;
-    --selectable-inputs-assumed-height: 5.25rem;
-    --top-overlay-size: @selectable-inputs-assumed-height;
-    --bottom-overlay-size: calc(1rem + env(safe-area-inset-bottom, 0rem));
-    --overlap-size: 3rem;
-    --transparency-grandient-pad: 6rem;
+    --top-overlay-size: @top-overlay-size;
+    --bottom-overlay-size: @bottom-overlay-size;
+    --overlap-size: @overlap-size;
+    --transparency-grandient-pad: @transparency-grandient-pad;
 }
 
 * {
