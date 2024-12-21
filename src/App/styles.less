@@ -15,8 +15,12 @@
 
 // iOS pads the bottom inset more than needed, so we deduce the actual inset size when using the webapp
 @calculated-bottom-safe-inset: ~"min(env(safe-area-inset-bottom, 0rem), max(1rem, calc(100lvh - 100svh - env(safe-area-inset-top, 0rem))))";
-@html-height: ~"min(100lvh, calc(100% + env(safe-area-inset-top, 0rem) + env(safe-area-inset-bottom, 0rem)))";
-@html-width: ~"min(100lvw, calc(100% + env(safe-area-inset-right, 0rem) + env(safe-area-inset-left, 0rem)))";
+@html-width: ~"calc(max(100svw, 100dvw))";
+@html-height: ~"calc(max(100svh, 100dvh))";
+@safe-area-inset-top: env(safe-area-inset-top, 0rem);
+@safe-area-inset-right: env(safe-area-inset-right, 0rem);
+@safe-area-inset-bottom: env(safe-area-inset-bottom, 0rem);
+@safe-area-inset-left: env(safe-area-inset-left, 0rem);
 
 @top-overlay-size: 5.25rem;
 @bottom-overlay-size: 0rem;
@@ -55,6 +59,10 @@
     --bottom-overlay-size: @bottom-overlay-size;
     --overlap-size: @overlap-size;
     --transparency-grandient-pad: @transparency-grandient-pad;
+    --safe-area-inset-top: @safe-area-inset-top;
+    --safe-area-inset-right: @safe-area-inset-right;
+    --safe-area-inset-bottom: @safe-area-inset-bottom;
+    --safe-area-inset-left: @safe-area-inset-left;
 }
 
 * {
@@ -124,8 +132,8 @@ html {
 
             .toasts-container {
                 position: absolute;
-                top: calc(1.2 * var(--horizontal-nav-bar-size) + env(safe-area-inset-top, 0rem));
-                right: env(safe-area-inset-right, 0rem);
+                top: calc(1.2 * var(--horizontal-nav-bar-size) + var(--safe-area-inset-top));
+                right: var(--safe-area-inset-right);
                 bottom: calc(1.2 * var(--horizontal-nav-bar-size) + var(--calculated-bottom-safe-inset, 0rem));
                 left: auto;
                 z-index: 1;

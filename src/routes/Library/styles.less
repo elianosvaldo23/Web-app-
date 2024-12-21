@@ -17,13 +17,6 @@
     background-color: transparent;
 
     .library-content {
-        --selectable-inputs-assumed-height: 80px;
-        --top-overlay-size: var(--top-overlay-size);
-        --bottom-vertical-nav-bar-size: 0px;
-        --bottom-overlay-size: calc(var(--bottom-vertical-nav-bar-size) + env(safe-area-inset-bottom, 0px));
-        --overlap-size: 3rem;
-        --transparency-grandient-pad: 6rem;
-
         width: 100%;
         height: calc(100% + var(--bottom-overlay-size));
         margin-bottom: calc(var(--bottom-overlay-size) * -1);
@@ -238,8 +231,6 @@
 @media only screen and (max-width: @minimum) {
     .library-container {
         .library-content {
-            --bottom-vertical-nav-bar-size: var(--vertical-nav-bar-size);
-
             .selectable-inputs-container {
                 justify-content: space-between;
             }
