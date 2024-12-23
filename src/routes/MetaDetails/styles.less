@@ -57,13 +57,6 @@
         margin-top: calc(var(--top-overlay-size) * -1);
         padding-top: var(--top-overlay-size);
         padding-bottom: var(--calculated-bottom-safe-inset, 0rem);
-        mask: linear-gradient(
-            to bottom,
-            transparent calc(var(--top-overlay-size) - var(--overlap-size)),
-            black calc(var(--top-overlay-size) + var(--transparency-grandient-pad)),
-            black 100%
-        );
-
         .vertical-nav-bar {
             flex: none;
         }

@@ -36,13 +36,6 @@
         left: var(--vertical-nav-bar-size);
         z-index: 0;
         overflow: scroll;
-
-        mask: linear-gradient(
-            to bottom,
-            transparent calc(var(--top-overlay-size) - var(--overlap-size)),
-            black calc(var(--top-overlay-size) + var(--transparency-grandient-pad)),
-            black 100%
-        );
     }
 }
 
@@ -51,14 +44,6 @@
         .nav-content-container {
             left: 0;
             padding-bottom: var(--vertical-nav-bar-size);
-
-            mask: linear-gradient(
-                to bottom,
-                transparent calc(var(--top-overlay-size) - var(--overlap-size)),
-                black calc(var(--top-overlay-size) + var(--transparency-grandient-pad)),
-                black calc(100% - var(--bottom-overlay-size) - var(--transparency-grandient-pad)),
-                transparent calc(100% - var(--bottom-overlay-size) + var(--overlap-size))
-            );
         }
 
         .vertical-nav-bar {
