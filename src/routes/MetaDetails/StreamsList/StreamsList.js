@@ -15,8 +15,10 @@ const ALL_ADDONS_KEY = 'ALL';
 const StreamsList = ({ className, video, ...props }) => {
     const { t } = useTranslation();
     const { core } = useServices();
+    const streamsContainerRef = React.useRef(null);
     const [selectedAddon, setSelectedAddon] = React.useState(ALL_ADDONS_KEY);
     const onAddonSelected = React.useCallback((event) => {
+        streamsContainerRef.current.scrollTo({ top: 0 });
         setSelectedAddon(event.value);
     }, []);
     const backButtonOnClick = React.useCallback(() => {
@@ -142,7 +144,7 @@ const StreamsList = ({ className, video, ...props }) => {
                                         :
                                         null
                                 }
-                                <div className={styles['streams-container']}>
+                                <div className={styles['streams-container']} ref={streamsContainerRef}>
                                     {filteredStreams.map((stream, index) => (
                                         <Stream
                                             key={index}
