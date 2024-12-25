@@ -129,17 +129,17 @@ const SubtitlesMenu = React.memo((props) => {
     const onSubtitlesOffsetChanged = React.useCallback((event) => {
         const delta = event.value === 'increment' ? 1 : -1;
         if (typeof props.selectedSubtitlesTrackId === 'string') {
-            if (props.extraSubtitlesOffset !== null && !isNaN(props.extraSubtitlesOffset)) {
-                const offset = Math.max(0, Math.min(100, Math.floor(props.extraSubtitlesOffset + delta)));
-                if (typeof props.onExtraSubtitlesOffsetChanged === 'function') {
-                    props.onExtraSubtitlesOffsetChanged(offset);
-                }
-            }
-        } else if (typeof props.selectedExtraSubtitlesTrackId === 'string') {
             if (props.subtitlesOffset !== null && !isNaN(props.subtitlesOffset)) {
                 const offset = Math.max(0, Math.min(100, Math.floor(props.subtitlesOffset + delta)));
                 if (typeof props.onSubtitlesOffsetChanged === 'function') {
                     props.onSubtitlesOffsetChanged(offset);
+                }
+            }
+        } else if (typeof props.selectedExtraSubtitlesTrackId === 'string') {
+            if (props.extraSubtitlesOffset !== null && !isNaN(props.extraSubtitlesOffset)) {
+                const offset = Math.max(0, Math.min(100, Math.floor(props.extraSubtitlesOffset + delta)));
+                if (typeof props.onExtraSubtitlesOffsetChanged === 'function') {
+                    props.onExtraSubtitlesOffsetChanged(offset);
                 }
             }
         }
