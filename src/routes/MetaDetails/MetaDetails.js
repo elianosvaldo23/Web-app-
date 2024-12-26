@@ -79,7 +79,6 @@ const MetaDetails = ({ urlParams, queryParams }) => {
     const renderBackground = React.useMemo(() => !!(
         metaPath &&
         metaDetails?.metaItem &&
-        metaDetails.metaItem.content?.type !== 'Err' &&
         metaDetails.metaItem.content.type !== 'Loading' &&
         typeof metaDetails.metaItem.content.content?.background === 'string' &&
         metaDetails.metaItem.content.content.background.length > 0
