@@ -40,8 +40,13 @@ const AudioMenu = ({ className, selectedAudioTrackId, audioTracks, onAudioTrackS
                                 data-id={id}
                                 onClick={onAudioTrackClick}
                             >
-                                <div className={styles['label']}>
-                                    { languages.label(lang) }
+                                <div className={styles['info']}>
+                                    <div className={styles['lang']}>
+                                        {languages.label(lang)}
+                                    </div>
+                                    <div className={styles['label']}>
+                                        {label}
+                                    </div>
                                 </div>
                                 {
                                     selectedAudioTrackId === id ?
