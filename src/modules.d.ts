@@ -4,4 +4,4 @@ declare module '*.less' {
 }
 
 declare module 'stremio/common';
-declare module 'stremio/common/Button';
+declare module 'stremio/components/Button';
