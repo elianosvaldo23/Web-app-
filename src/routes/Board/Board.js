@@ -57,14 +57,21 @@ const Board = () => {
                     {board.catalogs.map((catalog, index) => {
                         switch (catalog.content?.type) {
                             case 'Ready': {
-                                return (
-                                    <MetaRow
-                                        key={index}
-                                        className={classnames(styles['board-row'], styles[`board-row-${catalog.content.content[0].posterShape}`], 'animation-fade-in')}
-                                        catalog={catalog}
-                                        itemComponent={MetaItem}
-                                    />
-                                );
+                                if (catalog.content.content.length > 0) {
+                                    return (
+                                        <MetaRow
+                                            key={index}
+                                            className={classnames(
+                                                styles['board-row'],
+                                                styles[`board-row-${catalog.content.content[0].posterShape}`],
+                                                'animation-fade-in'
+                                            )}
+                                            catalog={catalog}
+                                            itemComponent={MetaItem}
+                                        />
+                                    );
+                                }
+                                return null;
                             }
                             case 'Err': {
                                 return (
