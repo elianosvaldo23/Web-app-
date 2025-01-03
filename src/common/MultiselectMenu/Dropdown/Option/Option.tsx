@@ -1,6 +1,6 @@
 // Copyright (C) 2017-2024 Smart code 203358507
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, forwardRef } from 'react';
 import classNames from 'classnames';
 import Button from 'stremio/common/Button';
 import styles from './Option.less';
@@ -12,7 +12,7 @@ type Props = {
     onSelect: (value: number) => void;
 };
 
-const Option = ({ option, selectedOption, onSelect }: Props) => {
+const Option = forwardRef<HTMLButtonElement, Props>(({ option, selectedOption, onSelect }, ref) => {
     // consider using option.id === selectedOption?.id instead
     const selected = useMemo(() => option?.value === selectedOption?.value, [option, selectedOption]);
 
@@ -22,6 +22,7 @@ const Option = ({ option, selectedOption, onSelect }: Props) => {
 
     return (
         <Button
+            ref={ref}
             className={classNames(styles['option'], { [styles['selected']]: selected })}
             key={option.id}
             onClick={handleClick}
@@ -32,7 +33,6 @@ const Option = ({ option, selectedOption, onSelect }: Props) => {
                 selected && !option.level ?
                     <div className={styles['icon']} />
                     : null
-
             }
             {
                 option.level ?
@@ -41,6 +41,8 @@ const Option = ({ option, selectedOption, onSelect }: Props) => {
             }
         </Button>
     );
-};
+});
+
+Option.displayName = 'Option';
 
 export default Option;
