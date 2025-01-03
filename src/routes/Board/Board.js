@@ -67,7 +67,7 @@ const Board = () => {
                                 );
                             }
                             case 'Err': {
-                                if (!catalog.content.content === 'EmptyContent') {
+                                if (catalog.content.content !== 'EmptyContent') {
                                     return (
                                         <MetaRow
                                             key={index}
