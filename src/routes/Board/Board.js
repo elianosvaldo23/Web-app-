@@ -67,14 +67,17 @@ const Board = () => {
                                 );
                             }
                             case 'Err': {
-                                return (
-                                    <MetaRow
-                                        key={index}
-                                        className={classnames(styles['board-row'], 'animation-fade-in')}
-                                        catalog={catalog}
-                                        message={catalog.content.content}
-                                    />
-                                );
+                                if (catalog.content.content !== 'EmptyContent') {
+                                    return (
+                                        <MetaRow
+                                            key={index}
+                                            className={classnames(styles['board-row'], 'animation-fade-in')}
+                                            catalog={catalog}
+                                            message={catalog.content.content}
+                                        />
+                                    );
+                                }
+                                return null;
                             }
                             default: {
                                 return (
