@@ -134,7 +134,7 @@
     }
 }
 
-@media only screen and (orientation: portrait) {
+@media only screen and (max-height: @xxsmall) and (orientation: portrait) {
     .cell {
         .heading {
             justify-content: center;
@@ -150,23 +150,11 @@
     }
 }
 
-@media only screen and (max-width: @small) and (orientation: landscape) {
+@media only screen and (max-height: @xxsmall) and (orientation: landscape) {
     .cell {
         flex-direction: row;
         align-items: center;
 
-        .items {
-           display: none;
-        }
-
-        .more {
-            display: flex;
-        }
-    }
-}
-
-@media only screen and (max-height: @xxsmall) and (orientation: landscape) {
-    .cell {
         .items {
             display: none;
         }
