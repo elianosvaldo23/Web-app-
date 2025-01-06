@@ -1,20 +1,30 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
-const React = require('react');
-const PropTypes = require('prop-types');
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 
-const Image = ({ className, src, alt, fallbackSrc, renderFallback, ...props }) => {
-    const [broken, setBroken] = React.useState(false);
-    const onError = React.useCallback((event) => {
+type Props = {
+    className: string,
+    src: string,
+    alt: string,
+    fallbackSrc: string,
+    renderFallback: () => void,
+    onError: (event: React.SyntheticEvent<HTMLImageElement>) => void,
+};
+
+const Image = ({ className, src, alt, fallbackSrc, renderFallback, ...props }: Props) => {
+    const [broken, setBroken] = useState(false);
+    const onError = useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
         if (typeof props.onError === 'function') {
             props.onError(event);
         }
 
         setBroken(true);
     }, [props.onError]);
-    React.useLayoutEffect(() => {
+
+    useLayoutEffect(() => {
         setBroken(false);
     }, [src]);
+
     return (broken || typeof src !== 'string' || src.length === 0) && (typeof renderFallback === 'function' || typeof fallbackSrc === 'string') ?
         typeof renderFallback === 'function' ?
             renderFallback()
@@ -24,13 +34,4 @@ const Image = ({ className, src, alt, fallbackSrc, renderFallback, ...props }) =
         <img {...props} className={className} src={src} alt={alt} loading='lazy' onError={onError} />;
 };
 
-Image.propTypes = {
-    className: PropTypes.string,
-    src: PropTypes.string,
-    alt: PropTypes.string,
-    fallbackSrc: PropTypes.string,
-    renderFallback: PropTypes.func,
-    onError: PropTypes.func
-};
-
-module.exports = Image;
+export default Image;

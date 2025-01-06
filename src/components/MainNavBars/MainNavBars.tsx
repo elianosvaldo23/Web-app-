@@ -1,10 +1,9 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
-const React = require('react');
-const PropTypes = require('prop-types');
-const classnames = require('classnames');
-const { VerticalNavBar, HorizontalNavBar } = require('stremio/components/NavBar');
-const styles = require('./styles');
+import React, { memo } from 'react';
+import classnames from 'classnames';
+import { VerticalNavBar, HorizontalNavBar } from 'stremio/components/NavBar';
+import styles from './MainNavBars.less';
 
 const TABS = [
     { id: 'board', label: 'Board', icon: 'home', href: '#/' },
@@ -15,7 +14,14 @@ const TABS = [
     { id: 'settings', label: 'SETTINGS', icon: 'settings', href: '#/settings' },
 ];
 
-const MainNavBars = React.memo(({ className, route, query, children }) => {
+type Props = {
+    className: string,
+    route?: string,
+    query?: string,
+    children?: React.ReactNode,
+};
+
+const MainNavBars = memo(({ className, route, query, children }: Props) => {
     return (
         <div className={classnames(className, styles['main-nav-bars-container'])}>
             <HorizontalNavBar
@@ -37,13 +43,5 @@ const MainNavBars = React.memo(({ className, route, query, children }) => {
     );
 });
 
-MainNavBars.displayName = 'MainNavBars';
+export default MainNavBars;
 
-MainNavBars.propTypes = {
-    className: PropTypes.string,
-    route: PropTypes.string,
-    query: PropTypes.string,
-    children: PropTypes.node
-};
-
-module.exports = MainNavBars;
