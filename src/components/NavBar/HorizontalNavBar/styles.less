@@ -1,4 +1,4 @@
-// Copyright (C) 2017-2023 Smart code 203358507
+// Copyright (C) 2017-2024 Smart code 203358507
 
 @import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
 @import (reference) '~stremio/common/screen-sizes.less';
@@ -12,6 +12,8 @@
     padding-right: 1rem;
     background-color: transparent;
     overflow: visible;
+    padding-top: var(--safe-area-inset-top);
+    box-sizing: content-box;
 
     .logo-container {
         flex: none;
@@ -32,7 +34,7 @@
     }
 
     .back-button-container {
-        margin-left: 1rem;
+        margin-left: max(0rem, calc(1rem - var(--safe-area-inset-left)));
     }
 
     .title {
