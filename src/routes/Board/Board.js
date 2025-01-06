@@ -5,11 +5,11 @@ const classnames = require('classnames');
 const debounce = require('lodash.debounce');
 const { useTranslation } = require('react-i18next');
 const { useStreamingServer, useNotifications, withCoreSuspender, getVisibleChildrenRange } = require('stremio/common');
-const { ContinueWatchingItem, EventModal, MainNavBars, MetaItem, MetaRow } = require('stremio/components');
-const StreamingServerWarning = require('./StreamingServerWarning');
+const { ContinueWatchingItem, EventModal, MainNavBars, MetaItem, MetaRow, Transition } = require('stremio/components');
 const useBoard = require('./useBoard');
 const useContinueWatchingPreview = require('./useContinueWatchingPreview');
 const styles = require('./styles');
+const { default: StreamingServerWarning } = require('./StreamingServerWarning');
 
 const THRESHOLD = 5;
 
@@ -21,6 +21,7 @@ const Board = () => {
     const notifications = useNotifications();
     const boardCatalogsOffset = continueWatchingPreview.items.length > 0 ? 1 : 0;
     const scrollContainerRef = React.useRef();
+    const streamingServerWarningOpen = React.useMemo(() => streamingServer.settings !== null && streamingServer.settings.type === 'Err', [streamingServer.settings]);
     const onVisibleRangeChange = React.useCallback(() => {
         const range = getVisibleChildrenRange(scrollContainerRef.current);
         if (range === null) {
@@ -94,12 +95,9 @@ const Board = () => {
                     })}
                 </div>
             </MainNavBars>
-            {
-                streamingServer.settings !== null && streamingServer.settings.type === 'Err' ?
-                    <StreamingServerWarning className={styles['board-warning-container']} />
-                    :
-                    null
-            }
+            <Transition when={streamingServerWarningOpen} name={'slide-top'}>
+                <StreamingServerWarning className={styles['board-warning-container']} />
+            </Transition>
         </div>
     );
 };
