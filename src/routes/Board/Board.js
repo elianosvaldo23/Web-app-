@@ -4,7 +4,7 @@ const React = require('react');
 const classnames = require('classnames');
 const debounce = require('lodash.debounce');
 const { useTranslation } = require('react-i18next');
-const { useStreamingServer, useNotifications, withCoreSuspender, getVisibleChildrenRange } = require('stremio/common');
+const { useStreamingServer, useNotifications, withCoreSuspender, getVisibleChildrenRange, useProfile } = require('stremio/common');
 const { ContinueWatchingItem, EventModal, MainNavBars, MetaItem, MetaRow, Transition } = require('stremio/components');
 const useBoard = require('./useBoard');
 const useContinueWatchingPreview = require('./useContinueWatchingPreview');
@@ -19,9 +19,15 @@ const Board = () => {
     const continueWatchingPreview = useContinueWatchingPreview();
     const [board, loadBoardRows] = useBoard();
     const notifications = useNotifications();
+    const profile = useProfile();
     const boardCatalogsOffset = continueWatchingPreview.items.length > 0 ? 1 : 0;
     const scrollContainerRef = React.useRef();
-    const streamingServerWarningOpen = React.useMemo(() => streamingServer.settings !== null && streamingServer.settings.type === 'Err', [streamingServer.settings]);
+    const streamingServerWarningDismissed = React.useMemo(() => {
+        return streamingServer.settings !== null &&
+            streamingServer.settings.type === 'Err' &&
+                !isNaN(profile.settings.streamingServerWarningDismissed.getTime()) &&
+                    profile.settings.streamingServerWarningDismissed.getTime() > Date.now();
+    }, [profile.settings, streamingServer.settings]);
     const onVisibleRangeChange = React.useCallback(() => {
         const range = getVisibleChildrenRange(scrollContainerRef.current);
         if (range === null) {
@@ -40,6 +46,8 @@ const Board = () => {
     React.useLayoutEffect(() => {
         onVisibleRangeChange();
     }, [board.catalogs, onVisibleRangeChange]);
+    console.log(streamingServerWarningDismissed); // eslint-disable-line no-console
+    console.log(profile.settings.streamingServerWarningDismissed); // eslint-disable-line no-console
     return (
         <div className={styles['board-container']}>
             <EventModal />
@@ -95,7 +103,7 @@ const Board = () => {
                     })}
                 </div>
             </MainNavBars>
-            <Transition when={streamingServerWarningOpen} name={'slide-top'}>
+            <Transition when={!streamingServerWarningDismissed} name={'slide-top'}>
                 <StreamingServerWarning className={styles['board-warning-container']} />
             </Transition>
         </div>

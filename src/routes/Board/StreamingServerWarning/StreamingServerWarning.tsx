@@ -24,6 +24,7 @@ const StreamingServerWarning = ({ className }: Props) => {
     };
 
     const updateSettings = useCallback((warningDismissed: Date) => {
+        console.log('updateSettings', warningDismissed); // eslint-disable-line no-console
         core.transport.dispatch({
             action: 'Ctx',
             args: {
