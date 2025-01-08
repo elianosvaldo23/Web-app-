@@ -79,6 +79,17 @@ const useVideo = () => {
         });
     };
 
+    const addLocalSubtitles = (filename, buffer) => {
+        dispatch({
+            type: 'command',
+            commandName: 'addLocalSubtitles',
+            commandArgs: {
+                filename,
+                buffer,
+            },
+        });
+    };
+
     const setProp = (name, value) => {
         dispatch({ type: 'setProp', propName: name, propValue: value });
     };
@@ -136,6 +147,7 @@ const useVideo = () => {
         load,
         unload,
         addExtraSubtitlesTracks,
+        addLocalSubtitles,
         setProp,
     };
 };

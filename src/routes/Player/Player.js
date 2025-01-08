@@ -8,7 +8,7 @@ const langs = require('langs');
 const { useTranslation } = require('react-i18next');
 const { useRouteFocused } = require('stremio-router');
 const { useServices } = require('stremio/services');
-const { useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender } = require('stremio/common');
+const { onFileDrop, useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender, CONSTANTS } = require('stremio/common');
 const { HorizontalNavBar, Transition } = require('stremio/components');
 const BufferingLoader = require('./BufferingLoader');
 const VolumeChangeIndicator = require('./VolumeChangeIndicator');
@@ -133,7 +133,10 @@ const Player = ({ urlParams, queryParams }) => {
         toast.show({
             type: 'success',
             title: t('PLAYER_SUBTITLES_LOADED'),
-            message: track.exclusive ? t('PLAYER_SUBTITLES_LOADED_EXCLUSIVE') : t('PLAYER_SUBTITLES_LOADED_ORIGIN', { origin: track.origin }),
+            message:
+                track.exclusive ? t('PLAYER_SUBTITLES_LOADED_EXCLUSIVE') :
+                    track.local ? t('PLAYER_SUBTITLES_LOADED_LOCAL') :
+                        t('PLAYER_SUBTITLES_LOADED_ORIGIN', { origin: track.origin }),
             timeout: 3000
         });
     }, []);
@@ -269,6 +272,11 @@ const Player = ({ urlParams, queryParams }) => {
     const onBarMouseMove = React.useCallback((event) => {
         event.nativeEvent.immersePrevented = true;
     }, []);
+
+    onFileDrop(CONSTANTS.SUPPORTED_LOCAL_SUBTITLES, async (file) => {
+        const buffer = await file.arrayBuffer();
+        video.addLocalSubtitles(file.name, buffer);
+    });
 
     React.useEffect(() => {
         setError(null);

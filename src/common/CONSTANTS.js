@@ -41,6 +41,11 @@ const ICON_FOR_TYPE = new Map([
     ['other', 'movies'],
 ]);
 
+const SUPPORTED_LOCAL_SUBTITLES = [
+    'application/x-subrip',
+    'text/vtt',
+];
+
 const EXTERNAL_PLAYERS = [
     {
         label: 'EXTERNAL_PLAYER_DISABLED',
@@ -113,6 +118,7 @@ module.exports = {
     WRITERS_LINK_CATEGORY,
     TYPE_PRIORITIES,
     ICON_FOR_TYPE,
+    SUPPORTED_LOCAL_SUBTITLES,
     EXTERNAL_PLAYERS,
     WHITELISTED_HOSTS,
 };

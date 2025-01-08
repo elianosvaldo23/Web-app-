@@ -13,6 +13,7 @@ const languages = require('./languages');
 const routesRegexp = require('./routesRegexp');
 const useAnimationFrame = require('./useAnimationFrame');
 const useBinaryState = require('./useBinaryState');
+const { default: onFileDrop } = require('./onFileDrop');
 const useFullscreen = require('./useFullscreen');
 const useLiveRef = require('./useLiveRef');
 const useModelState = require('./useModelState');
@@ -41,6 +42,7 @@ module.exports = {
     routesRegexp,
     useAnimationFrame,
     useBinaryState,
+    onFileDrop,
     useFullscreen,
     useLiveRef,
     useModelState,
