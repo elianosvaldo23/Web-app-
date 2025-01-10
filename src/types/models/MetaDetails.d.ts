@@ -4,6 +4,10 @@ type MetaItemMetaDetails = MetaItem & {
     deepLinks: MetaItemDeepLinks,
 };
 
+type MetaItemStream = Stream & {
+    suggested: boolean,
+};
+
 type MetaDetails = {
     metaExtensions: {
         url: string,
@@ -21,7 +25,7 @@ type MetaDetails = {
     } | null,
     streams: {
         addon: Addon,
-        content: Loadable<Stream[]>
+        content: Loadable<MetaItemStream[]>
     }[],
     title: string | null,
 };

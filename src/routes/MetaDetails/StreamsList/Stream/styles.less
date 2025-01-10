@@ -25,6 +25,16 @@
         background-color: var(--overlay-color);
     }
 
+    &.suggested-stream {
+        background-color: var(--tertiary-accent-color);
+        opacity: 0.8;
+        
+        &:hover, &:focus {
+            background-color: var(--tertiary-accent-color);
+            opacity: 0.4;
+        }
+    }
+
     &:hover, &:focus, &:global(.selected) {
         .icon {
             opacity: 1;
