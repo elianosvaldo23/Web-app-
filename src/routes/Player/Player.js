@@ -8,7 +8,8 @@ const langs = require('langs');
 const { useTranslation } = require('react-i18next');
 const { useRouteFocused } = require('stremio-router');
 const { useServices } = require('stremio/services');
-const { HorizontalNavBar, Transition, useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender } = require('stremio/common');
+const { useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender } = require('stremio/common');
+const { HorizontalNavBar, Transition } = require('stremio/components');
 const BufferingLoader = require('./BufferingLoader');
 const VolumeChangeIndicator = require('./VolumeChangeIndicator');
 const Error = require('./Error');
@@ -17,6 +18,7 @@ const NextVideoPopup = require('./NextVideoPopup');
 const StatisticsMenu = require('./StatisticsMenu');
 const OptionsMenu = require('./OptionsMenu');
 const SubtitlesMenu = require('./SubtitlesMenu');
+const { default: AudioMenu } = require('./AudioMenu');
 const SpeedMenu = require('./SpeedMenu');
 const { default: SideDrawerButton } = require('./SideDrawerButton');
 const { default: SideDrawer } = require('./SideDrawer');
@@ -54,18 +56,20 @@ const Player = ({ urlParams, queryParams }) => {
 
     const [optionsMenuOpen, , closeOptionsMenu, toggleOptionsMenu] = useBinaryState(false);
     const [subtitlesMenuOpen, , closeSubtitlesMenu, toggleSubtitlesMenu] = useBinaryState(false);
+    const [audioMenuOpen, , closeAudioMenu, toggleAudioMenu] = useBinaryState(false);
     const [speedMenuOpen, , closeSpeedMenu, toggleSpeedMenu] = useBinaryState(false);
     const [statisticsMenuOpen, , closeStatisticsMenu, toggleStatisticsMenu] = useBinaryState(false);
     const [nextVideoPopupOpen, openNextVideoPopup, closeNextVideoPopup] = useBinaryState(false);
     const [sideDrawerOpen, , closeSideDrawer, toggleSideDrawer] = useBinaryState(false);
 
     const menusOpen = React.useMemo(() => {
-        return optionsMenuOpen || subtitlesMenuOpen || speedMenuOpen || statisticsMenuOpen || sideDrawerOpen;
-    }, [optionsMenuOpen, subtitlesMenuOpen, speedMenuOpen, statisticsMenuOpen, sideDrawerOpen]);
+        return optionsMenuOpen || subtitlesMenuOpen || audioMenuOpen || speedMenuOpen || statisticsMenuOpen || sideDrawerOpen;
+    }, [optionsMenuOpen, subtitlesMenuOpen, audioMenuOpen, speedMenuOpen, statisticsMenuOpen, sideDrawerOpen]);
 
     const closeMenus = React.useCallback(() => {
         closeOptionsMenu();
         closeSubtitlesMenu();
+        closeAudioMenu();
         closeSpeedMenu();
         closeStatisticsMenu();
         closeSideDrawer();
@@ -235,6 +239,9 @@ const Player = ({ urlParams, queryParams }) => {
         if (!event.nativeEvent.subtitlesMenuClosePrevented) {
             closeSubtitlesMenu();
         }
+        if (!event.nativeEvent.audioMenuClosePrevented) {
+            closeAudioMenu();
+        }
         if (!event.nativeEvent.speedMenuClosePrevented) {
             closeSpeedMenu();
         }
@@ -399,11 +406,16 @@ const Player = ({ urlParams, queryParams }) => {
 
     React.useEffect(() => {
         if ((!Array.isArray(video.state.subtitlesTracks) || video.state.subtitlesTracks.length === 0) &&
-            (!Array.isArray(video.state.extraSubtitlesTracks) || video.state.extraSubtitlesTracks.length === 0) &&
-            (!Array.isArray(video.state.audioTracks) || video.state.audioTracks.length === 0)) {
+            (!Array.isArray(video.state.extraSubtitlesTracks) || video.state.extraSubtitlesTracks.length === 0)) {
             closeSubtitlesMenu();
         }
-    }, [video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks]);
+    }, [video.state.subtitlesTracks, video.state.extraSubtitlesTracks]);
+
+    React.useEffect(() => {
+        if (!Array.isArray(video.state.audioTracks) || video.state.audioTracks.length === 0) {
+            closeAudioMenu();
+        }
+    }, [video.state.audioTracks]);
 
     React.useEffect(() => {
         if (video.state.playbackSpeed === null) {
@@ -497,9 +509,16 @@ const Player = ({ urlParams, queryParams }) => {
                 case 'KeyS': {
                     closeMenus();
                     if ((Array.isArray(video.state.subtitlesTracks) && video.state.subtitlesTracks.length > 0) ||
-                        (Array.isArray(video.state.extraSubtitlesTracks) && video.state.extraSubtitlesTracks.length > 0) ||
-                        (Array.isArray(video.state.audioTracks) && video.state.audioTracks.length > 0)) {
+                        (Array.isArray(video.state.extraSubtitlesTracks) && video.state.extraSubtitlesTracks.length > 0)) {
                         toggleSubtitlesMenu();
+                    }
+
+                    break;
+                }
+                case 'KeyA': {
+                    closeMenus();
+                    if (Array.isArray(video.state.audioTracks) && video.state.audioTracks.length > 0) {
+                        toggleAudioMenu();
                     }
 
                     break;
@@ -678,6 +697,7 @@ const Player = ({ urlParams, queryParams }) => {
                 onSeekRequested={onSeekRequested}
                 onToggleOptionsMenu={toggleOptionsMenu}
                 onToggleSubtitlesMenu={toggleSubtitlesMenu}
+                onToggleAudioMenu={toggleAudioMenu}
                 onToggleSpeedMenu={toggleSpeedMenu}
                 onToggleStatisticsMenu={toggleStatisticsMenu}
                 onToggleSideDrawer={toggleSideDrawer}
@@ -717,8 +737,6 @@ const Player = ({ urlParams, queryParams }) => {
                 subtitlesMenuOpen ?
                     <SubtitlesMenu
                         className={classnames(styles['layer'], styles['menu-layer'])}
-                        audioTracks={video.state.audioTracks}
-                        selectedAudioTrackId={video.state.selectedAudioTrackId}
                         subtitlesTracks={video.state.subtitlesTracks}
                         selectedSubtitlesTrackId={video.state.selectedSubtitlesTrackId}
                         subtitlesOffset={video.state.subtitlesOffset}
@@ -730,12 +748,22 @@ const Player = ({ urlParams, queryParams }) => {
                         extraSubtitlesSize={video.state.extraSubtitlesSize}
                         onSubtitlesTrackSelected={onSubtitlesTrackSelected}
                         onExtraSubtitlesTrackSelected={onExtraSubtitlesTrackSelected}
-                        onAudioTrackSelected={onAudioTrackSelected}
                         onSubtitlesOffsetChanged={onSubtitlesOffsetChanged}
                         onSubtitlesSizeChanged={onSubtitlesSizeChanged}
                         onExtraSubtitlesOffsetChanged={onSubtitlesOffsetChanged}
                         onExtraSubtitlesDelayChanged={onExtraSubtitlesDelayChanged}
                         onExtraSubtitlesSizeChanged={onSubtitlesSizeChanged}
+                    />
+                    :
+                    null
+            }
+            {
+                audioMenuOpen ?
+                    <AudioMenu
+                        className={classnames(styles['layer'], styles['menu-layer'])}
+                        audioTracks={video.state.audioTracks}
+                        selectedAudioTrackId={video.state.selectedAudioTrackId}
+                        onAudioTrackSelected={onAudioTrackSelected}
                     />
                     :
                     null

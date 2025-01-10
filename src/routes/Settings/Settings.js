@@ -7,7 +7,8 @@ const { useTranslation } = require('react-i18next');
 const { default: Icon } = require('@stremio/stremio-icons/react');
 const { useRouteFocused } = require('stremio-router');
 const { useServices } = require('stremio/services');
-const { Button, Toggle, MainNavBars, Multiselect, ColorInput, useProfile, usePlatform, useStreamingServer, withCoreSuspender, useToast } = require('stremio/common');
+const { useProfile, usePlatform, useStreamingServer, withCoreSuspender, useToast } = require('stremio/common');
+const { Button, ColorInput, MainNavBars, Multiselect, Toggle } = require('stremio/components');
 const useProfileSettingsInputs = require('./useProfileSettingsInputs');
 const useStreamingServerSettingsInputs = require('./useStreamingServerSettingsInputs');
 const useDataExport = require('./useDataExport');
@@ -625,6 +626,14 @@ const Settings = () => {
                             </div>
                             <div className={classnames(styles['option-input-container'], styles['shortcut-container'])}>
                                 <kbd>S</kbd>
+                            </div>
+                        </div>
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>{ t('SETTINGS_SHORTCUT_MENU_AUDIO') }</div>
+                            </div>
+                            <div className={classnames(styles['option-input-container'], styles['shortcut-container'])}>
+                                <kbd>A</kbd>
                             </div>
                         </div>
                         <div className={styles['option-container']}>
