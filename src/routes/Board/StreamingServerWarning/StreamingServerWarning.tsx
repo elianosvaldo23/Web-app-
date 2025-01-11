@@ -1,3 +1,5 @@
+// Copyright (C) 2017-2024 Smart code 203358507
+
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
@@ -16,33 +18,38 @@ const StreamingServerWarning = ({ className }: Props) => {
     const { core } = useServices();
     const profile = useProfile();
 
-    const createDate = (months: number, years: number): Date => {
-        const date = new Date();
-        if (months) date.setMonth(date.getMonth() + months);
-        if (years) date.setFullYear(date.getFullYear() + years);
-        return date;
+    const createDismissalDate = (months: number, years = 0): Date => {
+        const dismissalDate = new Date();
+
+        if (months) {
+            dismissalDate.setMonth(dismissalDate.getMonth() + months);
+        }
+        if (years) {
+            dismissalDate.setFullYear(dismissalDate.getFullYear() + years);
+        }
+
+        return dismissalDate;
     };
 
-    const updateSettings = useCallback((warningDismissed: Date) => {
-        console.log('updateSettings', warningDismissed); // eslint-disable-line no-console
+    const updateSettings = useCallback((streamingServerWarningDismissed: Date) => {
         core.transport.dispatch({
             action: 'Ctx',
             args: {
                 action: 'UpdateSettings',
                 args: {
                     ...profile.settings,
-                    warningDismissed
+                    streamingServerWarningDismissed
                 }
             }
         });
     }, [profile.settings]);
 
     const onLater = useCallback(() => {
-        updateSettings(createDate(1, 0));
+        updateSettings(createDismissalDate(1));
     }, [updateSettings]);
 
     const onDismiss = useCallback(() => {
-        updateSettings(createDate(0, 50));
+        updateSettings(createDismissalDate(0, 50));
     }, [updateSettings]);
 
     return (

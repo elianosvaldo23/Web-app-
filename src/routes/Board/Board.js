@@ -5,7 +5,7 @@ const classnames = require('classnames');
 const debounce = require('lodash.debounce');
 const { useTranslation } = require('react-i18next');
 const { useStreamingServer, useNotifications, withCoreSuspender, getVisibleChildrenRange, useProfile } = require('stremio/common');
-const { ContinueWatchingItem, EventModal, MainNavBars, MetaItem, MetaRow, Transition } = require('stremio/components');
+const { ContinueWatchingItem, EventModal, MainNavBars, MetaItem, MetaRow } = require('stremio/components');
 const useBoard = require('./useBoard');
 const useContinueWatchingPreview = require('./useContinueWatchingPreview');
 const styles = require('./styles');
@@ -25,8 +25,8 @@ const Board = () => {
     const streamingServerWarningDismissed = React.useMemo(() => {
         return streamingServer.settings !== null &&
             streamingServer.settings.type === 'Err' &&
-                !isNaN(profile.settings.streamingServerWarningDismissed.getTime()) &&
-                    profile.settings.streamingServerWarningDismissed.getTime() > Date.now();
+            !isNaN(profile.settings.streamingServerWarningDismissed.getTime()) &&
+            profile.settings.streamingServerWarningDismissed.getTime() > Date.now();
     }, [profile.settings, streamingServer.settings]);
     const onVisibleRangeChange = React.useCallback(() => {
         const range = getVisibleChildrenRange(scrollContainerRef.current);
@@ -46,8 +46,6 @@ const Board = () => {
     React.useLayoutEffect(() => {
         onVisibleRangeChange();
     }, [board.catalogs, onVisibleRangeChange]);
-    console.log(streamingServerWarningDismissed); // eslint-disable-line no-console
-    console.log(profile.settings.streamingServerWarningDismissed); // eslint-disable-line no-console
     return (
         <div className={styles['board-container']}>
             <EventModal />
@@ -103,9 +101,12 @@ const Board = () => {
                     })}
                 </div>
             </MainNavBars>
-            <Transition when={!streamingServerWarningDismissed} name={'slide-top'}>
-                <StreamingServerWarning className={styles['board-warning-container']} />
-            </Transition>
+            {
+                !streamingServerWarningDismissed ?
+                    <StreamingServerWarning className={styles['board-warning-container']} />
+                    :
+                    null
+            }
         </div>
     );
 };
