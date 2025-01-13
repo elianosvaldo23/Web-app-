@@ -144,7 +144,7 @@ const Stream = ({ className, videoId, videoReleased, addonName, name, descriptio
 
     const renderLabel = React.useMemo(() => function renderLabel({ className, children, ...props }) {
         return (
-            <Button className={classnames(className, styles['stream-container'], lastUsed===true ? styles['last-used-stream'] : '')} title={addonName} href={href} target={target} download={download} onClick={onClick} {...props}>
+            <Button className={classnames(className, styles['stream-container'], { [styles['last-used-stream']]: lastUsed })} title={addonName} href={href} target={target} download={download} onClick={onClick} {...props}>
                 <div className={styles['info-container']}>
                     {
                         typeof thumbnail === 'string' && thumbnail.length > 0 ?
