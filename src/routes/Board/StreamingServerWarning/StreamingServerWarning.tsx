@@ -7,7 +7,7 @@ import { useServices } from 'stremio/services';
 import { Button } from 'stremio/components';
 import useProfile from 'stremio/common/useProfile';
 import { withCoreSuspender } from 'stremio/common/CoreSuspender';
-import styles from './styles.less';
+import styles from './StreamingServerWarning.less';
 
 type Props = {
     className?: string;
