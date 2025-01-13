@@ -159,7 +159,7 @@ const StreamsList = ({ className, video, ...props }) => {
                                             progress={stream.progress}
                                             deepLinks={stream.deepLinks}
                                             onClick={stream.onClick}
-                                            suggested={stream.suggested ?? false}
+                                            lastUsed={stream.lastUsed ?? false}
                                         />
                                     ))}
                                 </div>

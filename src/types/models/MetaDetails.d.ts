@@ -5,7 +5,7 @@ type MetaItemMetaDetails = MetaItem & {
 };
 
 type MetaItemStream = Stream & {
-    suggested: boolean,
+    lastUsed: boolean,
 };
 
 type MetaDetails = {
