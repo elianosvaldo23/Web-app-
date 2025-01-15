@@ -15,18 +15,18 @@
 
 // iOS pads the bottom inset more than needed, so we deduce the actual inset size when using the webapp
 @calculated-bottom-safe-inset: ~"min(env(safe-area-inset-bottom, 0rem), max(1rem, calc(100lvh - 100svh - env(safe-area-inset-top, 0rem))))";
+
+// Viewport sizes
 @viewport-width: ~"100vw";
 @viewport-height: ~"100vh";
-@modern-viewport-width: ~"100dvw";
-@modern-viewport-height: ~"100dvh";
-@small-viewport-width: ~"100svw";
-@small-viewport-height: ~"100svh";
-@large-viewport-width: ~"100lvw";
-@large-viewport-height: ~"100lvh";
-@html-width: ~"calc(max(100vw, var(--dynamic-viewport-width, 100vw)))";
-@html-height: ~"calc(max(100vh, var(--dynamic-viewport-height, 100vh)))";
-@html-standalone-width: ~"calc(max(100%, var(--dynamic-viewport-width, 100vw)))";
-@html-standalone-height: ~"calc(max(100%, var(--dynamic-viewport-height, 100vh)))";
+
+// HTML sizes
+@html-width: ~"calc(max(var(--small-viewport-width), var(--dynamic-viewport-width)))";
+@html-height: ~"calc(max(var(--small-viewport-height), var(--dynamic-viewport-height)))";
+@html-standalone-width: ~"calc(max(100%, var(--large-viewport-width)))";
+@html-standalone-height: ~"calc(max(100%, var(--large-viewport-height)))";
+
+// Safe area insets
 @safe-area-inset-top: env(safe-area-inset-top, 0rem);
 @safe-area-inset-right: env(safe-area-inset-right, 0rem);
 @safe-area-inset-bottom: env(safe-area-inset-bottom, 0rem);
@@ -75,10 +75,24 @@
     --safe-area-inset-left: @safe-area-inset-left;
     --dynamic-viewport-width: @viewport-width;
     --dynamic-viewport-height: @viewport-height;
+    --large-viewport-width: @viewport-width;
+    --large-viewport-height: @viewport-height;
+    --small-viewport-width: @viewport-width;
+    --small-viewport-height: @viewport-height;
 
     @supports (height: 100dvh) {
-        --dynamic-viewport-width: @modern-viewport-width;
-        --dynamic-viewport-height: @modern-viewport-height;
+        --dynamic-viewport-width: 100dvw;
+        --dynamic-viewport-height: 100dvh;
+    }
+
+    @supports (height: 100lvh) {
+        --large-viewport-width: 100lvw;
+        --large-viewport-height: 100lvh;
+    }
+
+    @supports (height: 100svh) {
+        --small-viewport-width: 100svw;
+        --small-viewport-height: 100svh;
     }
 }
 
