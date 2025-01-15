@@ -15,10 +15,18 @@
 
 // iOS pads the bottom inset more than needed, so we deduce the actual inset size when using the webapp
 @calculated-bottom-safe-inset: ~"min(env(safe-area-inset-bottom, 0rem), max(1rem, calc(100lvh - 100svh - env(safe-area-inset-top, 0rem))))";
-@html-width: ~"calc(max(100svw, 100dvw))";
-@html-height: ~"calc(max(100svh, 100dvh))";
-@html-standalone-width: ~"calc(max(100%, 100lvw))";
-@html-standalone-height: ~"calc(max(100%, 100lvh))";
+@viewport-width: ~"100vw";
+@viewport-height: ~"100vh";
+@modern-viewport-width: ~"100dvw";
+@modern-viewport-height: ~"100dvh";
+@small-viewport-width: ~"100svw";
+@small-viewport-height: ~"100svh";
+@large-viewport-width: ~"100lvw";
+@large-viewport-height: ~"100lvh";
+@html-width: ~"calc(max(100vw, var(--dynamic-viewport-width, 100vw)))";
+@html-height: ~"calc(max(100vh, var(--dynamic-viewport-height, 100vh)))";
+@html-standalone-width: ~"calc(max(100%, var(--dynamic-viewport-width, 100vw)))";
+@html-standalone-height: ~"calc(max(100%, var(--dynamic-viewport-height, 100vh)))";
 @safe-area-inset-top: env(safe-area-inset-top, 0rem);
 @safe-area-inset-right: env(safe-area-inset-right, 0rem);
 @safe-area-inset-bottom: env(safe-area-inset-bottom, 0rem);
@@ -65,6 +73,13 @@
     --safe-area-inset-right: @safe-area-inset-right;
     --safe-area-inset-bottom: @safe-area-inset-bottom;
     --safe-area-inset-left: @safe-area-inset-left;
+    --dynamic-viewport-width: @viewport-width;
+    --dynamic-viewport-height: @viewport-height;
+
+    @supports (height: 100dvh) {
+        --dynamic-viewport-width: @modern-viewport-width;
+        --dynamic-viewport-height: @modern-viewport-height;
+    }
 }
 
 * {
@@ -112,8 +127,8 @@ svg {
 html {
     width: @html-width;
     height: @html-height;
-    min-width: 100%; // Fallback for browsers that don't support new CSS units
-    min-height: 100%;
+    min-width: 100%; // Fallback for older browsers
+    min-height: 100%; // Fallback for older browsers
     font-family: 'PlusJakartaSans', 'sans-serif';
     overflow: auto;
     overscroll-behavior: none;
@@ -130,6 +145,7 @@ html {
     body {
         width: 100%;
         height: 100%;
+        min-height: 100%;
         background: linear-gradient(41deg, var(--primary-background-color) 0%, var(--secondary-background-color) 100%);
 
         :global(#app) {
@@ -137,6 +153,7 @@ html {
             z-index: 0;
             width: 100%;
             height: 100%;
+            min-height: 100%;
 
             .toasts-container {
                 position: absolute;
@@ -212,9 +229,6 @@ html {
 
 @media only screen and (max-width: @xsmall) {
     html {
-        min-width: inherit;
-        min-height: inherit;
-
         body {
             :global(#app) {
                 .toasts-container {
