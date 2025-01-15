@@ -14,7 +14,7 @@
 }
 
 // iOS pads the bottom inset more than needed, so we deduce the actual inset size when using the webapp
-@calculated-bottom-safe-inset: ~"min(env(safe-area-inset-bottom, 0rem), max(1rem, calc(100lvh - 100svh - env(safe-area-inset-top, 0rem))))";
+@calculated-bottom-safe-inset: ~"min(env(safe-area-inset-bottom, 0rem), max(1rem, calc(var(--viewport-height-diff) - env(safe-area-inset-top, 0rem))))";
 
 // Viewport sizes
 @viewport-width: ~"100vw";
@@ -79,6 +79,7 @@
     --large-viewport-height: @viewport-height;
     --small-viewport-width: @viewport-width;
     --small-viewport-height: @viewport-height;
+    --viewport-height-diff: calc(100vh - 100vh);
 
     @supports (height: 100dvh) {
         --dynamic-viewport-width: 100dvw;
@@ -93,6 +94,10 @@
     @supports (height: 100svh) {
         --small-viewport-width: 100svw;
         --small-viewport-height: 100svh;
+    }
+
+    @supports (height: 100lvh) and (height: 100svh) {
+        --viewport-height-diff: calc(100lvh - 100svh);
     }
 }
 
