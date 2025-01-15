@@ -146,8 +146,6 @@ svg {
 html {
     width: @html-width;
     height: @html-height;
-    min-width: 100%; // Fallback for older browsers
-    min-height: 100%; // Fallback for older browsers
     font-family: 'PlusJakartaSans', 'sans-serif';
     overflow: auto;
     overscroll-behavior: none;
@@ -164,7 +162,6 @@ html {
     body {
         width: 100%;
         height: 100%;
-        min-height: 100%;
         background: linear-gradient(41deg, var(--primary-background-color) 0%, var(--secondary-background-color) 100%);
 
         :global(#app) {
@@ -172,7 +169,6 @@ html {
             z-index: 0;
             width: 100%;
             height: 100%;
-            min-height: 100%;
 
             .toasts-container {
                 position: absolute;
