@@ -112,8 +112,8 @@ svg {
 html {
     width: @html-width;
     height: @html-height;
-    min-width: 640px;
-    min-height: 480px;
+    min-width: 100%; // Fallback for browsers that don't support new CSS units
+    min-height: 100%;
     font-family: 'PlusJakartaSans', 'sans-serif';
     overflow: auto;
     overscroll-behavior: none;
