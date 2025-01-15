@@ -17,6 +17,8 @@
 @calculated-bottom-safe-inset: ~"min(env(safe-area-inset-bottom, 0rem), max(1rem, calc(100lvh - 100svh - env(safe-area-inset-top, 0rem))))";
 @html-width: ~"calc(max(100svw, 100dvw))";
 @html-height: ~"calc(max(100svh, 100dvh))";
+@html-standalone-width: ~"calc(max(100%, 100lvw))";
+@html-standalone-height: ~"calc(max(100%, 100lvh))";
 @safe-area-inset-top: env(safe-area-inset-top, 0rem);
 @safe-area-inset-right: env(safe-area-inset-right, 0rem);
 @safe-area-inset-bottom: env(safe-area-inset-bottom, 0rem);
@@ -118,6 +120,12 @@ html {
     user-select: none;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+
+
+    @media (display-mode: standalone) {
+        width: @html-standalone-width;
+        height: @html-standalone-height;
+    }
 
     body {
         width: 100%;
