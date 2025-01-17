@@ -165,7 +165,7 @@ const SubtitlesMenu = React.memo((props) => {
                         <Button key={index} title={languages.label(lang)} className={classnames(styles['language-option'], { 'selected': selectedSubtitlesLanguage === lang })} data-lang={lang} onClick={subtitlesLanguageOnClick}>
                             <div className={styles['language-label']}>
                                 {
-                                    lang === 'local' ? t('LOCAL_SUBTITLES') : languages.label(lang)
+                                    lang === 'local' ? t('LOCAL') : languages.label(lang)
                                 }
                             </div>
                             {
