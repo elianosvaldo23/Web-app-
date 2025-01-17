@@ -165,7 +165,7 @@ const App = () => {
                             <PlatformProvider>
                                 <ToastProvider className={styles['toasts-container']}>
                                     <TooltipProvider className={styles['tooltip-container']}>
-                                        <FileDropProvider>
+                                        <FileDropProvider className={styles['file-drop-container']}>
                                             <ServicesToaster />
                                             <DeepLinkHandler />
                                             <SearchParamsHandler />

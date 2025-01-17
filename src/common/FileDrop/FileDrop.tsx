@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import classNames from 'classnames';
 
 export type FileType = string;
 export type FileDropListener = (file: File) => void;
@@ -11,14 +12,24 @@ type FileDropContext = {
 const FileDropContext = createContext({} as FileDropContext);
 
 type Props = {
+    className: string,
     children: JSX.Element,
 };
 
-const FileDropProvider = ({ children }: Props) => {
+const FileDropProvider = ({ className, children }: Props) => {
     const [listeners, setListeners] = useState<[FileType, FileDropListener][]>([]);
+    const [active, setActive] = useState(false);
 
     const onDragOver = (event: DragEvent) => {
         event.preventDefault();
+    };
+
+    const onDragEnter = () => {
+        setActive(true);
+    };
+
+    const onDragLeave = () => {
+        setActive(false);
     };
 
     const onDrop = useCallback((event: DragEvent) => {
@@ -33,6 +44,8 @@ const FileDropProvider = ({ children }: Props) => {
                 .filter(([type]) => type === file.type)
                 .forEach(([, listerner]) => listerner(file));
         }
+
+        setActive(false);
     }, [listeners]);
 
     const on = (type: FileType, listener: FileDropListener) => {
@@ -49,10 +62,14 @@ const FileDropProvider = ({ children }: Props) => {
 
     useEffect(() => {
         window.addEventListener('dragover', onDragOver);
+        window.addEventListener('dragenter', onDragEnter);
+        window.addEventListener('dragleave', onDragLeave);
         window.addEventListener('drop', onDrop);
 
         return () => {
             window.removeEventListener('dragover', onDragOver);
+            window.removeEventListener('dragenter', onDragEnter);
+            window.removeEventListener('dragleave', onDragLeave);
             window.removeEventListener('drop', onDrop);
         };
     }, [onDrop]);
@@ -60,6 +77,7 @@ const FileDropProvider = ({ children }: Props) => {
     return (
         <FileDropContext.Provider value={{ on, off }}>
             { children }
+            <div className={classNames(className, { 'active': active })} />
         </FileDropContext.Provider>
     );
 };
