@@ -6,7 +6,7 @@ const { useTranslation } = require('react-i18next');
 const { Router } = require('stremio-router');
 const { Core, Shell, Chromecast, DragAndDrop, KeyboardShortcuts, ServicesProvider } = require('stremio/services');
 const { NotFound } = require('stremio/routes');
-const { PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender } = require('stremio/common');
+const { FileDropProvider, PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender } = require('stremio/common');
 const ServicesToaster = require('./ServicesToaster');
 const DeepLinkHandler = require('./DeepLinkHandler');
 const SearchParamsHandler = require('./SearchParamsHandler');
@@ -165,14 +165,16 @@ const App = () => {
                             <PlatformProvider>
                                 <ToastProvider className={styles['toasts-container']}>
                                     <TooltipProvider className={styles['tooltip-container']}>
-                                        <ServicesToaster />
-                                        <DeepLinkHandler />
-                                        <SearchParamsHandler />
-                                        <RouterWithProtectedRoutes
-                                            className={styles['router']}
-                                            viewsConfig={routerViewsConfig}
-                                            onPathNotMatch={onPathNotMatch}
-                                        />
+                                        <FileDropProvider>
+                                            <ServicesToaster />
+                                            <DeepLinkHandler />
+                                            <SearchParamsHandler />
+                                            <RouterWithProtectedRoutes
+                                                className={styles['router']}
+                                                viewsConfig={routerViewsConfig}
+                                                onPathNotMatch={onPathNotMatch}
+                                            />
+                                        </FileDropProvider>
                                     </TooltipProvider>
                                 </ToastProvider>
                             </PlatformProvider>
