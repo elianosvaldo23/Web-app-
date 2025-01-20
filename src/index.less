@@ -1,0 +1,47 @@
+.toasts-container {
+    position: absolute;
+    top: calc(1.2 * var(--horizontal-nav-bar-size) + var(--safe-area-inset-top));
+    right: var(--safe-area-inset-right);
+    bottom: calc(1.2 * var(--horizontal-nav-bar-size) + var(--calculated-bottom-safe-inset, 0rem));
+    left: auto;
+    z-index: 1;
+    padding: 0 calc(0.5 * var(--horizontal-nav-bar-size));
+    overflow: visible;
+    scrollbar-width: none;
+    pointer-events: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.tooltip-container {
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+    color: var(--primary-foreground-color);
+    border-radius: var(--border-radius);
+    background-color: var(--modal-background-color);
+    box-shadow: var(--outer-glow);
+    transition: opacity 0.1s ease-out;
+}
+
+.file-drop-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 1rem;
+    border: 0.5rem dashed transparent;
+    pointer-events: none;
+    transition: border-color 0.25s ease-out;
+
+    &:global(.active) {
+        border-color: var(--primary-accent-color);
+        pointer-events: inherit;
+    }
+}

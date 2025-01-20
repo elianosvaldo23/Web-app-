@@ -22,9 +22,6 @@ const FileDropProvider = ({ className, children }: Props) => {
 
     const onDragOver = (event: DragEvent) => {
         event.preventDefault();
-    };
-
-    const onDragEnter = () => {
         setActive(true);
     };
 
@@ -62,13 +59,11 @@ const FileDropProvider = ({ className, children }: Props) => {
 
     useEffect(() => {
         window.addEventListener('dragover', onDragOver);
-        window.addEventListener('dragenter', onDragEnter);
         window.addEventListener('dragleave', onDragLeave);
         window.addEventListener('drop', onDrop);
 
         return () => {
             window.removeEventListener('dragover', onDragOver);
-            window.removeEventListener('dragenter', onDragEnter);
             window.removeEventListener('dragleave', onDragLeave);
             window.removeEventListener('drop', onDrop);
         };
