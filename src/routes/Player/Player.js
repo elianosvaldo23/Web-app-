@@ -141,6 +141,12 @@ const Player = ({ urlParams, queryParams }) => {
         });
     }, []);
 
+    const onExtraSubtitlesTrackAdded = React.useCallback((track) => {
+        if (track.local) {
+            video.setExtraSubtitlesTrack(track.id);
+        }
+    }, []);
+
     const onPlayRequested = React.useCallback(() => {
         video.setProp('paused', false);
         setSeeking(false);
@@ -175,13 +181,11 @@ const Player = ({ urlParams, queryParams }) => {
     }, []);
 
     const onSubtitlesTrackSelected = React.useCallback((id) => {
-        video.setProp('selectedSubtitlesTrackId', id);
-        video.setProp('selectedExtraSubtitlesTrackId', null);
+        video.setSubtitlesTrack(id);
     }, []);
 
     const onExtraSubtitlesTrackSelected = React.useCallback((id) => {
-        video.setProp('selectedSubtitlesTrackId', null);
-        video.setProp('selectedExtraSubtitlesTrackId', id);
+        video.setExtraSubtitlesTrack(id);
     }, []);
 
     const onAudioTrackSelected = React.useCallback((id) => {
@@ -594,6 +598,7 @@ const Player = ({ urlParams, queryParams }) => {
         video.events.on('ended', onEnded);
         video.events.on('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
         video.events.on('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
+        video.events.on('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
         video.events.on('implementationChanged', onImplementationChanged);
 
         return () => {
@@ -601,6 +606,7 @@ const Player = ({ urlParams, queryParams }) => {
             video.events.off('ended', onEnded);
             video.events.off('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
             video.events.off('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
+            video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
             video.events.off('implementationChanged', onImplementationChanged);
         };
     }, []);
