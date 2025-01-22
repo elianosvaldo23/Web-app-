@@ -36,9 +36,12 @@
     }
 
     .board-warning-container {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 0.5rem;
+        right: 0.5rem;
         flex: none;
         align-self: stretch;
-        margin-bottom: calc(max(var(--calculated-bottom-safe-inset), 0.5rem))
     }
 }
 
@@ -216,12 +219,8 @@
         }
         
         .board-warning-container {
-            position: absolute;
-            left: 0;
-            right: 0;
             bottom: calc(var(--vertical-nav-bar-size) + var(--calculated-bottom-safe-inset, 0rem));
             height: 7rem;
-            margin-bottom: 0rem;
         }
     }
 }
