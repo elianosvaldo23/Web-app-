@@ -261,13 +261,11 @@ module.exports = (env, argv) => ({
             icons: [
                 {
                     src: 'images/icon.png',
-                    destination: `${COMMIT_HASH}/icons`,
                     sizes: [196, 512],
                     purpose: 'any'
                 },
                 {
                     src: 'images/maskable_icon.png',
-                    destination: `${COMMIT_HASH}/maskable_icons`,
                     sizes: [196, 512],
                     purpose: 'maskable',
                     ios: true
