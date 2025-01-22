@@ -23,10 +23,10 @@ const Board = () => {
     const boardCatalogsOffset = continueWatchingPreview.items.length > 0 ? 1 : 0;
     const scrollContainerRef = React.useRef();
     const streamingServerWarningDismissed = React.useMemo(() => {
-        return streamingServer.settings !== null &&
-            streamingServer.settings.type === 'Err' &&
+        return streamingServer.settings !== null && streamingServer.settings.type === 'Ready' || (
             !isNaN(profile.settings.streamingServerWarningDismissed.getTime()) &&
-            profile.settings.streamingServerWarningDismissed.getTime() > Date.now();
+            profile.settings.streamingServerWarningDismissed.getTime() > Date.now()
+        );
     }, [profile.settings, streamingServer.settings]);
     const onVisibleRangeChange = React.useCallback(() => {
         const range = getVisibleChildrenRange(scrollContainerRef.current);
