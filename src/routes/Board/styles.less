@@ -217,7 +217,9 @@
         }
         
         .board-warning-container {
-            bottom: calc(var(--vertical-nav-bar-size) + var(--calculated-bottom-safe-inset, 0rem));
+            bottom: calc(var(--vertical-nav-bar-size) + 0.5rem);
+            margin-left: var(--safe-area-inset-left);
+            margin-right: var(--safe-area-inset-right);
             height: 7rem;
         }
     }
