@@ -13,7 +13,7 @@
 
 .board-container {
     width: 100%;
-    height: calc(100% - var(--calculated-bottom-safe-inset));
+    height: calc(100% - var(--safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
 
@@ -217,7 +217,7 @@
         }
         
         .board-warning-container {
-            bottom: calc(var(--vertical-nav-bar-size) + var(--calculated-bottom-safe-inset, 0rem));
+            bottom: calc(var(--vertical-nav-bar-size) + var(--safe-area-inset-bottom, 0rem));
             height: 7rem;
         }
     }
