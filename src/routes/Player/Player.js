@@ -273,13 +273,12 @@ const Player = ({ urlParams, queryParams }) => {
     React.useEffect(() => {
         setError(null);
         video.unload();
-
-        if (player.selected && streamingServer.settings?.type !== 'Loading') {
+        if (player.stream?.type === 'Ready' && streamingServer.settings?.type !== 'Loading') {
             video.load({
                 stream: {
-                    ...player.selected.stream,
-                    subtitles: Array.isArray(player.selected.stream.subtitles) ?
-                        player.selected.stream.subtitles.map((subtitles) => ({
+                    ...player.stream.content,
+                    subtitles: Array.isArray(player.stream.content.subtitles) ?
+                        player.stream.content.subtitles.map((subtitles) => ({
                             ...subtitles,
                             label: subtitles.url
                         }))
@@ -309,7 +308,7 @@ const Player = ({ urlParams, queryParams }) => {
                 shellTransport: shell.active ? shell.transport : null,
             });
         }
-    }, [streamingServer.baseUrl, player.selected, forceTranscoding, casting]);
+    }, [streamingServer.baseUrl, player.selected, player.stream, forceTranscoding, casting]);
     React.useEffect(() => {
         if (video.state.stream !== null) {
             const tracks = player.subtitles.map((subtitles) => ({
@@ -720,6 +719,7 @@ const Player = ({ urlParams, queryParams }) => {
                 statisticsMenuOpen ?
                     <StatisticsMenu
                         className={classnames(styles['layer'], styles['menu-layer'])}
+                        bingeWatching={player.selected && player.selected.stream.behaviorHints && typeof player.selected.stream.behaviorHints.bingeGroup === 'string' ? player.selected.stream.behaviorHints.bingeGroup : ''}
                         {...statistics}
                     />
                     :
