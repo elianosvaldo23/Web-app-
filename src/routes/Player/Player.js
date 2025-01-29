@@ -652,7 +652,7 @@ const Player = ({ urlParams, queryParams }) => {
             />
             {
                 !video.state.loaded ?
-                    <div className={classnames(styles['layer'], styles['background-layer'])}>
+                    <div className={classnames(styles['layer'], styles['background-layer'])} onContextMenu={onContextMenu}>
                         <img className={styles['image']} src={player?.metaItem?.content?.background} />
                     </div>
                     :
@@ -660,7 +660,7 @@ const Player = ({ urlParams, queryParams }) => {
             }
             {
                 (video.state.buffering || !video.state.loaded) && !error ?
-                    <BufferingLoader className={classnames(styles['layer'], styles['buffering-layer'])} logo={player?.metaItem?.content?.logo} />
+                    <BufferingLoader className={classnames(styles['layer'], styles['buffering-layer'])} logo={player?.metaItem?.content?.logo} onContextMenu={onContextMenu} />
                     :
                     null
             }

@@ -6,9 +6,9 @@ const classnames = require('classnames');
 const { Image } = require('stremio/components');
 const styles = require('./styles');
 
-const BufferingLoader = ({ className, logo }) => {
+const BufferingLoader = ({ className, logo, onContextMenu }) => {
     return (
-        <div className={classnames(className, styles['buffering-loader-container'])}>
+        <div className={classnames(className, styles['buffering-loader-container'])} onContextMenu={onContextMenu}>
             <Image
                 className={styles['buffering-loader']}
                 src={logo}
@@ -21,7 +21,8 @@ const BufferingLoader = ({ className, logo }) => {
 
 BufferingLoader.propTypes = {
     className: PropTypes.string,
-    logo: PropTypes.string
+    logo: PropTypes.string,
+    onContextMenu: PropTypes.func
 };
 
 module.exports = BufferingLoader;
