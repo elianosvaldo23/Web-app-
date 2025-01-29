@@ -49,6 +49,7 @@ const Player = ({ urlParams, queryParams }) => {
     const [casting, setCasting] = React.useState(() => {
         return chromecast.active && chromecast.transport.getCastState() === cast.framework.CastState.CONNECTED;
     });
+    const playbackDevices = React.useMemo(() => streamingServer.playbackDevices !== null && streamingServer.playbackDevices.type === 'Ready' ? streamingServer.playbackDevices.content : [], [streamingServer]);
 
     const [immersed, setImmersed] = React.useState(true);
     const setImmersedDebounced = React.useCallback(debounce(setImmersed, 3000), []);
@@ -282,7 +283,6 @@ const Player = ({ urlParams, queryParams }) => {
         }
 
         closeSideDrawer();
-        closeContextMenu();
     }, []);
 
     const onContainerMouseMove = React.useCallback((event) => {
@@ -702,7 +702,8 @@ const Player = ({ urlParams, queryParams }) => {
                         }
                         className={classnames(styles['layer'], styles['menu-layer'])}
                         stream={player.selected.stream}
-                        playbackDevices={streamingServer.playbackDevices !== null && streamingServer.playbackDevices.type === 'Ready' ? streamingServer.playbackDevices.content : []}
+                        playbackDevices={playbackDevices}
+                        onOutsideClick={closeContextMenu}
                     />
                     :
                     null
@@ -834,7 +835,7 @@ const Player = ({ urlParams, queryParams }) => {
                     <OptionsMenu
                         className={classnames(styles['layer'], styles['menu-layer'])}
                         stream={player.selected.stream}
-                        playbackDevices={streamingServer.playbackDevices !== null && streamingServer.playbackDevices.type === 'Ready' ? streamingServer.playbackDevices.content : []}
+                        playbackDevices={playbackDevices}
                     />
                     :
                     null
