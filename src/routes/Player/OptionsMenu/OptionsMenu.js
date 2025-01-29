@@ -9,7 +9,7 @@ const { useServices } = require('stremio/services');
 const Option = require('./Option');
 const styles = require('./styles');
 
-const OptionsMenu = ({ className, stream, playbackDevices }) => {
+const OptionsMenu = ({ className, stream, playbackDevices, style }) => {
     const { t } = useTranslation();
     const { core } = useServices();
     const platform = usePlatform();
@@ -70,7 +70,7 @@ const OptionsMenu = ({ className, stream, playbackDevices }) => {
         event.nativeEvent.optionsMenuClosePrevented = true;
     }, []);
     return (
-        <div className={classnames(className, styles['options-menu-container'])} onMouseDown={onMouseDown}>
+        <div style={style} className={classnames(className, styles['options-menu-container'])} onMouseDown={onMouseDown}>
             {
                 streamingUrl || downloadUrl ?
                     <Option
@@ -112,7 +112,8 @@ const OptionsMenu = ({ className, stream, playbackDevices }) => {
 OptionsMenu.propTypes = {
     className: PropTypes.string,
     stream: PropTypes.object,
-    playbackDevices: PropTypes.array
+    playbackDevices: PropTypes.array,
+    style: PropTypes.object,
 };
 
 module.exports = OptionsMenu;

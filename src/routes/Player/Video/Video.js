@@ -7,7 +7,7 @@ const styles = require('./styles');
 
 const Video = React.forwardRef(({ className, onClick, onDoubleClick }, ref) => {
     return (
-        <div className={classnames(className, styles['video-container'])} onClick={onClick} onDoubleClick={onDoubleClick}>
+        <div className={classnames(className, styles['video-container'])} onClick={onClick} onContextMenu={onClick} onDoubleClick={onDoubleClick}>
             <div ref={ref} className={styles['video']} />
         </div>
     );

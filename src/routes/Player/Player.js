@@ -61,9 +61,14 @@ const Player = ({ urlParams, queryParams }) => {
     const [statisticsMenuOpen, , closeStatisticsMenu, toggleStatisticsMenu] = useBinaryState(false);
     const [nextVideoPopupOpen, openNextVideoPopup, closeNextVideoPopup] = useBinaryState(false);
     const [sideDrawerOpen, , closeSideDrawer, toggleSideDrawer] = useBinaryState(false);
+    const [contextMenuOpen, openContextMenu, closeContextMenu] = useBinaryState(false);
+    const [contextCoords, setContextCoords] = React.useState({
+        x: 0,
+        y: 0,
+    });
 
     const menusOpen = React.useMemo(() => {
-        return optionsMenuOpen || subtitlesMenuOpen || audioMenuOpen || speedMenuOpen || statisticsMenuOpen || sideDrawerOpen;
+        return optionsMenuOpen || subtitlesMenuOpen || audioMenuOpen || speedMenuOpen || statisticsMenuOpen || sideDrawerOpen || contextMenuOpen;
     }, [optionsMenuOpen, subtitlesMenuOpen, audioMenuOpen, speedMenuOpen, statisticsMenuOpen, sideDrawerOpen]);
 
     const closeMenus = React.useCallback(() => {
@@ -73,6 +78,7 @@ const Player = ({ urlParams, queryParams }) => {
         closeSpeedMenu();
         closeStatisticsMenu();
         closeSideDrawer();
+        closeContextMenu();
     }, []);
 
     const overlayHidden = React.useMemo(() => {
@@ -216,13 +222,17 @@ const Player = ({ urlParams, queryParams }) => {
         }
     }, [player.nextVideo]);
 
-    const onVideoClick = React.useCallback(() => {
-        if (video.state.paused !== null) {
-            if (video.state.paused) {
-                onPlayRequestedDebounced();
-            } else {
-                onPauseRequestedDebounced();
+    const onVideoClick = React.useCallback((e) => {
+        if (e.type === 'click') {
+            if (video.state.paused !== null) {
+                if (video.state.paused) {
+                    onPlayRequestedDebounced();
+                } else {
+                    onPauseRequestedDebounced();
+                }
             }
+        } else if (e.type === 'contextmenu') {
+            onContextMenu(e);
         }
     }, [video.state.paused]);
 
@@ -231,6 +241,28 @@ const Player = ({ urlParams, queryParams }) => {
         onPauseRequestedDebounced.cancel();
         toggleFullscreen();
     }, [toggleFullscreen]);
+
+    const onContextMenu = React.useCallback((e) => {
+        e.preventDefault();
+        let baseFontSize = 14;
+        const { clientX, clientY } = event;
+        const { innerWidth, innerHeight } = window;
+
+        if (innerWidth > 1600) baseFontSize = 15;
+        if (innerWidth > 2200) baseFontSize = 16;
+
+        const menuWidth = 16 * baseFontSize;
+        const minMenuHeight = 9 * baseFontSize;
+
+        const adjustedX = clientX + menuWidth > innerWidth ? clientX - menuWidth : clientX;
+        const adjustedY = clientY + minMenuHeight > innerHeight ? clientY - minMenuHeight : clientY;
+
+        setContextCoords({
+            x: adjustedX,
+            y: adjustedY,
+        });
+        openContextMenu();
+    }, []);
 
     const onContainerMouseDown = React.useCallback((event) => {
         if (!event.nativeEvent.optionsMenuClosePrevented) {
@@ -250,6 +282,7 @@ const Player = ({ urlParams, queryParams }) => {
         }
 
         closeSideDrawer();
+        closeContextMenu();
     }, []);
 
     const onContainerMouseMove = React.useCallback((event) => {
@@ -652,6 +685,24 @@ const Player = ({ urlParams, queryParams }) => {
                     <VolumeChangeIndicator
                         muted={video.state.muted}
                         volume={video.state.volume}
+                    />
+                    :
+                    null
+            }
+            {
+                contextMenuOpen ?
+                    <OptionsMenu
+                        style={
+                            {
+                                top: `${contextCoords.y}px`,
+                                left: `${contextCoords.x}px`,
+                                right: 'auto',
+                                bottom: 'auto'
+                            }
+                        }
+                        className={classnames(styles['layer'], styles['menu-layer'])}
+                        stream={player.selected.stream}
+                        playbackDevices={streamingServer.playbackDevices !== null && streamingServer.playbackDevices.type === 'Ready' ? streamingServer.playbackDevices.content : []}
                     />
                     :
                     null
