@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Icon from '@stremio/stremio-icons/react';
 import { useServices } from 'stremio/services';
-import { useBinaryState } from 'stremio/common';
+import { useBinaryState, useShell } from 'stremio/common';
 import { Button, Transition } from 'stremio/components';
 import styles from './UpdaterBanner.less';
 
@@ -11,17 +11,18 @@ type Props = {
 
 const UpdaterBanner = ({ className }: Props) => {
     const { shell } = useServices();
+    const shellTransport = useShell();
     const [visible, show, hide] = useBinaryState(false);
 
     const onInstallClick = () => {
-        shell.transport && shell.transport.send('autoupdater-notif-clicked');
+        shellTransport.send('autoupdater-notif-clicked');
     };
 
     useEffect(() => {
-        shell.on('autoupdater-show-notif', show);
+        shell.transport && shell.transport.on('autoupdater-show-notif', show);
 
         return () => {
-            shell.off('autoupdater-show-notif', show);
+            shell.transport && shell.transport.off('autoupdater-show-notif', show);
         };
     });
 
