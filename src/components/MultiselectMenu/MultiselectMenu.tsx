@@ -1,6 +1,6 @@
 // Copyright (C) 2017-2024 Smart code 203358507
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button } from 'stremio/components';
 import useBinaryState from 'stremio/common/useBinaryState';
 import Dropdown from './Dropdown';
@@ -19,12 +19,14 @@ type Props = {
 
 const MultiselectMenu = ({ className, title, options, selectedOption, onSelect }: Props) => {
     const [menuOpen, , closeMenu, toggleMenu] = useBinaryState(false);
-    const multiselectMenuRef = useOutsideClick(() => closeMenu());
+    const multiselectMenuRef = useRef(null);
     const [level, setLevel] = React.useState<number>(0);
 
     const onOptionSelect = (value: number) => {
         level ? setLevel(level + 1) : onSelect(value), closeMenu();
     };
+
+    useOutsideClick(multiselectMenuRef, closeMenu);
 
     return (
         <div className={classNames(styles['multiselect-menu'], className)} ref={multiselectMenuRef}>

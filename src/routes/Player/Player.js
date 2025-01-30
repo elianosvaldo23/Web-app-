@@ -54,6 +54,7 @@ const Player = ({ urlParams, queryParams }) => {
     const [immersed, setImmersed] = React.useState(true);
     const setImmersedDebounced = React.useCallback(debounce(setImmersed, 3000), []);
     const [, , , toggleFullscreen] = useFullscreen();
+    const [screenWidth, screenHeight] = React.useMemo(() => [window.innerWidth, window.innerHeight], [window]);
 
     const [optionsMenuOpen, , closeOptionsMenu, toggleOptionsMenu] = useBinaryState(false);
     const [subtitlesMenuOpen, , closeSubtitlesMenu, toggleSubtitlesMenu] = useBinaryState(false);
@@ -64,9 +65,10 @@ const Player = ({ urlParams, queryParams }) => {
     const [sideDrawerOpen, , closeSideDrawer, toggleSideDrawer] = useBinaryState(false);
     const [contextMenuOpen, openContextMenu, closeContextMenu] = useBinaryState(false);
     const [contextCoords, setContextCoords] = React.useState({
-        x: 0,
-        y: 0,
+        x: screenWidth,
+        y: screenHeight,
     });
+    const contextMenuRef = React.useRef(null);
 
     const menusOpen = React.useMemo(() => {
         return optionsMenuOpen || subtitlesMenuOpen || audioMenuOpen || speedMenuOpen || statisticsMenuOpen || sideDrawerOpen || contextMenuOpen;
@@ -245,25 +247,27 @@ const Player = ({ urlParams, queryParams }) => {
 
     const onContextMenu = React.useCallback((e) => {
         e.preventDefault();
-        let baseFontSize = 14;
-        const { clientX, clientY } = event;
-        const { innerWidth, innerHeight } = window;
+        const { clientX, clientY } = e;
 
-        if (innerWidth > 1600) baseFontSize = 15;
-        if (innerWidth > 2200) baseFontSize = 16;
-
-        const menuWidth = 16 * baseFontSize;
-        const minMenuHeight = 9 * baseFontSize;
-
-        const adjustedX = clientX + menuWidth > innerWidth ? clientX - menuWidth : clientX;
-        const adjustedY = clientY + minMenuHeight > innerHeight ? clientY - minMenuHeight : clientY;
+        const menuSize = contextMenuRef?.current?.getBoundingClientRect();
+        const adjustedX = clientX + menuSize.width > screenWidth ? clientX - menuSize.width : clientX;
+        const adjustedY = clientY + menuSize.height > screenHeight ? clientY - menuSize.height : clientY;
 
         setContextCoords({
             x: adjustedX,
             y: adjustedY,
         });
         openContextMenu();
-    }, []);
+    }, [window, contextMenuRef]);
+
+    React.useEffect(() => {
+        if (!contextMenuOpen) {
+            setContextCoords({
+                x: screenWidth,
+                y: screenHeight
+            });
+        }
+    }, [contextMenuOpen]);
 
     const onContainerMouseDown = React.useCallback((event) => {
         if (!event.nativeEvent.optionsMenuClosePrevented) {
@@ -690,8 +694,9 @@ const Player = ({ urlParams, queryParams }) => {
                     null
             }
             {
-                contextMenuOpen ?
+                player.selected?.stream ?
                     <OptionsMenu
+                        menuRef={contextMenuRef}
                         style={
                             {
                                 top: `${contextCoords.y}px`,
