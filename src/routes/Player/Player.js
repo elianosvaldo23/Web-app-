@@ -699,6 +699,7 @@ const Player = ({ urlParams, queryParams }) => {
                         menuRef={contextMenuRef}
                         style={
                             {
+                                zIndex: 1,
                                 top: `${contextCoords.y}px`,
                                 left: `${contextCoords.x}px`,
                                 right: 'auto',
@@ -720,12 +721,14 @@ const Player = ({ urlParams, queryParams }) => {
                 fullscreenButton={true}
                 onMouseMove={onBarMouseMove}
                 onMouseOver={onBarMouseMove}
+                onContextMenu={onContextMenu}
             />
             {
                 player.metaItem?.type === 'Ready' ?
                     <SideDrawerButton
                         className={classnames(styles['layer'], styles['side-drawer-button-layer'])}
                         onClick={toggleSideDrawer}
+                        onContextMenu={onContextMenu}
                     />
                     :
                     null
@@ -760,6 +763,7 @@ const Player = ({ urlParams, queryParams }) => {
                 onToggleSideDrawer={toggleSideDrawer}
                 onMouseMove={onBarMouseMove}
                 onMouseOver={onBarMouseMove}
+                onContextMenu={onContextMenu}
             />
             {
                 nextVideoPopupOpen ?

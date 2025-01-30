@@ -8,11 +8,12 @@ import styles from './SideDrawerButton.less';
 type Props = {
     className: string,
     onClick: () => void,
+    onContextMenu: () => void,
 };
 
-const SideDrawerButton = ({ className, onClick }: Props) => {
+const SideDrawerButton = ({ className, onClick, onContextMenu }: Props) => {
     return (
-        <div className={classNames(className, styles['side-drawer-button'])} onClick={onClick}>
+        <div className={classNames(className, styles['side-drawer-button'])} onClick={onClick} onContextMenu={onContextMenu}>
             <Icon name={'chevron-back'} className={styles['icon']} />
         </div>
     );
