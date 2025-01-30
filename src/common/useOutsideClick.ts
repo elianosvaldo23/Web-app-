@@ -12,8 +12,8 @@ const useOutsideClick = (ref: RefObject<HTMLDivElement>, callback: () => void) =
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        document.addEventListener('touchstart', handleClickOutside);
+        document.addEventListener('mousedown', handleClickOutside, true);
+        document.addEventListener('touchstart', handleClickOutside, true);
 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
