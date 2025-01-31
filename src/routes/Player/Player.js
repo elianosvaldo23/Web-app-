@@ -248,10 +248,27 @@ const Player = ({ urlParams, queryParams }) => {
     const onContextMenu = React.useCallback((e) => {
         e.preventDefault();
         const { clientX, clientY } = e;
+        const safeAreaTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top)')) || 0;
+        const safeAreaRight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-right)')) || 0;
+        const safeAreaBottom = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-bottom)')) || 0;
+        const safeAreaLeft = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-left)')) || 0;
+
+        const maxX = screenWidth - safeAreaRight;
+        const maxY = screenHeight - safeAreaBottom;
+        const menuX = clientX < safeAreaLeft
+            ? safeAreaLeft
+            : clientX > maxX
+                ? maxX
+                : clientX;
+        const menuY = clientY < safeAreaTop
+            ? safeAreaTop
+            : clientY > maxY
+                ? maxY
+                : clientY;
 
         const menuSize = contextMenuRef?.current?.getBoundingClientRect();
-        const adjustedX = clientX + menuSize.width > screenWidth ? clientX - menuSize.width : clientX;
-        const adjustedY = clientY + menuSize.height > screenHeight ? clientY - menuSize.height : clientY;
+        const adjustedX = menuX + menuSize.width > maxX ? menuX - menuSize.width : menuX;
+        const adjustedY = menuY + menuSize.height > maxY ? menuY - menuSize.height : menuY;
 
         setContextCoords({
             x: adjustedX,
@@ -699,7 +716,7 @@ const Player = ({ urlParams, queryParams }) => {
                         menuRef={contextMenuRef}
                         style={
                             {
-                                zIndex: 1,
+                                zIndex: contextMenuOpen ? 1 : -1,
                                 top: `${contextCoords.y}px`,
                                 left: `${contextCoords.x}px`,
                                 right: 'auto',
