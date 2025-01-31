@@ -244,7 +244,7 @@ module.exports = (env, argv) => ({
             inject: false,
             scriptLoading: 'blocking',
             faviconsPath: 'favicons',
-            imagesPath: '$images',
+            imagesPath: 'images',
         }),
         new WebpackPwaManifest({
             name: 'Stremio Web',
