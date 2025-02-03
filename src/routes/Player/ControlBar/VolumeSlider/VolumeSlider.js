@@ -50,7 +50,7 @@ const VolumeSlider = ({ className, volume, onVolumeChangeRequested }) => {
                     100
             }
             minimumValue={0}
-            maximumValue={100}
+            maximumValue={200}
             disabled={disabled}
             onSlide={onSlide}
             onComplete={onComplete}
