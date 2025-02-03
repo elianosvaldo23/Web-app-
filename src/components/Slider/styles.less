@@ -58,6 +58,37 @@ html.active-slider-within {
         background-color: var(--primary-foreground-color);
     }
 
+    .volume-track {
+        background: linear-gradient(to right, 
+            var(--primary-foreground-color) 0%, 
+            var(--primary-foreground-color) 50%, 
+            var(--warning-accent-color) 75%, 
+            var(--danger-accent-color) 100%) !important;
+        opacity: 0.3;
+        filter: brightness(1.2);
+    }
+    
+    .volume-track-after {
+        background: linear-gradient(to right, 
+            var(--primary-foreground-color) 0%, 
+            var(--primary-foreground-color) 50%, 
+            var(--warning-accent-color) 75%, 
+            var(--danger-accent-color) 100%) !important;
+            
+        width: 100%;
+        mask-image: linear-gradient(to right, 
+            black 0%, 
+            black calc(var(--progress-width) - 2px), 
+            transparent var(--progress-width)
+        );
+        
+        -webkit-mask-image: linear-gradient(to right, 
+            black 0%, 
+            black calc(var(--progress-width) - 2px), 
+            transparent var(--progress-width)
+        );
+    }
+
     .thumb {
         z-index: 3;
         flex: none;
