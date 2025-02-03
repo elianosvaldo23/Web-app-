@@ -5,13 +5,16 @@ const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const debounce = require('lodash.debounce');
 const { useRouteFocused } = require('stremio-router');
+const { useServices } = require('stremio/services');
 const { Slider } = require('stremio/components');
 const styles = require('./styles');
 
 const VolumeSlider = ({ className, volume, onVolumeChangeRequested }) => {
+    const { shell } = useServices();
     const disabled = volume === null || isNaN(volume);
     const routeFocused = useRouteFocused();
     const [slidingVolume, setSlidingVolume] = React.useState(null);
+    const maxVolume = shell.active ? 200: 100;
     const resetVolumeDebounced = React.useCallback(debounce(() => {
         setSlidingVolume(null);
     }, 100), []);
@@ -50,11 +53,11 @@ const VolumeSlider = ({ className, volume, onVolumeChangeRequested }) => {
                     100
             }
             minimumValue={0}
-            maximumValue={200}
+            maximumValue={maxVolume}
             disabled={disabled}
             onSlide={onSlide}
             onComplete={onComplete}
-            isVolumeSlider
+            isVolumeSlider={!!shell.active}
         />
     );
 };
