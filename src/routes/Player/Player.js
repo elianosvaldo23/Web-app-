@@ -565,7 +565,7 @@ const Player = ({ urlParams, queryParams }) => {
                 onVolumeChangeRequested(Math.max(video.state.volume - 5, 0));
             } else {
                 if (video.state.volume < 100) {
-                onVolumeChangeRequested(Math.min(video.state.volume + 5, 100));
+                    onVolumeChangeRequested(Math.min(video.state.volume + 5, 100));
                 }
             }
         };

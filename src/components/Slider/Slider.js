@@ -99,15 +99,15 @@ const Slider = ({ className, value, buffered, minimumValue, maximumValue, disabl
     const bufferedPosition = Math.max(0, Math.min(1, (bufferedRef.current - minimumValueRef.current) / (maximumValueRef.current - minimumValueRef.current)));
     return (
         <div ref={sliderContainerRef} className={classnames(className, styles['slider-container'], { 'disabled': disabled })} onMouseDown={onMouseDown}>
-           <div className={styles['layer']}>
+            <div className={styles['layer']}>
                 <div className={classnames(styles['track'], { [styles['volume-track']]: isVolumeSlider })} />
             </div>
             <div className={styles['layer']}>
                 <div className={styles['track-before']} style={{ width: `calc(100% * ${bufferedPosition})` }} />
             </div>
             <div className={styles['layer']}>
-                <div className={classnames(styles['track-after'], { [styles['volume-track-after']]: isVolumeSlider })} 
-                    style={isVolumeSlider 
+                <div className={classnames(styles['track-after'], { [styles['volume-track-after']]: isVolumeSlider })}
+                    style={isVolumeSlider
                         ? { '--progress-width': `calc(${thumbPosition} * 100%)` }
                         : { width: `calc(${thumbPosition} * 100%)` }
                     }
