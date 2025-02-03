@@ -54,7 +54,6 @@ const Player = ({ urlParams, queryParams }) => {
     const [immersed, setImmersed] = React.useState(true);
     const setImmersedDebounced = React.useCallback(debounce(setImmersed, 3000), []);
     const [, , , toggleFullscreen] = useFullscreen();
-    const [screenWidth, screenHeight] = React.useMemo(() => [window.innerWidth, window.innerHeight], [window]);
 
     const [optionsMenuOpen, , closeOptionsMenu, toggleOptionsMenu] = useBinaryState(false);
     const [subtitlesMenuOpen, , closeSubtitlesMenu, toggleSubtitlesMenu] = useBinaryState(false);
@@ -65,8 +64,8 @@ const Player = ({ urlParams, queryParams }) => {
     const [sideDrawerOpen, , closeSideDrawer, toggleSideDrawer] = useBinaryState(false);
     const [contextMenuOpen, openContextMenu, closeContextMenu] = useBinaryState(false);
     const [contextCoords, setContextCoords] = React.useState({
-        x: screenWidth,
-        y: screenHeight,
+        x: -document.documentElement.clientWidth,
+        y: -document.documentElement.clientHeight,
     });
     const contextMenuRef = React.useRef(null);
 
@@ -253,8 +252,8 @@ const Player = ({ urlParams, queryParams }) => {
         const safeAreaBottom = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-bottom)')) || 0;
         const safeAreaLeft = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-left)')) || 0;
 
-        const maxX = screenWidth - safeAreaRight;
-        const maxY = screenHeight - safeAreaBottom;
+        const maxX = document.documentElement.clientWidth - safeAreaRight;
+        const maxY = document.documentElement.clientHeight - safeAreaBottom;
         const menuX = clientX < safeAreaLeft
             ? safeAreaLeft
             : clientX > maxX
@@ -275,14 +274,17 @@ const Player = ({ urlParams, queryParams }) => {
             y: adjustedY,
         });
         openContextMenu();
-    }, [window, contextMenuRef]);
+    }, [contextMenuRef]);
 
     React.useEffect(() => {
         if (!contextMenuOpen) {
-            setContextCoords({
-                x: screenWidth,
-                y: screenHeight
-            });
+            const menuSize = contextMenuRef?.current?.getBoundingClientRect();
+            if (menuSize?.width && menuSize?.height) {
+                setContextCoords({
+                    x: -menuSize.width,
+                    y: -menuSize.height,
+                });
+            }
         }
     }, [contextMenuOpen]);
 
