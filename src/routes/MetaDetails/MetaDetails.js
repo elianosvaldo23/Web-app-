@@ -129,7 +129,7 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                         metaDetails.metaItem === null ?
                             <div className={styles['meta-message-container']}>
                                 <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                                <div className={styles['message-label']}>No addons ware requested for this meta!</div>
+                                <div className={styles['message-label']}>No addons were requested for this meta!</div>
                             </div>
                             :
                             metaDetails.metaItem.content.type === 'Err' ?
