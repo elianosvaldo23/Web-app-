@@ -18,6 +18,11 @@ type SelectedStream = Stream & {
     deepLinks: StreamDeepLinks,
 };
 
+type ConvertedStream = {
+    url: string,
+    deepLinks: StreamDeepLinks,
+};
+
 type Subtitle = {
     id: string,
     lang: string,
@@ -41,6 +46,7 @@ type Player = {
         streamRequest: ResourceRequest,
         subtitlesPath: ResourceRequestPath,
     } | null,
+    stream: ConvertedStream,
     seriesInfo: SeriesInfo | null,
     subtitles: Subtitle[],
     title: string | null,
