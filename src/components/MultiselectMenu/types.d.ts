@@ -5,5 +5,5 @@ type MultiselectMenuOption = {
     destination?: string;
     default?: boolean;
     hidden?: boolean;
-    level?: MultiselectMenuOption[];
+    options?: MultiselectMenuOption[];
 };
