@@ -11,6 +11,7 @@ const styles = require('./styles');
 
 const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, toggleNotifications }) => {
     const { core } = useServices();
+    const [selectedEpisode, setSelectedEpisode] = React.useState(null);
     const showNotificationsToggle = React.useMemo(() => {
         return metaItem?.content?.content?.inLibrary && metaItem?.content?.content?.videos?.length;
     }, [metaItem]);
@@ -21,22 +22,19 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
             [];
     }, [metaItem]);
     const seasons = React.useMemo(() => {
-        return videos
-            .map(({ season }) => season)
-            .filter((season, index, seasons) => {
-                return season !== null &&
-                    !isNaN(season) &&
-                    typeof season === 'number' &&
-                    seasons.indexOf(season) === index;
-            })
-            .sort((a, b) => (a || Number.MAX_SAFE_INTEGER) - (b || Number.MAX_SAFE_INTEGER));
+        return [...new Set(videos.map(({ season }) => season))].map((season) => ({
+            id: season,
+            episodes: videos.filter(({ season: s }) => s === season).map(({ episode }) => episode)
+        }))
+            .sort((a, b) => (a.id || Number.MAX_SAFE_INTEGER) - (b.id || Number.MAX_SAFE_INTEGER));
     }, [videos]);
     const selectedSeason = React.useMemo(() => {
-        if (seasons.includes(season)) {
-            return season;
+        const foundSeason = seasons.find(({ id }) => id === season);
+        if (foundSeason) {
+            return foundSeason;
         }
 
-        const nonSpecialSeasons = seasons.filter((season) => season !== 0);
+        const nonSpecialSeasons = seasons.filter(({ id }) => id !== 0);
         if (nonSpecialSeasons.length > 0) {
             return nonSpecialSeasons[nonSpecialSeasons.length - 1];
         }
@@ -50,7 +48,7 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
     const videosForSeason = React.useMemo(() => {
         return videos
             .filter((video) => {
-                return selectedSeason === null || video.season === selectedSeason;
+                return selectedSeason === null || video.season === selectedSeason.id;
             })
             .sort((a, b) => {
                 return a.episode - b.episode;
@@ -70,6 +68,26 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
             }
         });
     };
+
+    const handleSelect = (event) => {
+        if (!event.level) {
+            seasonOnSelect(event);
+        } else {
+            setSelectedEpisode(event.value);
+            const episode = videos.find(({ season: s, episode: e }) => s === season && e.toString() === event.value);
+            if (episode.deepLinks) {
+                if (typeof episode.deepLinks.player === 'string') {
+                    window.location = episode.deepLinks.player;
+                } else if (typeof episode.deepLinks.metaDetailsStreams === 'string') {
+                    window.location.replace(episode.deepLinks.metaDetailsStreams);
+                }
+            }
+        }
+    };
+
+    React.useEffect(() => {
+        setSelectedEpisode(null);
+    }, [season]);
 
     return (
         <div className={classnames(className, styles['videos-list-container'])}>
@@ -107,8 +125,9 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
                                     <SeasonsBar
                                         className={styles['seasons-bar']}
                                         season={selectedSeason}
+                                        episode={selectedEpisode}
                                         seasons={seasons}
-                                        onSelect={seasonOnSelect}
+                                        onSelect={handleSelect}
                                     />
                                     :
                                     null
