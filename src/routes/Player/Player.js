@@ -296,6 +296,7 @@ const Player = ({ urlParams, queryParams }) => {
                     0,
                 forceTranscoding: forceTranscoding || casting,
                 maxAudioChannels: settings.surroundSound ? 32 : 2,
+                hardwareDecoding: settings.hardwareDecoding,
                 streamingServerURL: streamingServer.baseUrl ?
                     casting ?
                         streamingServer.baseUrl
@@ -303,7 +304,7 @@ const Player = ({ urlParams, queryParams }) => {
                         streamingServer.selected.transportUrl
                     :
                     null,
-                seriesInfo: player.seriesInfo
+                seriesInfo: player.seriesInfo,
             }, {
                 chromecastTransport: chromecast.active ? chromecast.transport : null,
                 shellTransport: shell.active ? shell.transport : null,
