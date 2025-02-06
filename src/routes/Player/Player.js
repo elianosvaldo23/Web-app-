@@ -459,6 +459,44 @@ const Player = ({ urlParams, queryParams }) => {
         };
     }, []);
 
+    React.useEffect(() => {
+        if ('mediaSession' in navigator && player.metaItem?.type === 'Ready') {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: 'Stremio',
+                artist: player.title,
+                artwork: [{
+                    src: player.metaItem.content.poster
+                }]
+            });
+        }
+    }, [player.metaItem, player.title]);
+
+    React.useEffect(() => {
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.setActionHandler('play', () => {
+                onPlayRequested();
+            });
+
+            navigator.mediaSession.setActionHandler('pause', () => {
+                onPauseRequested();
+            });
+
+            navigator.mediaSession.setActionHandler('stop', () => {
+                onPauseRequested();
+            });
+
+            navigator.mediaSession.setActionHandler('nexttrack', () => {
+                onNextVideoRequested();
+            });
+        }
+    }, []);
+
+    React.useEffect(() => {
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.playbackState = video.state.paused ? 'paused' : 'playing';
+        }
+    }, [video.state.paused]);
+
     React.useLayoutEffect(() => {
         const onKeyDown = (event) => {
             switch (event.code) {
