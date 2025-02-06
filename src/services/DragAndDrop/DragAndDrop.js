@@ -40,6 +40,8 @@ function DragAndDrop({ core }) {
                     break;
                 case 'text/vtt':
                     break;
+                case '':
+                    break;
                 default: {
                     events.emit('error', {
                         message: 'Unsupported file',
