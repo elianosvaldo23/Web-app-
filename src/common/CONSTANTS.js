@@ -41,6 +41,11 @@ const ICON_FOR_TYPE = new Map([
     ['other', 'movies'],
 ]);
 
+const MIME_SIGNATURES = {
+    'application/x-subrip': ['310D0A', '310A'],
+    'text/vtt': ['574542565454'],
+};
+
 const SUPPORTED_LOCAL_SUBTITLES = [
     'application/x-subrip',
     'text/vtt',
@@ -118,6 +123,7 @@ module.exports = {
     WRITERS_LINK_CATEGORY,
     TYPE_PRIORITIES,
     ICON_FOR_TYPE,
+    MIME_SIGNATURES,
     SUPPORTED_LOCAL_SUBTITLES,
     EXTERNAL_PLAYERS,
     WHITELISTED_HOSTS,

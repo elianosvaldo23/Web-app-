@@ -277,9 +277,8 @@ const Player = ({ urlParams, queryParams }) => {
         event.nativeEvent.immersePrevented = true;
     }, []);
 
-    onFileDrop(CONSTANTS.SUPPORTED_LOCAL_SUBTITLES, async (file) => {
-        const buffer = await file.arrayBuffer();
-        video.addLocalSubtitles(file.name, buffer);
+    onFileDrop(CONSTANTS.SUPPORTED_LOCAL_SUBTITLES, async (filename, buffer) => {
+        video.addLocalSubtitles(filename, buffer);
     });
 
     React.useEffect(() => {

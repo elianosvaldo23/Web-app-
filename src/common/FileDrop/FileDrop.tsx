@@ -1,8 +1,9 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { isFileType } from './utils';
 
 export type FileType = string;
-export type FileDropListener = (file: File) => void;
+export type FileDropListener = (filename: string, buffer: ArrayBuffer) => void;
 
 type FileDropContext = {
     on: (type: FileType, listener: FileDropListener) => void,
@@ -31,15 +32,18 @@ const FileDropProvider = ({ className, children }: Props) => {
 
     const onDrop = useCallback((event: DragEvent) => {
         event.preventDefault();
-
         const { dataTransfer } = event;
 
-        if (dataTransfer && dataTransfer.files.length > 0) {
+        if (dataTransfer && dataTransfer?.files.length > 0) {
             const file = dataTransfer.files[0];
 
-            listeners
-                .filter(([type]) => type === file.type)
-                .forEach(([, listerner]) => listerner(file));
+            file
+                .arrayBuffer()
+                .then((buffer) => {
+                    listeners
+                        .filter(([type]) => file.type ? type === file.type : isFileType(buffer, type))
+                        .forEach(([, listerner]) => listerner(file.name, buffer));
+                });
         }
 
         setActive(false);
