@@ -21,7 +21,7 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, ...props }, ref) => {
-    const [value, setValue] = useState(defaultValue || 1);
+    const [value, setValue] = useState(defaultValue || 0);
     const onKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
         props.onKeyDown && props.onKeyDown(event);
 

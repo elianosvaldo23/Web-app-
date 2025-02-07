@@ -14,7 +14,9 @@ export const EpisodePicker = ({ className, seriesId, onSubmit }: Props) => {
     const { t } = useTranslation();
     const [initialSeason, initialEpisode] = React.useMemo(() => {
         const [, season, episode] = seriesId ? seriesId.split(':') : [];
-        return [parseInt(season || '1'), parseInt(episode || '1')];
+        const initialSeason = isNaN(parseInt(season)) ? 1 : parseInt(season);
+        const initialEpisode = isNaN(parseInt(episode)) ? 1 : parseInt(episode);
+        return [initialSeason, initialEpisode];
     }, [seriesId]);
     const seasonRef = useRef(null);
     const episodeRef = useRef(null);
@@ -26,7 +28,7 @@ export const EpisodePicker = ({ className, seriesId, onSubmit }: Props) => {
     }, [onSubmit, seasonRef, episodeRef]);
 
     return <div className={className}>
-        <NumberInput ref={seasonRef} min={1} label={t('SEASON')} defaultValue={initialSeason} showButtons />
+        <NumberInput ref={seasonRef} min={0} label={t('SEASON')} defaultValue={initialSeason} showButtons />
         <NumberInput ref={episodeRef} min={1} label={t('EPISODE')} defaultValue={initialEpisode} showButtons />
         <Button className={styles['button-container']} onClick={handleSubmit}>{t('SIDEBAR_SHOW_STREAMS')}</Button>
     </div>;
