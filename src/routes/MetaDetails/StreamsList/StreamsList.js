@@ -26,8 +26,8 @@ const StreamsList = ({ className, video, onEpisodeSearch, ...props }) => {
         setSelectedAddon(event.value);
     }, [platform]);
     const showInstallAddonsButton = React.useMemo(() => {
-        return !profile || profile.auth === null || profile.auth?.user?.isNewUser === true;
-    }, [profile]);
+        return !profile || profile.auth === null || profile.auth?.user?.isNewUser === true && !video?.upcoming;
+    }, [profile, video]);
     const backButtonOnClick = React.useCallback(() => {
         if (video.deepLinks && typeof video.deepLinks.metaDetailsVideos === 'string') {
             window.location.replace(video.deepLinks.metaDetailsVideos + (
