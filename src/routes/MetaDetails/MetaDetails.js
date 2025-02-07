@@ -76,6 +76,18 @@ const MetaDetails = ({ urlParams, queryParams }) => {
     const seasonOnSelect = React.useCallback((event) => {
         setSeason(event.value);
     }, [setSeason]);
+    const handleEpisodeSearch = React.useCallback((season, episode) => {
+        const searchVideoId = streamPath.id.replace(/(:\d+:\d+)$/, `:${season}:${episode}`);
+        const videoFound = metaDetails.metaItem.content.content.videos.find((video) => video.id === searchVideoId);
+        if (videoFound) {
+            if (typeof videoFound.deepLinks.player === 'string') {
+                window.location = videoFound.deepLinks.player;
+            } else if (typeof videoFound.deepLinks.metaDetailsStreams === 'string') {
+                window.location.replace(videoFound.deepLinks.metaDetailsStreams);
+            }
+        }
+    }, [streamPath, metaDetails.metaItem]);
+
     const renderBackgroundImageFallback = React.useCallback(() => null, []);
     const renderBackground = React.useMemo(() => !!(
         metaPath &&
@@ -129,7 +141,7 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                         metaDetails.metaItem === null ?
                             <div className={styles['meta-message-container']}>
                                 <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                                <div className={styles['message-label']}>No addons ware requested for this meta!</div>
+                                <div className={styles['message-label']}>No addons were requested for this meta!</div>
                             </div>
                             :
                             metaDetails.metaItem.content.type === 'Err' ?
@@ -169,6 +181,7 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                             className={styles['streams-list']}
                             streams={metaDetails.streams}
                             video={video}
+                            onEpisodeSearch={handleEpisodeSearch}
                         />
                         :
                         metaPath !== null ?

@@ -10,10 +10,11 @@ const { useServices } = require('stremio/services');
 const Stream = require('./Stream');
 const styles = require('./styles');
 const { usePlatform, useProfile } = require('stremio/common');
+const { SeasonEpisodePicker } = require('./EpisodePicker');
 
 const ALL_ADDONS_KEY = 'ALL';
 
-const StreamsList = ({ className, video, ...props }) => {
+const StreamsList = ({ className, video, onEpisodeSearch, ...props }) => {
     const { t } = useTranslation();
     const { core } = useServices();
     const platform = usePlatform();
@@ -93,6 +94,11 @@ const StreamsList = ({ className, video, ...props }) => {
             onSelect: onAddonSelected
         };
     }, [streamsByAddon, selectedAddon]);
+
+    const handleEpisodePicker = React.useCallback((season, episode) => {
+        onEpisodeSearch(season, episode);
+    }, [onEpisodeSearch]);
+
     return (
         <div className={classnames(className, styles['streams-list-container'])}>
             <div className={styles['select-choices-wrapper']}>
@@ -122,12 +128,14 @@ const StreamsList = ({ className, video, ...props }) => {
             {
                 props.streams.length === 0 ?
                     <div className={styles['message-container']}>
+                        <SeasonEpisodePicker seriesId={video?.id} onSubmit={handleEpisodePicker} />
                         <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
                         <div className={styles['label']}>No addons were requested for streams!</div>
                     </div>
                     :
                     props.streams.every((streams) => streams.content.type === 'Err') ?
                         <div className={styles['message-container']}>
+                            <SeasonEpisodePicker seriesId={video?.id} onSubmit={handleEpisodePicker} />
                             <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
                             <div className={styles['label']}>{t('NO_STREAM')}</div>
                             {
@@ -193,7 +201,8 @@ const StreamsList = ({ className, video, ...props }) => {
 StreamsList.propTypes = {
     className: PropTypes.string,
     streams: PropTypes.arrayOf(PropTypes.object).isRequired,
-    video: PropTypes.object
+    video: PropTypes.object,
+    onEpisodeSearch: PropTypes.func
 };
 
 module.exports = StreamsList;
