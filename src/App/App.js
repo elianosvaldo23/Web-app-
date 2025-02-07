@@ -10,6 +10,7 @@ const { FileDropProvider, PlatformProvider, ToastProvider, TooltipProvider, CONS
 const ServicesToaster = require('./ServicesToaster');
 const DeepLinkHandler = require('./DeepLinkHandler');
 const SearchParamsHandler = require('./SearchParamsHandler');
+const { default: UpdaterBanner } = require('./UpdaterBanner');
 const ErrorDialog = require('./ErrorDialog');
 const withProtectedRoutes = require('./withProtectedRoutes');
 const routerViewsConfig = require('./routerViewsConfig');
@@ -169,6 +170,7 @@ const App = () => {
                                             <ServicesToaster />
                                             <DeepLinkHandler />
                                             <SearchParamsHandler />
+                                            <UpdaterBanner className={styles['updater-banner-container']} />
                                             <RouterWithProtectedRoutes
                                                 className={styles['router']}
                                                 viewsConfig={routerViewsConfig}
