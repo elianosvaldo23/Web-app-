@@ -136,6 +136,7 @@ const StreamsList = ({ className, video, onEpisodeSearch, ...props }) => {
                     props.streams.every((streams) => streams.content.type === 'Err') ?
                         <div className={styles['message-container']}>
                             <SeasonEpisodePicker seriesId={video?.id} onSubmit={handleEpisodePicker} />
+                            {video?.upcoming && <div className={styles['label']}>{t('UPCOMING')}...</div>}
                             <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
                             <div className={styles['label']}>{t('NO_STREAM')}</div>
                             {
