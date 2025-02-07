@@ -26,7 +26,7 @@ const UpdaterBanner = ({ className }: Props) => {
         return () => {
             shell.transport && shell.transport.off('autoupdater-show-notif', show);
         };
-    });
+    }, []);
 
     return (
         <div className={className}>
