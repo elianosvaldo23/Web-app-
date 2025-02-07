@@ -18,7 +18,7 @@
         "@stremio/stremio-colors": "5.2.0",
         "@stremio/stremio-core-web": "0.48.4",
         "@stremio/stremio-icons": "5.4.1",
-        "@stremio/stremio-video": "0.0.48",
+        "@stremio/stremio-video": "github:Stremio/stremio-video#436fe5a988ab0953a61aa043666cae1dd9522882",
         "a-color-picker": "1.2.1",
         "bowser": "2.11.0",
         "buffer": "6.0.3",
@@ -40,7 +40,7 @@
         "react-i18next": "^15.1.3",
         "react-is": "18.3.1",
         "spatial-navigation-polyfill": "github:Stremio/spatial-navigation#64871b1422466f5f45d24ebc8bbd315b2ebab6a6",
-        "stremio-translations": "github:Stremio/stremio-translations#a0f50634202f748a57907b645d2cd92fbaa479dd",
+        "stremio-translations": "github:Stremio/stremio-translations#f7d327d822f1061947568042bfb3dffde5525a30",
         "url": "0.11.4",
         "use-long-press": "^3.2.0"
     },
