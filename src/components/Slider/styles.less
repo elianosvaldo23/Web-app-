@@ -40,6 +40,16 @@ html.active-slider-within {
         height: var(--track-size);
         border-radius: var(--track-size);
         background-color: var(--overlay-color);
+
+        &.audio-boost {
+            background: linear-gradient(to right, 
+            var(--primary-foreground-color) 0%, 
+            var(--primary-foreground-color) 50%, 
+            var(--warning-accent-color) 75%, 
+            var(--danger-accent-color) 100%) !important;
+            opacity: 0.3;
+            filter: brightness(1.2);
+        }
     }
 
     .track-before {
@@ -56,37 +66,25 @@ html.active-slider-within {
         height: var(--track-size);
         border-radius: var(--track-size);
         background-color: var(--primary-foreground-color);
-    }
 
-    .volume-track {
-        background: linear-gradient(to right, 
+        &.audio-boost {
+            background: linear-gradient(to right, 
             var(--primary-foreground-color) 0%, 
             var(--primary-foreground-color) 50%, 
             var(--warning-accent-color) 75%, 
             var(--danger-accent-color) 100%) !important;
-        opacity: 0.3;
-        filter: brightness(1.2);
-    }
-    
-    .volume-track-after {
-        background: linear-gradient(to right, 
-            var(--primary-foreground-color) 0%, 
-            var(--primary-foreground-color) 50%, 
-            var(--warning-accent-color) 75%, 
-            var(--danger-accent-color) 100%) !important;
-            
-        width: 100%;
-        mask-image: linear-gradient(to right, 
-            black 0%, 
-            black calc(var(--progress-width) - 2px), 
-            transparent var(--progress-width)
-        );
-        
-        -webkit-mask-image: linear-gradient(to right, 
-            black 0%, 
-            black calc(var(--progress-width) - 2px), 
-            transparent var(--progress-width)
-        );
+            width: 100%;
+            mask-image: linear-gradient(to right, 
+                black 0%, 
+                black calc(var(--progress-width) - 2px), 
+                transparent var(--progress-width)
+            );
+            -webkit-mask-image: linear-gradient(to right, 
+                black 0%, 
+                black calc(var(--progress-width) - 2px), 
+                transparent var(--progress-width)
+            );
+        }
     }
 
     .thumb {

@@ -57,7 +57,7 @@ const VolumeSlider = ({ className, volume, onVolumeChangeRequested }) => {
             disabled={disabled}
             onSlide={onSlide}
             onComplete={onComplete}
-            isVolumeSlider={!!shell.active}
+            audioBoost={!!shell.active}
         />
     );
 };

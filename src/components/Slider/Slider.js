@@ -8,7 +8,7 @@ const useAnimationFrame = require('stremio/common/useAnimationFrame');
 const useLiveRef = require('stremio/common/useLiveRef');
 const styles = require('./styles');
 
-const Slider = ({ className, value, buffered, minimumValue, maximumValue, disabled, onSlide, onComplete, isVolumeSlider }) => {
+const Slider = ({ className, value, buffered, minimumValue, maximumValue, disabled, onSlide, onComplete, audioBoost }) => {
     const minimumValueRef = useLiveRef(minimumValue !== null && !isNaN(minimumValue) ? minimumValue : 0);
     const maximumValueRef = useLiveRef(maximumValue !== null && !isNaN(maximumValue) ? maximumValue : 100);
     const valueRef = useLiveRef(value !== null && !isNaN(value) ? Math.min(maximumValueRef.current, Math.max(minimumValueRef.current, value)) : 0);
@@ -100,14 +100,14 @@ const Slider = ({ className, value, buffered, minimumValue, maximumValue, disabl
     return (
         <div ref={sliderContainerRef} className={classnames(className, styles['slider-container'], { 'disabled': disabled })} onMouseDown={onMouseDown}>
             <div className={styles['layer']}>
-                <div className={classnames(styles['track'], { [styles['volume-track']]: isVolumeSlider })} />
+                <div className={classnames(styles['track'], { [styles['audio-boost']]: audioBoost })} />
             </div>
             <div className={styles['layer']}>
                 <div className={styles['track-before']} style={{ width: `calc(100% * ${bufferedPosition})` }} />
             </div>
             <div className={styles['layer']}>
-                <div className={classnames(styles['track-after'], { [styles['volume-track-after']]: isVolumeSlider })}
-                    style={isVolumeSlider
+                <div className={classnames(styles['track-after'], { [styles['audio-boost']]: audioBoost })}
+                    style={audioBoost
                         ? { '--progress-width': `calc(${thumbPosition} * 100%)` }
                         : { width: `calc(${thumbPosition} * 100%)` }
                     }
@@ -129,7 +129,7 @@ Slider.propTypes = {
     disabled: PropTypes.bool,
     onSlide: PropTypes.func,
     onComplete: PropTypes.func,
-    isVolumeSlider: PropTypes.bool
+    audioBoost: PropTypes.bool
 };
 
 module.exports = Slider;
