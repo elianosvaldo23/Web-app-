@@ -1,5 +1,6 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
+const { FileDropProvider, onFileDrop } = require('./FileDrop');
 const { PlatformProvider, usePlatform } = require('./Platform');
 const { ToastProvider, useToast } = require('./Toast');
 const { TooltipProvider, Tooltip } = require('./Tooltips');
@@ -25,6 +26,8 @@ const useTorrent = require('./useTorrent');
 const useTranslate = require('./useTranslate');
 
 module.exports = {
+    FileDropProvider,
+    onFileDrop,
     PlatformProvider,
     usePlatform,
     ToastProvider,
