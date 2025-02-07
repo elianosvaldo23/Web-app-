@@ -19,6 +19,7 @@ const useModelState = require('./useModelState');
 const useNotifications = require('./useNotifications');
 const useOnScrollToBottom = require('./useOnScrollToBottom');
 const useProfile = require('./useProfile');
+const { default: useShell } = require('./useShell');
 const useStreamingServer = require('./useStreamingServer');
 const useTorrent = require('./useTorrent');
 const useTranslate = require('./useTranslate');
@@ -47,6 +48,7 @@ module.exports = {
     useNotifications,
     useOnScrollToBottom,
     useProfile,
+    useShell,
     useStreamingServer,
     useTorrent,
     useTranslate,
