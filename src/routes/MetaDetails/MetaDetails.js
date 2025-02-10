@@ -77,16 +77,11 @@ const MetaDetails = ({ urlParams, queryParams }) => {
         setSeason(event.value);
     }, [setSeason]);
     const handleEpisodeSearch = React.useCallback((season, episode) => {
-        const searchVideoId = streamPath.id.replace(/(:\d+:\d+)$/, `:${season}:${episode}`);
-        const videoFound = metaDetails.metaItem.content.content.videos.find((video) => video.id === searchVideoId);
-        if (videoFound) {
-            if (typeof videoFound.deepLinks.player === 'string') {
-                window.location = videoFound.deepLinks.player;
-            } else if (typeof videoFound.deepLinks.metaDetailsStreams === 'string') {
-                window.location.replace(videoFound.deepLinks.metaDetailsStreams);
-            }
-        }
-    }, [streamPath, metaDetails.metaItem]);
+        const searchVideoHash = encodeURIComponent(`${urlParams.id}:${season}:${episode}`);
+        const url = window.location.hash;
+        const searchVideoPath = url.replace(encodeURIComponent(urlParams.videoId), searchVideoHash);
+        window.location = searchVideoPath;
+    }, [urlParams, window.location]);
 
     const renderBackgroundImageFallback = React.useCallback(() => null, []);
     const renderBackground = React.useMemo(() => !!(
