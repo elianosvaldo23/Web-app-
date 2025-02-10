@@ -32,7 +32,7 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, ...prop
 
     const handleIncrease = () => {
         const { max } = props;
-        if (max) {
+        if (typeof max !== 'undefined') {
             return setValue((prevVal) =>
                 prevVal + 1 > max ? max : prevVal + 1
             );
@@ -42,7 +42,7 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, ...prop
 
     const handleDecrease = () => {
         const { min } = props;
-        if (min) {
+        if (typeof min !== 'undefined') {
             return setValue((prevVal) =>
                 prevVal - 1 < min ? min : prevVal - 1
             );
@@ -55,7 +55,7 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, ...prop
             {props.showButtons ? <Button
                 className={styles['btn']}
                 onClick={handleDecrease}
-                disabled={props.disabled || props.min ? value <= props.min : false}>
+                disabled={props.disabled || typeof props.min !== 'undefined' ? value <= props.min : false}>
                 <Icon className={styles['icon']} name={'remove'} />
             </Button> : null}
             <div className={classnames(styles['number-display'], props.showButtons ? styles['with-btns'] : '')}>
@@ -72,7 +72,7 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, ...prop
                 />
             </div>
             {props.showButtons ? <Button
-                className={styles['btn']} onClick={handleIncrease} disabled={props.disabled || props.max ? value >= props.max : false}>
+                className={styles['btn']} onClick={handleIncrease} disabled={props.disabled || typeof props.max !== 'undefined' ? value >= props.max : false}>
                 <Icon className={styles['icon']} name={'add'} />
             </Button> : null}
         </div>
