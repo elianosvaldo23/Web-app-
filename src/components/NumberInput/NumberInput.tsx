@@ -67,7 +67,12 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, ...prop
                     value={value}
                     {...props}
                     className={classnames(props.className, styles['value'], { 'disabled': props.disabled })}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(parseInt(event.target.value))}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                        const newValue = parseInt(event.target.value);
+                        if (props.min !== undefined && newValue < props.min) return props.min;
+                        if (props.max !== undefined && newValue > props.max) return props.max;
+                        setValue(newValue);
+                    }}
                     onKeyDown={onKeyDown}
                 />
             </div>
