@@ -128,14 +128,14 @@ const StreamsList = ({ className, video, onEpisodeSearch, ...props }) => {
             {
                 props.streams.length === 0 ?
                     <div className={styles['message-container']}>
-                        <SeasonEpisodePicker onSubmit={handleEpisodePicker} />
+                        <SeasonEpisodePicker className={styles['search']} onSubmit={handleEpisodePicker} />
                         <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
                         <div className={styles['label']}>No addons were requested for streams!</div>
                     </div>
                     :
                     props.streams.every((streams) => streams.content.type === 'Err') ?
                         <div className={styles['message-container']}>
-                            <SeasonEpisodePicker onSubmit={handleEpisodePicker} />
+                            <SeasonEpisodePicker className={styles['search']} onSubmit={handleEpisodePicker} />
                             {video?.upcoming && <div className={styles['label']}>{t('UPCOMING')}...</div>}
                             <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
                             <div className={styles['label']}>{t('NO_STREAM')}</div>
