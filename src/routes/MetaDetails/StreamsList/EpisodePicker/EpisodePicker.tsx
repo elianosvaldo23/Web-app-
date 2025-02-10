@@ -24,9 +24,11 @@ export const EpisodePicker = ({ className, onSubmit }: Props) => {
     const episodeRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = React.useCallback(() => {
-        const season = seasonRef.current?.value || 1;
-        const episode = episodeRef.current?.value || 1;
-        if (typeof onSubmit === 'function' && !isNaN(season) && !isNaN(parseInt(episode))) onSubmit(season, episode);
+        const season = parseInt(seasonRef.current?.value || '1');
+        const episode = parseInt(episodeRef.current?.value || '1');
+        if (typeof onSubmit === 'function' && !isNaN(season) && !isNaN(episode)) {
+            onSubmit(season, episode);
+        }
     }, [onSubmit, seasonRef, episodeRef]);
 
     return <div className={className}>
