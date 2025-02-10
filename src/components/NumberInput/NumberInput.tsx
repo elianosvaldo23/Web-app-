@@ -1,6 +1,6 @@
 // Copyright (C) 2017-2025 Smart code 203358507
 
-import React, { forwardRef, useCallback, useState } from 'react';
+import React, { ChangeEvent, forwardRef, useCallback, useState } from 'react';
 import { type KeyboardEvent, type InputHTMLAttributes } from 'react';
 import classnames from 'classnames';
 import styles from './styles.less';
@@ -55,7 +55,7 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, ...prop
             {props.showButtons ? <Button
                 className={styles['btn']}
                 onClick={handleDecrease}
-                disabled={props.disabled || typeof props.min !== 'undefined' ? value <= props.min : false}>
+                disabled={props.disabled || (props.min !== undefined ? value <= props.min : false)}>
                 <Icon className={styles['icon']} name={'remove'} />
             </Button> : null}
             <div className={classnames(styles['number-display'], props.showButtons ? styles['with-btns'] : '')}>
@@ -67,12 +67,12 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, ...prop
                     value={value}
                     {...props}
                     className={classnames(props.className, styles['value'], { 'disabled': props.disabled })}
-                    onChange={(event) => setValue(event.value)}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(parseInt(event.target.value))}
                     onKeyDown={onKeyDown}
                 />
             </div>
             {props.showButtons ? <Button
-                className={styles['btn']} onClick={handleIncrease} disabled={props.disabled || typeof props.max !== 'undefined' ? value >= props.max : false}>
+                className={styles['btn']} onClick={handleIncrease} disabled={props.disabled || (props.max !== undefined ? value >= props.max : false)}>
                 <Icon className={styles['icon']} name={'add'} />
             </Button> : null}
         </div>

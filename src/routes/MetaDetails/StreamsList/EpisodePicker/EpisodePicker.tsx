@@ -10,21 +10,23 @@ type Props = {
     seriesId: string;
     onSubmit: (season: number, episode: number) => void;
 };
-export const EpisodePicker = ({ className, seriesId, onSubmit }: Props) => {
+export const EpisodePicker = ({ className, onSubmit }: Props) => {
     const { t } = useTranslation();
+    const splitPath = window.location.hash.split('/');
+    const videoId = decodeURIComponent(splitPath[splitPath.length - 1]);
     const [initialSeason, initialEpisode] = React.useMemo(() => {
-        const [, season, episode] = seriesId ? seriesId.split(':') : [];
-        const initialSeason = isNaN(parseInt(season)) ? 1 : parseInt(season);
-        const initialEpisode = isNaN(parseInt(episode)) ? 1 : parseInt(episode);
+        const [, pathSeason, pathEpisode] = videoId ? videoId.split(':') : [];
+        const initialSeason = isNaN(parseInt(pathSeason)) ? 1 : parseInt(pathSeason);
+        const initialEpisode = isNaN(parseInt(pathEpisode)) ? 1 : parseInt(pathEpisode);
         return [initialSeason, initialEpisode];
-    }, [seriesId]);
-    const seasonRef = useRef(null);
-    const episodeRef = useRef(null);
+    }, [videoId]);
+    const seasonRef = useRef<HTMLInputElement>(null);
+    const episodeRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = React.useCallback(() => {
-        const season = seasonRef.current?.value;
-        const episode = episodeRef.current?.value;
-        if (typeof onSubmit === 'function') onSubmit(season, episode);
+        const season = seasonRef.current?.value || 1;
+        const episode = episodeRef.current?.value || 1;
+        if (typeof onSubmit === 'function' && !isNaN(season) && !isNaN(parseInt(episode))) onSubmit(season, episode);
     }, [onSubmit, seasonRef, episodeRef]);
 
     return <div className={className}>
