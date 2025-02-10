@@ -3,11 +3,12 @@
 const React = require('react');
 const { useTranslation } = require('react-i18next');
 const { useServices } = require('stremio/services');
-const { CONSTANTS, usePlatform, interfaceLanguages, languageNames } = require('stremio/common');
+const { CONSTANTS, usePlatform, useStreamingServer, interfaceLanguages, languageNames } = require('stremio/common');
 
 const useProfileSettingsInputs = (profile) => {
     const { t } = useTranslation();
-    const { core } = useServices();
+    const { core, shell } = useServices();
+    const streamingServer = useStreamingServer();
     const platform = usePlatform();
     // TODO combine those useMemo in one
     const interfaceLanguageSelect = React.useMemo(() => ({
@@ -213,7 +214,14 @@ const useProfileSettingsInputs = (profile) => {
     }), [profile.settings]);
     const playInExternalPlayerSelect = React.useMemo(() => ({
         options: CONSTANTS.EXTERNAL_PLAYERS
-            .filter(({ platforms }) => platforms.includes(platform.name))
+            .filter(({ platforms, value }) => {
+
+                // FOR TESTING ONLY as there is no shell for linux
+                // let runningInShell = shell.active || true;
+                let runningInShell = shell.active;
+                let playbackDevicesInShell = runningInShell && (streamingServer.playbackDevices !== null && streamingServer.playbackDevices.type === 'Ready' && streamingServer.playbackDevices.content.find(({ id, type }) => type === 'external' && id === value));
+                return platforms.includes(platform.name) || playbackDevicesInShell;
+            })
             .map(({ label, value }) => ({
                 value,
                 label: t(label),
@@ -235,7 +243,7 @@ const useProfileSettingsInputs = (profile) => {
                 }
             });
         }
-    }), [profile.settings]);
+    }), [profile.settings, streamingServer.playbackDevices]);
     const nextVideoPopupDurationSelect = React.useMemo(() => ({
         options: CONSTANTS.NEXT_VIDEO_POPUP_DURATIONS.map((duration) => ({
             value: `${duration}`,
