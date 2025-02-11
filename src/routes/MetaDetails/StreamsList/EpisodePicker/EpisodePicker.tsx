@@ -23,7 +23,7 @@ export const EpisodePicker = ({ className, onSubmit }: Props) => {
         const initialEpisode = isNaN(parseInt(pathEpisode)) ? 1 : parseInt(pathEpisode);
         return initialEpisode;
     });
-    const handleSeasonChange = (value: number) => setSeason(!isNaN(value) ? value : 1);
+    const handleSeasonChange = (value: number) => setSeason(!isNaN(value) ? value : 0);
 
     const handleEpisodeChange = (value: number) => setEpisode(!isNaN(value) ? value : 1);
 
@@ -36,7 +36,7 @@ export const EpisodePicker = ({ className, onSubmit }: Props) => {
     const disabled = React.useMemo(() => season === parseInt(pathSeason) && episode === parseInt(pathEpisode), [pathSeason, pathEpisode, season, episode]);
 
     return <div className={className}>
-        <NumberInput min={0} label={t('SEASON')} placeholder={t('SPECIAL')} defaultValue={season} onUpdate={handleSeasonChange} showButtons />
+        <NumberInput min={0} label={t('SEASON')} defaultValue={season} onUpdate={handleSeasonChange} showButtons />
         <NumberInput min={1} label={t('EPISODE')} defaultValue={episode} onUpdate={handleEpisodeChange} showButtons />
         <Button className={styles['button-container']} onClick={handleSubmit} disabled={disabled}>
             <div className={styles['label']}>{t('SIDEBAR_SHOW_STREAMS')}</div>
