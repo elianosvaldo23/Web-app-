@@ -1,6 +1,6 @@
 // Copyright (C) 2017-2025 Smart code 203358507
 
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, NumberInput } from 'stremio/components';
 import styles from './EpisodePicker.less';
@@ -13,22 +13,32 @@ type Props = {
 
 const EpisodePicker = ({ className, onSubmit }: Props) => {
     const { t } = useTranslation();
-    const splitPath = window.location.hash.split('/');
-    const videoId = decodeURIComponent(splitPath[splitPath.length - 1]);
-    const [, pathSeason, pathEpisode] = videoId ? videoId.split(':') : [];
-    const [season, setSeason] = React.useState(isNaN(parseInt(pathSeason)) ? 0 : parseInt(pathSeason));
-    const [episode, setEpisode] = React.useState(isNaN(parseInt(pathEpisode)) ? 1 : parseInt(pathEpisode));
-    const handleSeasonChange = (value: number) => setSeason(!isNaN(value) ? value : 0);
 
-    const handleEpisodeChange = (value: number) => setEpisode(!isNaN(value) ? value : 1);
+    const { initialSeason, initialEpisode } = useMemo(() => {
+        const splitPath = window.location.hash.split('/');
+        const videoId = decodeURIComponent(splitPath[splitPath.length - 1]);
+        const [, pathSeason, pathEpisode] = videoId ? videoId.split(':') : [];
+        return {
+            initialSeason: isNaN(parseInt(pathSeason)) ? 0 : parseInt(pathSeason),
+            initialEpisode: isNaN(parseInt(pathEpisode)) ? 1 : parseInt(pathEpisode)
+        };
+    }, []);
 
-    const handleSubmit = React.useCallback(() => {
+    const [season, setSeason] = useState(initialSeason);
+    const [episode, setEpisode] = useState(initialEpisode);
+
+    const handleSeasonChange = useCallback((value: number) => setSeason(!isNaN(value) ? value : 0), []);
+    const handleEpisodeChange = useCallback((value: number) => setEpisode(!isNaN(value) ? value : 1), []);
+
+    const handleSubmit = useCallback(() => {
         if (typeof onSubmit === 'function' && !isNaN(season) && !isNaN(episode)) {
             onSubmit(season, episode);
         }
     }, [onSubmit, season, episode]);
 
-    const disabled = React.useMemo(() => season === parseInt(pathSeason) && episode === parseInt(pathEpisode), [pathSeason, pathEpisode, season, episode]);
+    const disabled = useMemo(() => {
+        return season === initialSeason && episode === initialEpisode;
+    }, [season, episode, initialSeason, initialEpisode]);
 
     return (
         <div className={className}>
