@@ -14,7 +14,7 @@ const { default: SeasonEpisodePicker } = require('./EpisodePicker');
 
 const ALL_ADDONS_KEY = 'ALL';
 
-const StreamsList = ({ className, video, onEpisodeSearch, ...props }) => {
+const StreamsList = ({ className, video, type, onEpisodeSearch, ...props }) => {
     const { t } = useTranslation();
     const { core } = useServices();
     const platform = usePlatform();
@@ -128,14 +128,22 @@ const StreamsList = ({ className, video, onEpisodeSearch, ...props }) => {
             {
                 props.streams.length === 0 ?
                     <div className={styles['message-container']}>
-                        <SeasonEpisodePicker className={styles['search']} onSubmit={handleEpisodePicker} />
+                        {
+                            type === 'series' ?
+                                <SeasonEpisodePicker className={styles['search']} onSubmit={handleEpisodePicker} />
+                                : null
+                        }
                         <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
                         <div className={styles['label']}>No addons were requested for streams!</div>
                     </div>
                     :
                     props.streams.every((streams) => streams.content.type === 'Err') ?
                         <div className={styles['message-container']}>
-                            <SeasonEpisodePicker className={styles['search']} onSubmit={handleEpisodePicker} />
+                            {
+                                type === 'series' ?
+                                    <SeasonEpisodePicker className={styles['search']} onSubmit={handleEpisodePicker} />
+                                    : null
+                            }
                             {
                                 video?.upcoming ?
                                     <div className={styles['label']}>{t('UPCOMING')}...</div>
@@ -207,6 +215,7 @@ StreamsList.propTypes = {
     className: PropTypes.string,
     streams: PropTypes.arrayOf(PropTypes.object).isRequired,
     video: PropTypes.object,
+    type: PropTypes.string,
     onEpisodeSearch: PropTypes.func
 };
 

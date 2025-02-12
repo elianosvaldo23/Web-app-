@@ -176,6 +176,7 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                             className={styles['streams-list']}
                             streams={metaDetails.streams}
                             video={video}
+                            type={streamPath.type}
                             onEpisodeSearch={handleEpisodeSearch}
                         />
                         :
