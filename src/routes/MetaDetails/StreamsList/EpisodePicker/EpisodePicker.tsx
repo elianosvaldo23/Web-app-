@@ -16,14 +16,8 @@ const EpisodePicker = ({ className, onSubmit }: Props) => {
     const splitPath = window.location.hash.split('/');
     const videoId = decodeURIComponent(splitPath[splitPath.length - 1]);
     const [, pathSeason, pathEpisode] = videoId ? videoId.split(':') : [];
-    const [season, setSeason] = React.useState(() => {
-        const initialSeason = isNaN(parseInt(pathSeason)) ? 0 : parseInt(pathSeason);
-        return initialSeason;
-    });
-    const [episode, setEpisode] = React.useState(() => {
-        const initialEpisode = isNaN(parseInt(pathEpisode)) ? 1 : parseInt(pathEpisode);
-        return initialEpisode;
-    });
+    const [season, setSeason] = React.useState(isNaN(parseInt(pathSeason)) ? 0 : parseInt(pathSeason));
+    const [episode, setEpisode] = React.useState(isNaN(parseInt(pathEpisode)) ? 1 : parseInt(pathEpisode));
     const handleSeasonChange = (value: number) => setSeason(!isNaN(value) ? value : 0);
 
     const handleEpisodeChange = (value: number) => setEpisode(!isNaN(value) ? value : 1);
