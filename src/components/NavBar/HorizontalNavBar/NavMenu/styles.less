@@ -1,14 +1,14 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
-@mobile-height: calc(var(--small-viewport-height) - var(--horizontal-nav-bar-size) - var(--vertical-nav-bar-size));
-@height: calc(var(--small-viewport-height) - var(--horizontal-nav-bar-size));
-
 @import (reference) '~@stremio/stremio-colors/less/stremio-colors.less';
 @import (reference) '~stremio/common/screen-sizes.less';
 
 :import('~stremio/components/Popup/styles.less') {
     popup-menu-container: menu-container;
 }
+
+@mobile-height: calc(var(--small-viewport-height) - var(--horizontal-nav-bar-size) - var(--vertical-nav-bar-size));
+@height: calc(var(--small-viewport-height) - var(--horizontal-nav-bar-size));
 
 .nav-menu-popup-label {
     .popup-menu-container {
