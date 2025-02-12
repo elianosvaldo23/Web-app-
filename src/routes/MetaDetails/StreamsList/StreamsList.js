@@ -10,7 +10,7 @@ const { useServices } = require('stremio/services');
 const Stream = require('./Stream');
 const styles = require('./styles');
 const { usePlatform, useProfile } = require('stremio/common');
-const { SeasonEpisodePicker } = require('./EpisodePicker');
+const { default: SeasonEpisodePicker } = require('./EpisodePicker');
 
 const ALL_ADDONS_KEY = 'ALL';
 

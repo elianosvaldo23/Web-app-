@@ -2,6 +2,4 @@
 
 import SeasonEpisodePicker from './EpisodePicker';
 
-export {
-    SeasonEpisodePicker
-};
+export default SeasonEpisodePicker;
