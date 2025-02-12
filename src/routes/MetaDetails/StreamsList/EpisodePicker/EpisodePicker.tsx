@@ -10,7 +10,8 @@ type Props = {
     seriesId: string;
     onSubmit: (season: number, episode: number) => void;
 };
-export const EpisodePicker = ({ className, onSubmit }: Props) => {
+
+const EpisodePicker = ({ className, onSubmit }: Props) => {
     const { t } = useTranslation();
     const splitPath = window.location.hash.split('/');
     const videoId = decodeURIComponent(splitPath[splitPath.length - 1]);
