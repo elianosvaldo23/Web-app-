@@ -1,11 +1,11 @@
 // Copyright (C) 2017-2025 Smart code 203358507
 
+import Icon from '@stremio/stremio-icons/react';
 import React, { ChangeEvent, forwardRef, useCallback, useEffect, useState } from 'react';
 import { type KeyboardEvent, type InputHTMLAttributes } from 'react';
 import classnames from 'classnames';
-import styles from './styles.less';
+import styles from './NumberInput.less';
 import Button from '../Button';
-import Icon from '@stremio/stremio-icons/react';
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
     containerClassName?: string;
