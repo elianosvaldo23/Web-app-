@@ -30,13 +30,15 @@ const EpisodePicker = ({ className, onSubmit }: Props) => {
 
     const disabled = React.useMemo(() => season === parseInt(pathSeason) && episode === parseInt(pathEpisode), [pathSeason, pathEpisode, season, episode]);
 
-    return <div className={className}>
-        <NumberInput min={0} label={t('SEASON')} defaultValue={season} onUpdate={handleSeasonChange} showButtons />
-        <NumberInput min={1} label={t('EPISODE')} defaultValue={episode} onUpdate={handleEpisodeChange} showButtons />
-        <Button className={styles['button-container']} onClick={handleSubmit} disabled={disabled}>
-            <div className={styles['label']}>{t('SIDEBAR_SHOW_STREAMS')}</div>
-        </Button>
-    </div>;
+return (
+        <div className={className}>
+            <NumberInput min={0} label={t('SEASON')} defaultValue={season} onUpdate={handleSeasonChange} showButtons />
+            <NumberInput min={1} label={t('EPISODE')} defaultValue={episode} onUpdate={handleEpisodeChange} showButtons />
+            <Button className={styles['button-container']} onClick={handleSubmit} disabled={disabled}>
+                <div className={styles['label']}>{t('SIDEBAR_SHOW_STREAMS')}</div>
+            </Button>
+        </div>
+    );
 };
 
 export default EpisodePicker;
