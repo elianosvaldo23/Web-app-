@@ -137,9 +137,9 @@ const StreamsList = ({ className, video, onEpisodeSearch, ...props }) => {
                         <div className={styles['message-container']}>
                             <SeasonEpisodePicker className={styles['search']} onSubmit={handleEpisodePicker} />
                             {
-                                video?.upcoming ? 
+                                video?.upcoming ?
                                     <div className={styles['label']}>{t('UPCOMING')}...</div>
-                                : null
+                                    : null
                             }
                             <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
                             <div className={styles['label']}>{t('NO_STREAM')}</div>

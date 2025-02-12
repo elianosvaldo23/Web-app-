@@ -91,9 +91,9 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, showBut
             }
             <div className={classnames(styles['number-display'], showButtons ? styles['buttons-container'] : '')}>
                 {
-                    props.label ? 
+                    props.label ?
                         <div className={styles['label']}>{props.label}</div>
-                    : null
+                        : null
                 }
                 <input
                     ref={ref}
