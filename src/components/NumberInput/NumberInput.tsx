@@ -31,51 +31,37 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, showBut
         }
     }, [props.onKeyDown, props.onSubmit]);
 
+    const updateValueAndNotify = (valueAsNumber: number) => {
+        setValue(valueAsNumber);
+        onUpdate?.(valueAsNumber);
+    };
+
     const handleIncrease = () => {
-        const { max } = props;
-        if (max !== undefined) {
-            return setValue((prevVal) => {
-                const value = prevVal || 0;
-                return value + 1 > max ? max : value + 1;
-            });
+        if (props.max !== undefined) {
+            updateValueAndNotify(Math.min(props.max, (value || 0) + 1));
+            return;
         }
-        setValue((prevVal) => {
-            const value = prevVal || 0;
-            return value + 1;
-        });
+        updateValueAndNotify((value || 0) + 1);
     };
 
     const handleDecrease = () => {
-        const { min } = props;
-        if (min !== undefined) {
-            return setValue((prevVal) => {
-                const value = prevVal || 0;
-                return value - 1 < min ? min : value - 1;
-            });
+        if (props.min !== undefined) {
+            updateValueAndNotify(Math.max(props.min, (value || 0) - 1));
+            return;
         }
-        setValue((prevVal) => {
-            const value = prevVal || 0;
-            return value - 1;
-        });
+        updateValueAndNotify((value || 0) - 1);
     };
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = ({ target: { valueAsNumber }}: ChangeEvent<HTMLInputElement>) => {
         const min = props.min || 0;
-        let newValue = event.target.valueAsNumber;
-        if (newValue && newValue < min) {
-            newValue = min;
+        if (valueAsNumber && valueAsNumber < min) {
+            valueAsNumber = min;
         }
-        if (props.max !== undefined && newValue && newValue > props.max) {
-            newValue = props.max;
+        if (props.max !== undefined && valueAsNumber && valueAsNumber > props.max) {
+            valueAsNumber = props.max;
         }
-        setValue(newValue);
+        updateValueAndNotify(valueAsNumber);
     };
-
-    useEffect(() => {
-        if (typeof onUpdate === 'function') {
-            onUpdate(value);
-        }
-    }, [value]);
 
     return (
         <div className={classnames(props.containerClassName, styles['number-input'])}>
