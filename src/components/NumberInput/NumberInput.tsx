@@ -26,7 +26,7 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, showBut
     const onKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
         props.onKeyDown && props.onKeyDown(event);
 
-        if (event.key === 'Enter' ) {
+        if (event.key === 'Enter') {
             props.onSubmit && props.onSubmit(event);
         }
     }, [props.onKeyDown, props.onSubmit]);
