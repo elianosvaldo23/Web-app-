@@ -1,0 +1,95 @@
+// Copyright (C) 2017-2025 Smart code 203358507
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    overflow: visible;
+
+    .label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0.5rem 0;
+        
+        span {
+            font-size: 0.9rem;
+            color: var(--primary-foreground-color);
+            opacity: 0.6;
+        }
+        .link {
+            font-size: 0.9rem;
+            color: var(--primary-accent-color);
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .checkbox-container {
+        position: relative;
+        width: 1.75rem;
+        height: 1.75rem;
+        border: 0.2rem solid var(--color-placeholder);
+        border-radius: 0.5rem;
+        background-color: transparent;
+        display: flex;
+        flex: none;
+        margin-right: 1rem;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+        outline: none;
+        user-select: none;
+
+        input[type='checkbox'] {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            transition: opacity 0.2s ease-in-out;
+            background-color: transparent;
+            opacity: 0;
+
+            &:after {
+                content: "";
+                position: absolute;
+                left: 0.45rem;
+                top: 0.2rem;
+                width: 0.2rem;
+                height: 0.5rem;
+                border: solid var(--primary-foreground-color);
+                border-width: 0 0.2rem 0.2rem 0;
+                -webkit-transform: rotate(45deg);
+                -ms-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+        }
+
+        &.disabled {
+            cursor: not-allowed;
+        }
+
+        &.error {
+            border-color: var(--color-trakt);
+        }
+
+        &.checked {
+            border: 3px solid var(--secondary-accent-color);
+            background-color: var(--secondary-accent-color);
+            .checkmark {
+                opacity: 1;
+            }
+        }
+    }
+}
