@@ -15,7 +15,12 @@ type Props = {
     label?: string;
     link?: string;
     href?: string;
-    onChange?: (props: any) => void;
+    onChange?: (props: {
+        type: string;
+        checked: boolean;
+        reactEvent: KeyboardEvent<HTMLInputElement> | ChangeEvent<HTMLInputElement>;
+        nativeEvent: Event;
+    }) => void;
     error?: string;
 };
 
@@ -32,12 +37,12 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(({ name, disabled, cl
         }
     }, [disabled, onChange]);
 
-    const onKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
+    const onKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
         if ((event.key === 'Enter' || event.key === ' ') && !disabled) {
             onChange && onChange({
                 type: 'select',
-                checked: event.target.checked,
-                reactEvent: event,
+                checked: !checked,
+                reactEvent: event as KeyboardEvent<HTMLInputElement>,
                 nativeEvent: event.nativeEvent,
             });
         }
