@@ -10,6 +10,7 @@
     width: 20rem;
     padding: 0 1rem;
     overflow-y: auto;
+    scroll-padding-block-start: 2px;
 }
 
 @media only screen and (max-width: @small) and (orientation: portrait) {
@@ -33,11 +34,5 @@
 @media only screen and (max-width: @xsmall) and (orientation: landscape) {
     .list {
         display: none;
-    }
-}
-
-@supports (scroll-padding-block-start: 2px) {
-    .list {
-        scroll-padding-block-start: 2px;
     }
 }
