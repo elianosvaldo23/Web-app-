@@ -4,6 +4,7 @@ import React, { useCallback, ChangeEvent, KeyboardEvent, RefCallback } from 'rea
 import classNames from 'classnames';
 import styles from './Checkbox.less';
 import Button from '../Button';
+import Icon from '@stremio/stremio-icons/react';
 
 type Props = {
     ref?: RefCallback<HTMLInputElement>;
@@ -66,7 +67,11 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(({ name, disabled, cl
                         onChange={handleSelect}
                         className={styles['input']}
                     />
-                    <span className={styles['checkmark']} />
+                    {
+                        checked ?
+                            <Icon name={'checkmark'} className={styles['checkbox-icon']} />
+                            : null
+                    }
                 </div>
                 <div>
                     <span>{label}</span>
