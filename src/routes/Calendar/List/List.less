@@ -10,7 +10,10 @@
     width: 20rem;
     padding: 0 1rem;
     overflow-y: auto;
-    scroll-padding-block-start: 2px;
+    
+    @supports (scroll-padding-block-start: 2px) {
+        scroll-padding-block-start: 2px;
+    }
 }
 
 @media only screen and (max-width: @small) and (orientation: portrait) {

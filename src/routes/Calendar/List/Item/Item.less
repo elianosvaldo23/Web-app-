@@ -9,7 +9,10 @@
     border-radius: var(--border-radius);
     border: 0.15rem solid transparent;
     transition: border-color 0.1s ease-out;
-    scroll-margin-block-start: 2px;
+
+    @supports (scroll-margin-block-start: 2px) {
+        scroll-margin-block-start: 2px;
+    }
 
     .heading {
         flex: none;
