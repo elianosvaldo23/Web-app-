@@ -106,11 +106,9 @@ const Slider = ({ className, value, buffered, minimumValue, maximumValue, disabl
                 <div className={styles['track-before']} style={{ width: `calc(100% * ${bufferedPosition})` }} />
             </div>
             <div className={styles['layer']}>
-                <div className={classnames(styles['track-after'], { [styles['audio-boost']]: audioBoost })}
-                    style={audioBoost
-                        ? { '--progress-width': `calc(${thumbPosition} * 100%)` }
-                        : { width: `calc(${thumbPosition} * 100%)` }
-                    }
+                <div
+                    className={classnames(styles['track-after'], { [styles['audio-boost']]: audioBoost })}
+                    style={{ '--mask-width': `calc(${thumbPosition} * 100%)` }}
                 />
             </div>
             <div className={styles['layer']}>
