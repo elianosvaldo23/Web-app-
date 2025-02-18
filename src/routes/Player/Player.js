@@ -506,14 +506,14 @@ const Player = ({ urlParams, queryParams }) => {
                 }
                 case 'ArrowUp': {
                     if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
-                        onVolumeChangeRequested(video.state.volume + 5);
+                        onVolumeChangeRequested(Math.min(video.state.volume + 5, 200));
                     }
 
                     break;
                 }
                 case 'ArrowDown': {
                     if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
-                        onVolumeChangeRequested(video.state.volume - 5);
+                        onVolumeChangeRequested(Math.max(video.state.volume - 5, 0));
                     }
 
                     break;
@@ -571,13 +571,13 @@ const Player = ({ urlParams, queryParams }) => {
             }
         };
         const onWheel = ({ deltaY }) => {
+            if (menusOpen || video.state.volume === null) return;
+
             if (deltaY > 0) {
-                if (!menusOpen && video.state.volume !== null) {
-                    onVolumeChangeRequested(video.state.volume - 5);
-                }
+                onVolumeChangeRequested(Math.max(video.state.volume - 5, 0));
             } else {
-                if (!menusOpen && video.state.volume !== null) {
-                    onVolumeChangeRequested(video.state.volume + 5);
+                if (video.state.volume < 100) {
+                    onVolumeChangeRequested(Math.min(video.state.volume + 5, 100));
                 }
             }
         };
