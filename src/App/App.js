@@ -6,10 +6,11 @@ const { useTranslation } = require('react-i18next');
 const { Router } = require('stremio-router');
 const { Core, Shell, Chromecast, DragAndDrop, KeyboardShortcuts, ServicesProvider } = require('stremio/services');
 const { NotFound } = require('stremio/routes');
-const { PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender } = require('stremio/common');
+const { FileDropProvider, PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender } = require('stremio/common');
 const ServicesToaster = require('./ServicesToaster');
 const DeepLinkHandler = require('./DeepLinkHandler');
 const SearchParamsHandler = require('./SearchParamsHandler');
+const { default: UpdaterBanner } = require('./UpdaterBanner');
 const ErrorDialog = require('./ErrorDialog');
 const withProtectedRoutes = require('./withProtectedRoutes');
 const routerViewsConfig = require('./routerViewsConfig');
@@ -165,14 +166,17 @@ const App = () => {
                             <PlatformProvider>
                                 <ToastProvider className={styles['toasts-container']}>
                                     <TooltipProvider className={styles['tooltip-container']}>
-                                        <ServicesToaster />
-                                        <DeepLinkHandler />
-                                        <SearchParamsHandler />
-                                        <RouterWithProtectedRoutes
-                                            className={styles['router']}
-                                            viewsConfig={routerViewsConfig}
-                                            onPathNotMatch={onPathNotMatch}
-                                        />
+                                        <FileDropProvider className={styles['file-drop-container']}>
+                                            <ServicesToaster />
+                                            <DeepLinkHandler />
+                                            <SearchParamsHandler />
+                                            <UpdaterBanner className={styles['updater-banner-container']} />
+                                            <RouterWithProtectedRoutes
+                                                className={styles['router']}
+                                                viewsConfig={routerViewsConfig}
+                                                onPathNotMatch={onPathNotMatch}
+                                            />
+                                        </FileDropProvider>
                                     </TooltipProvider>
                                 </ToastProvider>
                             </PlatformProvider>
