@@ -98,9 +98,11 @@ const Discover = ({ urlParams, queryParams }) => {
                                 onSelect={onSelect}
                             />
                         ))}
-                        <Button className={styles['filter-container']} title={'All filters'} onClick={openInputsModal}>
-                            <Icon className={styles['filter-icon']} name={'filters'} />
-                        </Button>
+                        <div className={styles['filter-container']}>
+                            <Button className={styles['filter-button']} title={'All filters'} onClick={openInputsModal}>
+                                <Icon className={styles['filter-icon']} name={'filters'} />
+                            </Button>
+                        </div>
                     </div>
                     {
                         discover.catalog !== null && !discover.catalog.installed ?
