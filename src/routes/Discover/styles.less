@@ -374,9 +374,10 @@
                     .select-input {
                         &:nth-child(n+2) {
                             display: none;
-
-                            &~.filter-button {
-                                display: flex;
+                            &~.filter-container {
+                                .filter-button {
+                                    display: flex;
+                                }
                             }
                         }
                     }
