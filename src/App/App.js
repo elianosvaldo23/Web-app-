@@ -106,7 +106,7 @@ const App = () => {
                         i18n.changeLanguage(args.settings.interfaceLanguage);
                     }
                     if (args?.settings) {
-                        shell.send('update_settings', args.settings);
+                        shell.send('update-settings', args.settings);
                     }
                     break;
                 }
@@ -118,7 +118,7 @@ const App = () => {
             }
 
             if (state?.profile?.settings) {
-                shell.send('update_settings', state.profile.settings);
+                shell.send('update-settings', state.profile.settings);
             }
         };
         const onWindowFocus = () => {
