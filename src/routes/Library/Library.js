@@ -5,7 +5,8 @@ const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const NotFound = require('stremio/routes/NotFound');
 const { useProfile, useNotifications, routesRegexp, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
-const { Button, DelayedRenderer, Chips, Image, MainNavBars, Multiselect, LibItem } = require('stremio/components');
+const { DelayedRenderer, Chips, Image, MainNavBars, Multiselect, LibItem } = require('stremio/components');
+const { default: Placeholder } = require('./Placeholder');
 const useLibrary = require('./useLibrary');
 const useSelectableInputs = require('./useSelectableInputs');
 const styles = require('./styles');
@@ -76,17 +77,7 @@ const Library = ({ model, urlParams, queryParams }) => {
                 }
                 {
                     model === 'library' && profile.auth === null ?
-                        <div className={classnames(styles['message-container'], styles['no-user-message-container'])}>
-                            <Image
-                                className={styles['image']}
-                                src={require('/images/anonymous.png')}
-                                alt={' '}
-                            />
-                            <div className={styles['message-label']}>Library is only available for logged in users!</div>
-                            <Button className={styles['login-button-container']} href={'#/intro'}>
-                                <div className={styles['label']}>LOG IN</div>
-                            </Button>
-                        </div>
+                        <Placeholder />
                         :
                         library.selected === null ?
                             <DelayedRenderer delay={500}>
