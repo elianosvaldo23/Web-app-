@@ -63,7 +63,7 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
 
     const onMarkSeasonAsWatched = (season: number, watched: boolean) => {
         core.transport.dispatch({
-            action: 'MetaDetails',
+            action: 'Player',
             args: {
                 action: 'MarkSeasonAsWatched',
                 args: [season, !watched]
