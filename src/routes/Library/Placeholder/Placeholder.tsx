@@ -16,7 +16,7 @@ const Placeholder = () => {
             <div className={styles['image-container']}>
                 <Image
                     className={styles['image']}
-                    src={require('/images/not_loggedin_placeholder.png')}
+                    src={require('/images/media_carousel.png')}
                     alt={' '}
                 />
             </div>
