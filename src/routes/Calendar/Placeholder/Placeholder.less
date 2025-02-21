@@ -13,7 +13,9 @@
     overflow-y: auto;
 
     .title {
-        flex: none;
+        display: flex;
+        flex: 4;
+        align-items: flex-end;
         font-size: 1.75rem;
         font-weight: 400;
         text-align: center;
@@ -22,19 +24,26 @@
         opacity: 0.5;
     }
 
-    .image {
-        flex: none;
-        height: 14rem;
-        margin: 1.5rem 0;
+    .image-container {
+        display: flex;
+        flex: 4;
+        align-items: center;
+        padding: 1.5rem 0;
+
+        .image {
+            height: 100%;
+            max-height: 14rem;
+            object-fit: contain;
+        }
     }
 
     .overview {
-        flex: none;
+        flex: 2;
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 4rem;
-        margin-bottom: 3rem;
+        margin-bottom: 1rem;
 
         .point {
             display: flex;
@@ -61,21 +70,57 @@
         }
     }
 
-    .button {
-        flex: none;
-        justify-content: center;
-        height: 4rem;
-        line-height: 4rem;
-        padding: 0 5rem;
-        font-size: 1.1rem;
-        color: var(--primary-foreground-color);
-        text-align: center;
-        border-radius: 3.5rem;
-        background-color: var(--overlay-color);
+    .button-container {
+        display: flex;
+        flex: 2;       
+        align-items: flex-start;
+        margin: 1rem 0;
+    
+        .button {
+            display: flex;
+            justify-content: center;
+            height: 4rem;
+            line-height: 4rem;
+            padding: 0 5rem;
+            font-size: 1.1rem;
+            color: var(--primary-foreground-color);
+            text-align: center;
+            border-radius: 3.5rem;
+            background-color: var(--overlay-color);
 
-        &:hover {
-            outline: var(--focus-outline-size) solid var(--primary-foreground-color);
-            background-color: transparent;
+            &:hover {
+                outline: var(--focus-outline-size) solid var(--primary-foreground-color);
+                background-color: transparent;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: @xsmall) {
+    .placeholder {
+        padding: 1rem 2rem;
+
+        .title {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .image-container {
+            flex: 3;
+            padding: 1rem;
+
+            .image {
+                max-height: 10rem;
+            }
+        }
+
+        .overview {
+            flex: 2;
+        }
+
+        .button-container {
+            flex: 2;
+            margin: 1rem 0 0;
         }
     }
 }
@@ -83,17 +128,27 @@
 @media only screen and (max-width: @minimum) {
     .placeholder {
         padding: 1rem 2rem;
-
-        .image {
-            height: 10rem;
+        .title {
+            flex: 2;
         }
 
         .overview {
             flex-direction: column;
+            flex: 2;
+            gap: 1rem;
+
+            .point {
+                .text {
+                    font-size: 1rem;
+                }
+            }
         }
 
-        .button {
-            width: 100%;
+        .button-container {
+            flex: 3;
+            .button {
+                width: 100%;
+            }
         }
     }
 }
