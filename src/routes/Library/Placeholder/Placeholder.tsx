@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import Icon from '@stremio/stremio-icons/react';
 import { Button, Image } from 'stremio/components';
 import styles from './Placeholder.less';
 
@@ -16,9 +17,23 @@ const Placeholder = () => {
             <div className={styles['image-container']}>
                 <Image
                     className={styles['image']}
-                    src={require('/images/media_carousel.png')}
+                    src={require('/images/library_placeholder.png')}
                     alt={' '}
                 />
+            </div>
+            <div className={styles['overview']}>
+                <div className={styles['point']}>
+                    <Icon className={styles['icon']} name={'cloud-library'} />
+                    <div className={styles['text']}>
+                        {t('NOT_LOGGED_IN_CLOUD')}
+                    </div>
+                </div>
+                <div className={styles['point']}>
+                    <Icon className={styles['icon']} name={'actors'} />
+                    <div className={styles['text']}>
+                        {t('NOT_LOGGED_IN_RECOMMENDATIONS')}
+                    </div>
+                </div>
             </div>
             <div className={styles['button-container']}>
                 <Button className={styles['button']} href={'#/intro?form=login'}>

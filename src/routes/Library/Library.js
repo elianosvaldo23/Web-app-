@@ -59,55 +59,58 @@ const Library = ({ model, urlParams, queryParams }) => {
     }, [hasNextPage, loadNextPage]);
     const onScroll = useOnScrollToBottom(onScrollToBottom, SCROLL_TO_BOTTOM_TRESHOLD);
     React.useLayoutEffect(() => {
-        if (profile.auth !== null && library.selected && library.selected.request.page === 1 && library.catalog.length !== 0 ) {
+        if (profile.auth !== null && library.selected && library.selected.request.page === 1 && library.catalog.length !== 0) {
             scrollContainerRef.current.scrollTop = 0;
         }
     }, [profile.auth, library.selected]);
     return (
         <MainNavBars className={styles['library-container']} route={model}>
-            <div className={styles['library-content']}>
-                {
-                    model === 'continue_watching' || profile.auth !== null ?
-                        <div className={styles['selectable-inputs-container']}>
-                            <Multiselect {...typeSelect} className={styles['select-input-container']} />
-                            <Chips {...sortChips} className={styles['select-input-container']} />
-                        </div>
-                        :
-                        null
-                }
-                {
-                    model === 'library' && profile.auth === null ?
-                        <Placeholder />
-                        :
-                        library.selected === null ?
-                            <DelayedRenderer delay={500}>
-                                <div className={styles['message-container']}>
-                                    <Image
-                                        className={styles['image']}
-                                        src={require('/images/empty.png')}
-                                        alt={' '}
-                                    />
-                                    <div className={styles['message-label']}>{model === 'library' ? 'Library' : 'Continue Watching'} not loaded!</div>
-                                </div>
-                            </DelayedRenderer>
-                            :
-                            library.catalog.length === 0 ?
-                                <div className={styles['message-container']}>
-                                    <Image
-                                        className={styles['image']}
-                                        src={require('/images/empty.png')}
-                                        alt={' '}
-                                    />
-                                    <div className={styles['message-label']}>Empty {model === 'library' ? 'Library' : 'Continue Watching'}</div>
+            {
+                profile.auth === null ?
+                    <Placeholder />
+                    : <div className={styles['library-content']}>
+                        {
+                            model === 'continue_watching' ?
+                                <div className={styles['selectable-inputs-container']}>
+                                    <Multiselect {...typeSelect} className={styles['select-input-container']} />
+                                    <Chips {...sortChips} className={styles['select-input-container']} />
                                 </div>
                                 :
-                                <div ref={scrollContainerRef} className={classnames(styles['meta-items-container'], 'animation-fade-in')} onScroll={onScroll}>
-                                    {library.catalog.map((libItem, index) => (
-                                        <LibItem {...libItem} notifications={notifications} removable={model === 'library'} key={index} />
-                                    ))}
-                                </div>
-                }
-            </div>
+                                null
+                        }
+                        {
+                            model === 'library' ?
+                                library.selected === null ?
+                                    <DelayedRenderer delay={500}>
+                                        <div className={styles['message-container']}>
+                                            <Image
+                                                className={styles['image']}
+                                                src={require('/images/empty.png')}
+                                                alt={' '}
+                                            />
+                                            <div className={styles['message-label']}>{model === 'library' ? 'Library' : 'Continue Watching'} not loaded!</div>
+                                        </div>
+                                    </DelayedRenderer>
+                                    :
+                                    library.catalog.length === 0 ?
+                                        <div className={styles['message-container']}>
+                                            <Image
+                                                className={styles['image']}
+                                                src={require('/images/empty.png')}
+                                                alt={' '}
+                                            />
+                                            <div className={styles['message-label']}>Empty {model === 'library' ? 'Library' : 'Continue Watching'}</div>
+                                        </div>
+                                        :
+                                        <div ref={scrollContainerRef} className={classnames(styles['meta-items-container'], 'animation-fade-in')} onScroll={onScroll}>
+                                            {library.catalog.map((libItem, index) => (
+                                                <LibItem {...libItem} notifications={notifications} removable={model === 'library'} key={index} />
+                                            ))}
+                                        </div>
+                                : null
+                        }
+                    </div>
+            }
         </MainNavBars>
     );
 };
