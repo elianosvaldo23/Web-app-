@@ -252,7 +252,7 @@
     }
 }
 
-@media only screen and (max-width: @minimum) {
+@media only screen and (max-width: @xsmall) {
     .intro-container {
         justify-content: initial;
         padding: 3rem 1.5rem;
@@ -279,6 +279,22 @@
         .content-container {
             flex-direction: column-reverse;
 
+            .form-container, .options-container {
+                width: 50%;
+                margin: 0 auto;
+            }
+
+            .options-container {
+                margin-bottom: 4rem;
+            }
+        }
+    }
+}
+
+
+@media only screen and (max-width: @minimum) {
+    .intro-container {
+        .content-container {
             .form-container, .options-container {
                 width: 100%;
                 margin: 0;
