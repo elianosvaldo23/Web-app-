@@ -100,7 +100,7 @@ const App = () => {
         };
     }, []);
 
-    // Handle shell window visibility changed event 
+    // Handle shell window visibility changed event
     React.useEffect(() => {
         const onWindowVisibilityChanged = (state) => {
             setWindowHidden(state.visible === false && state.visibility === 0);

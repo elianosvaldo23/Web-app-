@@ -17,11 +17,17 @@ type ShellEvent = {
     args: string[];
 };
 
-
-
 const createId = () => Math.floor(Math.random() * 9999) + 1;
 
 const useShell = () => {
+    const on = (name: string, listener: (arg: any) => void) => {
+        events.on(name, listener);
+    };
+
+    const off = (name: string, listener: (arg: any) => void) => {
+        events.off(name, listener);
+    };
+
     const send = (method: string, ...args: (string | number)[]) => {
         try {
             transport?.send(JSON.stringify({
@@ -31,17 +37,9 @@ const useShell = () => {
                 method: 'onEvent',
                 args: [method, ...args],
             }));
-        } catch(e) {
+        } catch (e) {
             console.error('Shell', 'Failed to send event', e);
         }
-    };
-
-    const on = (name: string, listener: (arg: any) => void) => {
-        events.on(name, listener);
-    };
-
-    const off = (name: string, listener: (arg: any) => void) => {
-        events.off(name, listener);
     };
 
     useEffect(() => {

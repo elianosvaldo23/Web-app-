@@ -17,4 +17,4 @@ declare global {
     var qt: Qt | undefined;
 }
 
-export {}
+export {};
