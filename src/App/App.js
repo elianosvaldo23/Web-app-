@@ -21,6 +21,7 @@ const RouterWithProtectedRoutes = withCoreSuspender(withProtectedRoutes(Router))
 const App = () => {
     const { i18n } = useTranslation();
     const shell = useShell();
+    const [windowHidden, setWindowHidden] = React.useState(false);
     const onPathNotMatch = React.useCallback(() => {
         return NotFound;
     }, []);
@@ -98,6 +99,17 @@ const App = () => {
             services.chromecast.off('stateChanged', onChromecastStateChange);
         };
     }, []);
+
+    // Handle shell window visibility changed event 
+    React.useEffect(() => {
+        const onWindowVisibilityChanged = (state) => {
+            setWindowHidden(state.visible === false && state.visibility === 0);
+        };
+
+        shell.on('win-visibility-changed', onWindowVisibilityChanged);
+        return () => shell.off('win-visibility-changed', onWindowVisibilityChanged);
+    }, []);
+
     React.useEffect(() => {
         const onCoreEvent = ({ event, args }) => {
             switch (event) {
@@ -105,9 +117,11 @@ const App = () => {
                     if (args && args.settings && typeof args.settings.interfaceLanguage === 'string') {
                         i18n.changeLanguage(args.settings.interfaceLanguage);
                     }
-                    if (args?.settings) {
-                        shell.send('update-settings', args.settings);
+
+                    if (args?.settings?.quitOnClose && windowHidden) {
+                        shell.send('quit');
                     }
+
                     break;
                 }
             }
@@ -117,8 +131,8 @@ const App = () => {
                 i18n.changeLanguage(state.profile.settings.interfaceLanguage);
             }
 
-            if (state?.profile?.settings) {
-                shell.send('update-settings', state.profile.settings);
+            if (state?.profile?.settings?.quitOnClose && windowHidden) {
+                shell.send('quit');
             }
         };
         const onWindowFocus = () => {
@@ -162,7 +176,7 @@ const App = () => {
                 services.core.transport.off('CoreEvent', onCoreEvent);
             }
         };
-    }, [initialized]);
+    }, [initialized, windowHidden]);
     return (
         <React.StrictMode>
             <ServicesProvider services={services}>

@@ -1,7 +1,12 @@
 /* eslint-disable no-var */
 
+type QtTransportMessage = {
+    data: string;
+};
+
 interface QtTransport {
     send: (message: string) => void,
+    onmessage: (message: QtTransportMessage) => void,
 }
 
 interface Qt {
@@ -12,4 +17,4 @@ declare global {
     var qt: Qt | undefined;
 }
 
-export { };
+export {}
