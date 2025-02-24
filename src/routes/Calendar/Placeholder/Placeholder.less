@@ -8,14 +8,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    min-height: 100%;
     width: 100%;
     overflow-y: auto;
 
     .title {
-        display: flex;
-        flex: 4;
-        align-items: flex-end;
         font-size: 1.75rem;
         font-weight: 400;
         text-align: center;
@@ -25,9 +22,6 @@
     }
 
     .image-container {
-        display: flex;
-        flex: 4;
-        align-items: center;
         padding: 1.5rem 0;
 
         .image {
@@ -38,7 +32,6 @@
     }
 
     .overview {
-        flex: 2;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -71,9 +64,6 @@
     }
 
     .button-container {
-        display: flex;
-        flex: 2;       
-        align-items: flex-start;
         margin: 1rem 0;
     
         .button {
@@ -101,12 +91,10 @@
         padding: 1rem 2rem;
 
         .title {
-            flex: 1;
             margin-bottom: 0;
         }
 
         .image-container {
-            flex: 3;
             padding: 1rem;
 
             .image {
@@ -114,12 +102,7 @@
             }
         }
 
-        .overview {
-            flex: 2;
-        }
-
         .button-container {
-            flex: 2;
             margin: 1rem 0 0;
         }
     }
@@ -128,13 +111,9 @@
 @media only screen and (max-width: @minimum) {
     .placeholder {
         padding: 1rem 2rem;
-        .title {
-            flex: 2;
-        }
 
         .overview {
             flex-direction: column;
-            flex: 2;
             gap: 1rem;
 
             .point {
@@ -145,7 +124,6 @@
         }
 
         .button-container {
-            flex: 3;
             .button {
                 width: 100%;
             }
