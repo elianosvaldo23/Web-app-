@@ -66,18 +66,12 @@ const Library = ({ model, urlParams, queryParams }) => {
     return (
         <MainNavBars className={styles['library-container']} route={model}>
             {
-                profile.auth === null ?
-                    <Placeholder />
-                    : <div className={styles['library-content']}>
-                        {
-                            model === 'continue_watching' ?
-                                <div className={styles['selectable-inputs-container']}>
-                                    <Multiselect {...typeSelect} className={styles['select-input-container']} />
-                                    <Chips {...sortChips} className={styles['select-input-container']} />
-                                </div>
-                                :
-                                null
-                        }
+                profile.auth !== null ?
+                    <div className={styles['library-content']}>
+                        <div className={styles['selectable-inputs-container']}>
+                            <Multiselect {...typeSelect} className={styles['select-input-container']} />
+                            <Chips {...sortChips} className={styles['select-input-container']} />
+                        </div>
                         {
                             model === 'library' ?
                                 library.selected === null ?
@@ -110,6 +104,8 @@ const Library = ({ model, urlParams, queryParams }) => {
                                 : null
                         }
                     </div>
+                    :
+                    <Placeholder />
             }
         </MainNavBars>
     );
