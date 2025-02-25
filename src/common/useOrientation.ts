@@ -28,7 +28,7 @@ const useOrientation = () => {
         };
     }, [window.innerWidth, window.innerHeight]);
 
-    return { orientation };
+    return orientation;
 };
 
 export default useOrientation;
