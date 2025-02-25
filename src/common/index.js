@@ -24,6 +24,7 @@ const { default: useShell } = require('./useShell');
 const useStreamingServer = require('./useStreamingServer');
 const useTorrent = require('./useTorrent');
 const useTranslate = require('./useTranslate');
+const useWindowSize = require('./useWindowSize');
 
 module.exports = {
     FileDropProvider,
@@ -55,4 +56,5 @@ module.exports = {
     useStreamingServer,
     useTorrent,
     useTranslate,
+    useWindowSize,
 };
