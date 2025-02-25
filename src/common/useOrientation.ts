@@ -1,63 +1,34 @@
 // Copyright (C) 2017-2025 Smart code 203358507
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
-type DeviceOrientationData = {
-    alpha: number | null;
-    beta: number | null;
-    gamma: number | null;
-    absolute: boolean | null;
-    permissionGranted: boolean;
-};
+type DeviceOrientation = 'landscape' | 'portrait';
 
 const useOrientation = () => {
-    const [orientation, setOrientation] = useState<DeviceOrientationData>({
-        alpha: null,
-        beta: null,
-        gamma: null,
-        absolute: null,
-        permissionGranted: false,
-    });
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    const requestPermission = async () => {
-        if (
-            typeof DeviceOrientationEvent !== 'undefined' &&
-            (DeviceOrientationEvent as any).requestPermission
-        ) {
-            try {
-                const permissionState = await (DeviceOrientationEvent as any).requestPermission();
-                if (permissionState === 'granted') {
-                    setOrientation((prev) => ({ ...prev, permissionGranted: true }));
-                }
-            } catch (error) {
-                console.error('Error requesting DeviceOrientation permission:', error);
-            }
+    const orientation: DeviceOrientation = useMemo(() => {
+        if (windowHeight > windowWidth) {
+            return 'portrait';
         } else {
-            setOrientation((prev) => ({ ...prev, permissionGranted: true }));
+            return 'landscape';
         }
-    };
+    }, [windowWidth, windowHeight]);
 
     useEffect(() => {
-        const handleOrientationChange = (event: DeviceOrientationEvent) => {
-            setOrientation((prev) => ({
-                ...prev,
-                alpha: event.alpha ?? null,
-                beta: event.beta ?? null,
-                gamma: event.gamma ?? null,
-                absolute: event.absolute ?? null,
-            }));
+        const handleResize = () => {
+            setWindowHeight(window.innerHeight);
+            setWindowWidth(window.innerWidth);
         };
 
-        if (orientation.permissionGranted && window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', handleOrientationChange);
-        }
-
+        window.addEventListener('resize', handleResize);
         return () => {
-            window.removeEventListener('deviceorientation', handleOrientationChange);
+            window.removeEventListener('resize', handleResize);
         };
-    }, [orientation.permissionGranted]);
+    }, [window.innerWidth, window.innerHeight]);
 
-    return { ...orientation, requestPermission };
+    return { orientation };
 };
 
 export default useOrientation;
