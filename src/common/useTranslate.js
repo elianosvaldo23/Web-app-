@@ -21,10 +21,11 @@ const useTranslate = () => {
         if (addon && id && name) {
             const partialKey = `${addon.manifest.id.split('.').join('_')}_${id}`;
             const translatedName = stringWithPrefix(partialKey, 'CATALOG_', name);
+            const addonName = addon.manifest.name;
 
             if (type && withType) {
                 const translatedType = stringWithPrefix(type, 'TYPE_');
-                return `${translatedName} - ${translatedType}`;
+                return `${addonName}: ${translatedName} - ${translatedType}`;
             }
 
             return translatedName;

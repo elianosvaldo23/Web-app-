@@ -110,13 +110,12 @@ const Search = ({ queryParams }) => {
                                         return null;
                                     }
                                     default: {
-                                        const loadingTitle = `${catalog.addon.manifest.name}: ${t.catalogTitle(catalog)}`;
                                         return (
                                             <MetaRow.Placeholder
                                                 key={index}
                                                 className={classnames(styles['search-row'], styles['search-row-poster'], 'animation-fade-in')}
                                                 catalog={catalog}
-                                                title={loadingTitle}
+                                                title={t.catalogTitle(catalog)}
                                             />
                                         );
                                     }
