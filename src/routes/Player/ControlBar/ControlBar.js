@@ -40,6 +40,7 @@ const ControlBar = ({
     onToggleSideDrawer,
     onToggleOptionsMenu,
     onToggleStatisticsMenu,
+    onTouchEnd,
     ...props
 }) => {
     const { chromecast } = useServices();
@@ -103,7 +104,7 @@ const ControlBar = ({
         };
     }, []);
     return (
-        <div {...props} className={classnames(className, styles['control-bar-container'])}>
+        <div {...props} onTouchStart={props.onMouseOver} onTouchMove={props.onMouseMove} onTouchEnd={onTouchEnd} className={classnames(className, styles['control-bar-container'])}>
             <SeekBar
                 className={styles['seek-bar']}
                 time={time}
@@ -206,6 +207,9 @@ ControlBar.propTypes = {
     onToggleSideDrawer: PropTypes.func,
     onToggleOptionsMenu: PropTypes.func,
     onToggleStatisticsMenu: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onMouseMove: PropTypes.func,
+    onTouchEnd: PropTypes.func,
 };
 
 module.exports = ControlBar;
