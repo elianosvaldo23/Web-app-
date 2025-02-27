@@ -43,7 +43,7 @@ const SeekBar = ({ className, time, duration, buffered, onSeekRequested }) => {
     }, []);
     return (
         <div className={classnames(className, styles['seek-bar-container'], { 'active': seekTime !== null })}>
-            <div className={styles['label']}>{formatTime(seekTime !== null ? seekTime : time)}</div>
+            <div className={styles['label']}>{ formatTime(!disabled ? (seekTime !== null ? seekTime : time) : null )}</div>
             <Slider
                 className={classnames(styles['slider'], { 'active': seekTime !== null })}
                 value={
