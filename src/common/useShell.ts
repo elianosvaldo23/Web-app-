@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import EventEmitter from 'eventemitter3';
 
 const SHELL_EVENT_OBJECT = 'transport';
-const transport = globalThis?.qt?.webChannelTransport;
+const transport = globalThis?.chrome?.webview;
 const events = new EventEmitter();
 
 enum ShellEventType {
@@ -30,7 +30,7 @@ const useShell = () => {
 
     const send = (method: string, ...args: (string | number)[]) => {
         try {
-            transport?.send(JSON.stringify({
+            transport?.postMessage(JSON.stringify({
                 id: createId(),
                 type: ShellEventType.INVOKE_METHOD,
                 object: SHELL_EVENT_OBJECT,
@@ -45,10 +45,9 @@ const useShell = () => {
     useEffect(() => {
         if (!transport) return;
 
-        transport.onmessage = ({ data }) => {
+        const onMessage = ({ data }: { data: string }) => {
             try {
                 const { type, args } = JSON.parse(data) as ShellEvent;
-
                 if (type === ShellEventType.SIGNAL) {
                     const [methodName, methodArg] = args;
                     events.emit(methodName, methodArg);
@@ -57,6 +56,9 @@ const useShell = () => {
                 console.error('Shell', 'Failed to handle event', e);
             }
         };
+
+        transport.addEventListener('message', onMessage);
+        return () => transport.removeEventListener('message', onMessage);
     }, []);
 
     return {
