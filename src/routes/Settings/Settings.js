@@ -341,7 +341,7 @@ const Settings = () => {
                         <div className={styles['section-title']}>{ t('SETTINGS_NAV_PLAYER') }</div>
                         <div className={styles['section-category-container']}>
                             <Icon className={styles['icon']} name={'subtitles'} />
-                            <div className={styles['label']}>{t('SETTINGS_SECTION_SUBTITLES')}</div>
+                            <div className={styles['label']}>{t('SETTINGS_CLOSE_WINDOW')}</div>
                         </div>
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
