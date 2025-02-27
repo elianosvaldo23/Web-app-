@@ -56,6 +56,11 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
                 return a.episode - b.episode;
             });
     }, [videos, selectedSeason]);
+
+    const seasonWatched = React.useMemo(() => {
+        return videosForSeason.every((video) => video.watched);
+    }, [videosForSeason]);
+
     const [search, setSearch] = React.useState('');
     const searchInputOnChange = React.useCallback((event) => {
         setSearch(event.currentTarget.value);
@@ -67,6 +72,16 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
             args: {
                 action: 'MarkVideoAsWatched',
                 args: [video, !watched]
+            }
+        });
+    };
+
+    const onMarkSeasonAsWatched = (season, watched) => {
+        core.transport.dispatch({
+            action: 'MetaDetails',
+            args: {
+                action: 'MarkSeasonAsWatched',
+                args: [season, !watched]
             }
         });
     };
@@ -135,6 +150,7 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
                                                 id={video.id}
                                                 title={video.title}
                                                 thumbnail={video.thumbnail}
+                                                season={video.season}
                                                 episode={video.episode}
                                                 released={video.released}
                                                 upcoming={video.upcoming}
@@ -142,7 +158,9 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
                                                 progress={video.progress}
                                                 deepLinks={video.deepLinks}
                                                 scheduled={video.scheduled}
+                                                seasonWatched={seasonWatched}
                                                 onMarkVideoAsWatched={onMarkVideoAsWatched}
+                                                onMarkSeasonAsWatched={onMarkSeasonAsWatched}
                                             />
                                         ))
                                 }
