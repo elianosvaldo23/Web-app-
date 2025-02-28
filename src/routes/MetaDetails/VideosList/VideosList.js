@@ -20,7 +20,6 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
             :
             [];
     }, [metaItem]);
-    // Orders season from 1 to X and 0 (special season) at the end
     const seasons = React.useMemo(() => {
         return videos
             .map(({ season }) => season)
@@ -37,22 +36,18 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
             return season;
         }
 
-        if (libraryItem?.state.video_id && videos) {
-            const video = videos?.find((video) => video.id === libraryItem.state.video_id);
+        const video = videos?.find((video) => video.id === libraryItem?.state.video_id);
 
-            if (video && video.season && seasons.includes(video.season)) {
-                return video.season;
-            }
+        if (video && video.season && seasons.includes(video.season)) {
+            return video.season;
         }
 
         const nonSpecialSeasons = seasons.filter((season) => season !== 0);
         if (nonSpecialSeasons.length > 0) {
-            // default to 1st season
             return nonSpecialSeasons[0];
         }
 
         if (seasons.length > 0) {
-            // default to 1st season
             return seasons[0];
         }
 
