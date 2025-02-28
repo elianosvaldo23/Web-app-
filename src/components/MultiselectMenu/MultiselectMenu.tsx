@@ -11,7 +11,7 @@ import useOutsideClick from 'stremio/common/useOutsideClick';
 
 type Props = {
     className?: string,
-    title?: string;
+    title?: string | (() => string);
     options: MultiselectMenuOption[];
     selectedOption?: MultiselectMenuOption;
     onSelect: (value: number) => void;
@@ -35,7 +35,11 @@ const MultiselectMenu = ({ className, title, options, selectedOption, onSelect }
                 aria-haspopup='listbox'
                 aria-expanded={menuOpen}
             >
-                {title}
+                {
+                    typeof title === 'function'
+                        ? title()
+                        : title ?? selectedOption?.label
+                }
                 <Icon name={'caret-down'} className={classNames(styles['icon'], { [styles['open']]: menuOpen })} />
             </Button>
             {
