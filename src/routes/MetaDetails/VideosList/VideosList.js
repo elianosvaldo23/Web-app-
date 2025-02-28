@@ -36,17 +36,23 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
             return season;
         }
 
+        const video = videos?.find((video) => video.id === libraryItem?.state.video_id);
+
+        if (video && video.season && seasons.includes(video.season)) {
+            return video.season;
+        }
+
         const nonSpecialSeasons = seasons.filter((season) => season !== 0);
         if (nonSpecialSeasons.length > 0) {
-            return nonSpecialSeasons[nonSpecialSeasons.length - 1];
+            return nonSpecialSeasons[0];
         }
 
         if (seasons.length > 0) {
-            return seasons[seasons.length - 1];
+            return seasons[0];
         }
 
         return null;
-    }, [seasons, season]);
+    }, [seasons, season, videos, libraryItem]);
     const videosForSeason = React.useMemo(() => {
         return videos
             .filter((video) => {
