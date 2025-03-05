@@ -1,4 +1,4 @@
-// Copyright (C) 2017-2024 Smart code 203358507
+// Copyright (C) 2017-2025 Smart code 203358507
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,26 +12,26 @@ const Placeholder = () => {
     return (
         <div className={styles['placeholder']}>
             <div className={styles['title']}>
-                {t('CALENDAR_NOT_LOGGED_IN')}
+                {t('LIBRARY_NOT_LOGGED_IN')}
             </div>
             <div className={styles['image-container']}>
                 <Image
                     className={styles['image']}
-                    src={require('/images/calendar_placeholder.png')}
+                    src={require('/images/library_placeholder.png')}
                     alt={' '}
                 />
             </div>
             <div className={styles['overview']}>
                 <div className={styles['point']}>
-                    <Icon className={styles['icon']} name={'megaphone'} />
+                    <Icon className={styles['icon']} name={'cloud-library'} />
                     <div className={styles['text']}>
-                        {t('NOT_LOGGED_IN_NOTIFICATIONS')}
+                        {t('NOT_LOGGED_IN_CLOUD')}
                     </div>
                 </div>
                 <div className={styles['point']}>
-                    <Icon className={styles['icon']} name={'calendar-thin'} />
+                    <Icon className={styles['icon']} name={'actors'} />
                     <div className={styles['text']}>
-                        {t('NOT_LOGGED_IN_CALENDAR')}
+                        {t('NOT_LOGGED_IN_RECOMMENDATIONS')}
                     </div>
                 </div>
             </div>
