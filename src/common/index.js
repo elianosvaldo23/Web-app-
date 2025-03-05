@@ -1,5 +1,6 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
+const { FileDropProvider, onFileDrop } = require('./FileDrop');
 const { PlatformProvider, usePlatform } = require('./Platform');
 const { ToastProvider, useToast } = require('./Toast');
 const { TooltipProvider, Tooltip } = require('./Tooltips');
@@ -19,11 +20,15 @@ const useModelState = require('./useModelState');
 const useNotifications = require('./useNotifications');
 const useOnScrollToBottom = require('./useOnScrollToBottom');
 const useProfile = require('./useProfile');
+const { default: useShell } = require('./useShell');
 const useStreamingServer = require('./useStreamingServer');
 const useTorrent = require('./useTorrent');
 const useTranslate = require('./useTranslate');
+const { default: useOrientation } = require('./useOrientation');
 
 module.exports = {
+    FileDropProvider,
+    onFileDrop,
     PlatformProvider,
     usePlatform,
     ToastProvider,
@@ -47,7 +52,9 @@ module.exports = {
     useNotifications,
     useOnScrollToBottom,
     useProfile,
+    useShell,
     useStreamingServer,
     useTorrent,
     useTranslate,
+    useOrientation,
 };

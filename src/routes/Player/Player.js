@@ -8,7 +8,7 @@ const langs = require('langs');
 const { useTranslation } = require('react-i18next');
 const { useRouteFocused } = require('stremio-router');
 const { useServices } = require('stremio/services');
-const { useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender } = require('stremio/common');
+const { onFileDrop, useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender, CONSTANTS } = require('stremio/common');
 const { HorizontalNavBar, Transition } = require('stremio/components');
 const BufferingLoader = require('./BufferingLoader');
 const VolumeChangeIndicator = require('./VolumeChangeIndicator');
@@ -141,9 +141,18 @@ const Player = ({ urlParams, queryParams }) => {
         toast.show({
             type: 'success',
             title: t('PLAYER_SUBTITLES_LOADED'),
-            message: track.exclusive ? t('PLAYER_SUBTITLES_LOADED_EXCLUSIVE') : t('PLAYER_SUBTITLES_LOADED_ORIGIN', { origin: track.origin }),
+            message:
+                track.exclusive ? t('PLAYER_SUBTITLES_LOADED_EXCLUSIVE') :
+                    track.local ? t('PLAYER_SUBTITLES_LOADED_LOCAL') :
+                        t('PLAYER_SUBTITLES_LOADED_ORIGIN', { origin: track.origin }),
             timeout: 3000
         });
+    }, []);
+
+    const onExtraSubtitlesTrackAdded = React.useCallback((track) => {
+        if (track.local) {
+            video.setExtraSubtitlesTrack(track.id);
+        }
     }, []);
 
     const onPlayRequested = React.useCallback(() => {
@@ -180,13 +189,11 @@ const Player = ({ urlParams, queryParams }) => {
     }, []);
 
     const onSubtitlesTrackSelected = React.useCallback((id) => {
-        video.setProp('selectedSubtitlesTrackId', id);
-        video.setProp('selectedExtraSubtitlesTrackId', null);
+        video.setSubtitlesTrack(id);
     }, []);
 
     const onExtraSubtitlesTrackSelected = React.useCallback((id) => {
-        video.setProp('selectedSubtitlesTrackId', null);
-        video.setProp('selectedExtraSubtitlesTrackId', id);
+        video.setExtraSubtitlesTrack(id);
     }, []);
 
     const onAudioTrackSelected = React.useCallback((id) => {
@@ -326,6 +333,10 @@ const Player = ({ urlParams, queryParams }) => {
         event.nativeEvent.immersePrevented = true;
     }, []);
 
+    onFileDrop(CONSTANTS.SUPPORTED_LOCAL_SUBTITLES, async (filename, buffer) => {
+        video.addLocalSubtitles(filename, buffer);
+    });
+
     React.useEffect(() => {
         setError(null);
         video.unload();
@@ -352,6 +363,7 @@ const Player = ({ urlParams, queryParams }) => {
                     0,
                 forceTranscoding: forceTranscoding || casting,
                 maxAudioChannels: settings.surroundSound ? 32 : 2,
+                hardwareDecoding: settings.hardwareDecoding,
                 streamingServerURL: streamingServer.baseUrl ?
                     casting ?
                         streamingServer.baseUrl
@@ -359,7 +371,7 @@ const Player = ({ urlParams, queryParams }) => {
                         streamingServer.selected.transportUrl
                     :
                     null,
-                seriesInfo: player.seriesInfo
+                seriesInfo: player.seriesInfo,
             }, {
                 chromecastTransport: chromecast.active ? chromecast.transport : null,
                 shellTransport: shell.active ? shell.transport : null,
@@ -550,14 +562,14 @@ const Player = ({ urlParams, queryParams }) => {
                 }
                 case 'ArrowUp': {
                     if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
-                        onVolumeChangeRequested(video.state.volume + 5);
+                        onVolumeChangeRequested(Math.min(video.state.volume + 5, 200));
                     }
 
                     break;
                 }
                 case 'ArrowDown': {
                     if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
-                        onVolumeChangeRequested(video.state.volume - 5);
+                        onVolumeChangeRequested(Math.max(video.state.volume - 5, 0));
                     }
 
                     break;
@@ -615,13 +627,13 @@ const Player = ({ urlParams, queryParams }) => {
             }
         };
         const onWheel = ({ deltaY }) => {
+            if (menusOpen || video.state.volume === null) return;
+
             if (deltaY > 0) {
-                if (!menusOpen && video.state.volume !== null) {
-                    onVolumeChangeRequested(video.state.volume - 5);
-                }
+                onVolumeChangeRequested(Math.max(video.state.volume - 5, 0));
             } else {
-                if (!menusOpen && video.state.volume !== null) {
-                    onVolumeChangeRequested(video.state.volume + 5);
+                if (video.state.volume < 100) {
+                    onVolumeChangeRequested(Math.min(video.state.volume + 5, 100));
                 }
             }
         };
@@ -642,6 +654,7 @@ const Player = ({ urlParams, queryParams }) => {
         video.events.on('ended', onEnded);
         video.events.on('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
         video.events.on('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
+        video.events.on('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
         video.events.on('implementationChanged', onImplementationChanged);
 
         return () => {
@@ -649,6 +662,7 @@ const Player = ({ urlParams, queryParams }) => {
             video.events.off('ended', onEnded);
             video.events.off('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
             video.events.off('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
+            video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
             video.events.off('implementationChanged', onImplementationChanged);
         };
     }, []);
