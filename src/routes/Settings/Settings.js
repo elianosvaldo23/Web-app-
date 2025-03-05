@@ -41,6 +41,7 @@ const Settings = () => {
         seekTimeDurationSelect,
         seekShortTimeDurationSelect,
         escExitFullscreenToggle,
+        quitOnCloseToggle,
         playInExternalPlayerSelect,
         nextVideoPopupDurationSelect,
         bingeWatchingToggle,
@@ -322,12 +323,25 @@ const Settings = () => {
                                 {...interfaceLanguageSelect}
                             />
                         </div>
+                        {
+                            shell.active &&
+                                <div className={styles['option-container']}>
+                                    <div className={styles['option-name-container']}>
+                                        <div className={styles['label']}>{ t('SETTINGS_QUIT_ON_CLOSE') }</div>
+                                    </div>
+                                    <Toggle
+                                        className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                        tabIndex={-1}
+                                        {...quitOnCloseToggle}
+                                    />
+                                </div>
+                        }
                     </div>
                     <div ref={playerSectionRef} className={styles['section-container']}>
                         <div className={styles['section-title']}>{ t('SETTINGS_NAV_PLAYER') }</div>
                         <div className={styles['section-category-container']}>
                             <Icon className={styles['icon']} name={'subtitles'} />
-                            <div className={styles['label']}>{t('SETTINGS_SECTION_SUBTITLES')}</div>
+                            <div className={styles['label']}>{t('SETTINGS_CLOSE_WINDOW')}</div>
                         </div>
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
