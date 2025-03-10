@@ -16,7 +16,7 @@ const useProfileSettingsInputs = (profile) => {
             label: name,
         })),
         selectedOption: {
-            label: interfaceLanguages.find(({ codes }) => codes[0] === profile.settings.interfaceLanguage)?.name,
+            label: interfaceLanguages.find(({ codes }) => codes[0] === profile.settings.interfaceLanguage || codes[1] === profile.settings.interfaceLanguage)?.name,
             value: interfaceLanguages.find(({ codes }) => codes[1] === profile.settings.interfaceLanguage)?.codes?.[0] || profile.settings.interfaceLanguage
         },
         onSelect: (value) => {
