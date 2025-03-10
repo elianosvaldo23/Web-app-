@@ -6,7 +6,7 @@ const { useTranslation } = require('react-i18next');
 const { Router } = require('stremio-router');
 const { Core, Shell, Chromecast, DragAndDrop, KeyboardShortcuts, ServicesProvider } = require('stremio/services');
 const { NotFound } = require('stremio/routes');
-const { FileDropProvider, PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender } = require('stremio/common');
+const { FileDropProvider, PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender, useShell } = require('stremio/common');
 const ServicesToaster = require('./ServicesToaster');
 const DeepLinkHandler = require('./DeepLinkHandler');
 const SearchParamsHandler = require('./SearchParamsHandler');
@@ -20,6 +20,8 @@ const RouterWithProtectedRoutes = withCoreSuspender(withProtectedRoutes(Router))
 
 const App = () => {
     const { i18n } = useTranslation();
+    const shell = useShell();
+    const [windowHidden, setWindowHidden] = React.useState(false);
     const onPathNotMatch = React.useCallback(() => {
         return NotFound;
     }, []);
@@ -97,6 +99,17 @@ const App = () => {
             services.chromecast.off('stateChanged', onChromecastStateChange);
         };
     }, []);
+
+    // Handle shell window visibility changed event
+    React.useEffect(() => {
+        const onWindowVisibilityChanged = (state) => {
+            setWindowHidden(state.visible === false && state.visibility === 0);
+        };
+
+        shell.on('win-visibility-changed', onWindowVisibilityChanged);
+        return () => shell.off('win-visibility-changed', onWindowVisibilityChanged);
+    }, []);
+
     React.useEffect(() => {
         const onCoreEvent = ({ event, args }) => {
             switch (event) {
@@ -104,6 +117,11 @@ const App = () => {
                     if (args && args.settings && typeof args.settings.interfaceLanguage === 'string') {
                         i18n.changeLanguage(args.settings.interfaceLanguage);
                     }
+
+                    if (args?.settings?.quitOnClose && windowHidden) {
+                        shell.send('quit');
+                    }
+
                     break;
                 }
             }
@@ -111,6 +129,10 @@ const App = () => {
         const onCtxState = (state) => {
             if (state && state.profile && state.profile.settings && typeof state.profile.settings.interfaceLanguage === 'string') {
                 i18n.changeLanguage(state.profile.settings.interfaceLanguage);
+            }
+
+            if (state?.profile?.settings?.quitOnClose && windowHidden) {
+                shell.send('quit');
             }
         };
         const onWindowFocus = () => {
@@ -146,7 +168,7 @@ const App = () => {
             services.core.transport
                 .getState('ctx')
                 .then(onCtxState)
-                .catch((e) => console.error(e));
+                .catch(console.error);
         }
         return () => {
             if (services.core.active) {
@@ -154,7 +176,7 @@ const App = () => {
                 services.core.transport.off('CoreEvent', onCoreEvent);
             }
         };
-    }, [initialized]);
+    }, [initialized, windowHidden]);
     return (
         <React.StrictMode>
             <ServicesProvider services={services}>
