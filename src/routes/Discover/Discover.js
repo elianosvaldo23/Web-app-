@@ -26,6 +26,15 @@ const Discover = ({ urlParams, queryParams }) => {
             metasContainerRef.current.scrollTop = 0;
         }
     }, [discover.catalog]);
+    React.useEffect(() => {
+        if (hasNextPage && metasContainerRef.current) {
+            const containerHeight = metasContainerRef.current.scrollHeight;
+            const viewportHeight = metasContainerRef.current.clientHeight;
+            if (containerHeight <= viewportHeight) {
+                loadNextPage();
+            }
+        }
+    }, [hasNextPage, loadNextPage]);
     const selectedMetaItem = React.useMemo(() => {
         return discover.catalog !== null &&
             discover.catalog.content.type === 'Ready' &&
