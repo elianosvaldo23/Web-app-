@@ -251,9 +251,7 @@ const Player = ({ urlParams, queryParams }) => {
         toggleFullscreen();
     }, [toggleFullscreen]);
 
-    const onContextMenu = React.useCallback((e) => {
-        e.preventDefault();
-        const { clientX, clientY } = e;
+    const handleContextMenuPosition = (clientX, clientY) => {
         const safeAreaTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top)')) || 0;
         const safeAreaRight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-right)')) || 0;
         const safeAreaBottom = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-bottom)')) || 0;
@@ -280,8 +278,23 @@ const Player = ({ urlParams, queryParams }) => {
             x: adjustedX,
             y: adjustedY,
         });
+    };
+
+    const onContextMenu = React.useCallback((e) => {
+        e.preventDefault();
+        const { clientX, clientY } = e;
+        handleContextMenuPosition(clientX, clientY);
         openContextMenu();
     }, [contextMenuRef]);
+
+    const onTouchStart = (event) => {
+        const touch = event.touches[0];
+        handleContextMenuPosition(touch.clientX, touch.clientY);
+    };
+
+    const onTouchEnd = () => {
+        openContextMenu();
+    };
 
     React.useEffect(() => {
         if (!contextMenuOpen) {
@@ -689,7 +702,7 @@ const Player = ({ urlParams, queryParams }) => {
             />
             {
                 !video.state.loaded ?
-                    <div className={classnames(styles['layer'], styles['background-layer'])} onContextMenu={onContextMenu}>
+                    <div className={classnames(styles['layer'], styles['background-layer'])} onContextMenu={onContextMenu} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                         <img className={styles['image']} src={player?.metaItem?.content?.background} />
                     </div>
                     :
@@ -697,7 +710,7 @@ const Player = ({ urlParams, queryParams }) => {
             }
             {
                 (video.state.buffering || !video.state.loaded) && !error ?
-                    <BufferingLoader className={classnames(styles['layer'], styles['buffering-layer'])} logo={player?.metaItem?.content?.logo} onContextMenu={onContextMenu} />
+                    <BufferingLoader className={classnames(styles['layer'], styles['buffering-layer'])} logo={player?.metaItem?.content?.logo} onContextMenu={onContextMenu} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} />
                     :
                     null
             }
@@ -755,6 +768,8 @@ const Player = ({ urlParams, queryParams }) => {
                 onMouseMove={onBarMouseMove}
                 onMouseOver={onBarMouseMove}
                 onContextMenu={onContextMenu}
+                onTouchStart={onTouchStart}
+                onTouchEnd={onTouchEnd}
             />
             {
                 player.metaItem?.type === 'Ready' ?
@@ -762,6 +777,8 @@ const Player = ({ urlParams, queryParams }) => {
                         className={classnames(styles['layer'], styles['side-drawer-button-layer'])}
                         onClick={toggleSideDrawer}
                         onContextMenu={onContextMenu}
+                        onTouchStart={onTouchStart}
+                        onTouchEnd={onTouchEnd}
                     />
                     :
                     null
@@ -797,6 +814,8 @@ const Player = ({ urlParams, queryParams }) => {
                 onMouseMove={onBarMouseMove}
                 onMouseOver={onBarMouseMove}
                 onContextMenu={onContextMenu}
+                onTouchStart={onTouchStart}
+                onTouchEnd={onTouchEnd}
             />
             {
                 nextVideoPopupOpen ?
