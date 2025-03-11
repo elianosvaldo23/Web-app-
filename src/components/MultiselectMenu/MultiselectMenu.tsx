@@ -27,7 +27,7 @@ const MultiselectMenu = ({ className, title, options, selectedOption, onSelect }
     };
 
     return (
-        <div className={classNames(styles['multiselect-menu'], className)} ref={multiselectMenuRef}>
+        <div className={classNames(styles['multiselect-menu'], { [styles['active']]: menuOpen }, className)} ref={multiselectMenuRef}>
             <Button
                 className={classNames(styles['multiselect-button'], { [styles['open']]: menuOpen })}
                 onClick={toggleMenu}
