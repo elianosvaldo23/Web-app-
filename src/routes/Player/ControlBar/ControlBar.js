@@ -9,7 +9,7 @@ const { useServices } = require('stremio/services');
 const SeekBar = require('./SeekBar');
 const VolumeSlider = require('./VolumeSlider');
 const styles = require('./styles');
-const { useBinaryState } = require('stremio/common');
+const { useBinaryState, usePlatform } = require('stremio/common');
 const { t } = require('i18next');
 
 const ControlBar = ({
@@ -44,6 +44,7 @@ const ControlBar = ({
     ...props
 }) => {
     const { chromecast } = useServices();
+    const platform = usePlatform();
     const [chromecastServiceActive, setChromecastServiceActive] = React.useState(() => chromecast.active);
     const [buttonsMenuOpen, , , toggleButtonsMenu] = useBinaryState(false);
     const onSubtitlesButtonMouseDown = React.useCallback((event) => {
@@ -136,12 +137,16 @@ const ControlBar = ({
                         }
                     />
                 </Button>
-                <VolumeSlider
-                    className={styles['volume-slider']}
-                    volume={volume}
-                    muted={muted}
-                    onVolumeChangeRequested={onVolumeChangeRequested}
-                />
+                {
+                    !platform.isMobile ?
+                        <VolumeSlider
+                            className={styles['volume-slider']}
+                            volume={volume}
+                            muted={muted}
+                            onVolumeChangeRequested={onVolumeChangeRequested}
+                        />
+                        : null
+                }
                 <div className={styles['spacing']} />
                 <Button className={styles['control-bar-buttons-menu-button']} onClick={toggleButtonsMenu}>
                     <Icon className={styles['icon']} name={'more-vertical'} />
