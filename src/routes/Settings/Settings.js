@@ -31,7 +31,7 @@ const Settings = () => {
     const toast = useToast();
     const {
         interfaceLanguageSelect,
-        blurUnwatchedImageToggle,
+        hideSpoilersToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
         subtitlesTextColorInput,
@@ -510,7 +510,7 @@ const Settings = () => {
                             <Toggle
                                 className={classnames(styles['option-input-container'], styles['toggle-container'])}
                                 tabIndex={-1}
-                                {...blurUnwatchedImageToggle}
+                                {...hideSpoilersToggle}
                             />
                         </div>
                         {

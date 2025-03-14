@@ -32,8 +32,8 @@ const useProfileSettingsInputs = (profile) => {
         }
     }), [profile.settings]);
 
-    const blurUnwatchedImageToggle = React.useMemo(() => ({
-        checked: profile.settings.blurUnwatchedImage,
+    const hideSpoilersToggle = React.useMemo(() => ({
+        checked: profile.settings.hideSpoilers,
         onClick: () => {
             core.transport.dispatch({
                 action: 'Ctx',
@@ -41,7 +41,7 @@ const useProfileSettingsInputs = (profile) => {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        blurUnwatchedImage: !profile.settings.blurUnwatchedImage
+                        hideSpoilers: !profile.settings.hideSpoilers
                     }
                 }
             });
@@ -341,7 +341,7 @@ const useProfileSettingsInputs = (profile) => {
     }), [profile.settings]);
     return {
         interfaceLanguageSelect,
-        blurUnwatchedImageToggle,
+        hideSpoilersToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
         subtitlesTextColorInput,
