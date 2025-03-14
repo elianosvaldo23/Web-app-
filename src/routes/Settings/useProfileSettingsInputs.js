@@ -32,6 +32,22 @@ const useProfileSettingsInputs = (profile) => {
         }
     }), [profile.settings]);
 
+    const blurUnwatchedImageToggle = React.useMemo(() => ({
+        checked: profile.settings.blurUnwatchedImage,
+        onClick: () => {
+            core.transport.dispatch({
+                action: 'Ctx',
+                args: {
+                    action: 'UpdateSettings',
+                    args: {
+                        ...profile.settings,
+                        blurUnwatchedImage: !profile.settings.blurUnwatchedImage
+                    }
+                }
+            });
+        }
+    }), [profile.settings]);
+
     const quitOnCloseToggle = React.useMemo(() => ({
         checked: profile.settings.quitOnClose,
         onClick: () => {
@@ -325,6 +341,7 @@ const useProfileSettingsInputs = (profile) => {
     }), [profile.settings]);
     return {
         interfaceLanguageSelect,
+        blurUnwatchedImageToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
         subtitlesTextColorInput,

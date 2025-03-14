@@ -21,6 +21,7 @@ type Settings = {
     hardwareDecoding: boolean,
     escExitFullscreen: boolean,
     interfaceLanguage: string,
+    blurUnwatchedImage: boolean,
     nextVideoNotificationDuration: number,
     playInBackground: boolean,
     playerType: string | null,

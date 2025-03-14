@@ -31,6 +31,7 @@ const Settings = () => {
     const toast = useToast();
     const {
         interfaceLanguageSelect,
+        blurUnwatchedImageToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
         subtitlesTextColorInput,
@@ -500,6 +501,16 @@ const Settings = () => {
                             <Multiselect
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...playInExternalPlayerSelect}
+                            />
+                        </div>
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>{ t('SETTINGS_BLUR_UNWATCHED_IMAGE') }</div>
+                            </div>
+                            <Toggle
+                                className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                tabIndex={-1}
+                                {...blurUnwatchedImageToggle}
                             />
                         </div>
                         {
