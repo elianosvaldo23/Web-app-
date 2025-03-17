@@ -6,13 +6,13 @@
                 "appID": "9EWRZ4QP3J.com.stremio.one",
                 "paths": [
                     "/",
-                    "#/player/*",
-                    "#/discover/*",
-                    "#/detail/*",
-                    "#/library/*",
-                    "#/addons",
-                    "#/settings",
-                    "#/search/*"
+                    "/#/player/*",
+                    "/#/discover/*",
+                    "/#/detail/*",
+                    "/#/library/*",
+                    "/#/addons/*",
+                    "/#/settings",
+                    "/#/search/*"
                 ],
                 "components": [
                     {
@@ -37,7 +37,7 @@
                     },
                     {
                         "/": "/",
-                        "#": "/addons",
+                        "#": "/addons/*",
                         "comment": "Matches deep link for addons"
                     },
                     {
