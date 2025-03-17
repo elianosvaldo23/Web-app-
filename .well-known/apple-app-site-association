@@ -4,25 +4,35 @@
         "details": [
             {
                 "appID": "9EWRZ4QP3J.com.stremio.one",
+                "paths": [
+                    "/",
+                    "#/player/*",
+                    "#/discover/*",
+                    "#/detail/*",
+                    "#/library/*",
+                    "#/addons",
+                    "#/settings",
+                    "#/search/*"
+                ],
                 "components": [
                     {
                         "/": "/",
-                        "#": "/player",
+                        "#": "/player/*",
                         "comment": "Matches deep link for player"
                     },
                     {
                         "/": "/",
-                        "#": "/discover",
+                        "#": "/discover/*",
                         "comment": "Matches deep link for discover"
                     },
                     {
                         "/": "/",
-                        "#": "/detail",
+                        "#": "/detail/*",
                         "comment": "Matches deep link for detail"
                     },
                     {
                         "/": "/",
-                        "#": "/library",
+                        "#": "/library/*",
                         "comment": "Matches deep link for library"
                     },
                     {
@@ -37,7 +47,7 @@
                     },
                     {
                         "/": "/",
-                        "#": "/search",
+                        "#": "/search/*",
                         "comment": "Matches deep link for search"
                     }
                 ]
