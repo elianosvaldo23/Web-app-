@@ -210,11 +210,16 @@ const Player = ({ urlParams, queryParams }) => {
     }, []);
 
     const onNextVideoRequested = React.useCallback(() => {
-        if (player.nextVideo !== null) {
-            nextVideo();
-
+        console.log('Before nextVideo()');
+        nextVideo();
+        console.log('after nextVideo()');
+    });
+    React.useEffect(() => {
+        if (player.nextVideo !== null && player.nextVideo.deepLinks !== null) {
             const deepLinks = player.nextVideo.deepLinks;
             if (deepLinks.metaDetailsStreams && deepLinks.player) {
+                console.log('Next: window.location.replace() & window.location.href = deepLinks.player');
+
                 window.location.replace(deepLinks.metaDetailsStreams);
                 window.location.href = deepLinks.player;
             } else {
