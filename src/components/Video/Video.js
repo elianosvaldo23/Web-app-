@@ -68,7 +68,7 @@ const Video = ({ className, id, title, thumbnail, season, episode, released, upc
         }
     }, [deepLinks]);
     const renderLabel = React.useMemo(() => function renderLabel({ className, id, title, thumbnail, episode, released, upcoming, watched, progress, scheduled, children, ...props }) {
-        const blurThumbnail = profile.settings.hideSpoilers && !watched;
+        const blurThumbnail = profile.settings.hideSpoilers && season && episode && !watched;
         return (
             <Button {...props} className={classnames(className, styles['video-container'])} title={title}>
                 {

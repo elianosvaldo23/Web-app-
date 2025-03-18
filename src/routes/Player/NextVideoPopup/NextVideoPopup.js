@@ -10,7 +10,7 @@ const styles = require('./styles');
 
 const NextVideoPopup = ({ className, metaItem, nextVideo, onDismiss, onNextVideoRequested }) => {
     const profile = useProfile();
-    const blurPosterImage = profile.settings.hideSpoilers;
+    const blurPosterImage = profile.settings.hideSpoilers && metaItem.type === 'series';
     const watchNowButtonRef = React.useRef(null);
     const [animationEnded, setAnimationEnded] = React.useState(false);
     const videoName = React.useMemo(() => {
