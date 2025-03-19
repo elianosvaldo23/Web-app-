@@ -31,6 +31,7 @@ const Settings = () => {
     const toast = useToast();
     const {
         interfaceLanguageSelect,
+        hideSpoilersToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
         subtitlesTextColorInput,
@@ -336,6 +337,16 @@ const Settings = () => {
                                     />
                                 </div>
                         }
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>{ t('SETTINGS_BLUR_UNWATCHED_IMAGE') }</div>
+                            </div>
+                            <Toggle
+                                className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                tabIndex={-1}
+                                {...hideSpoilersToggle}
+                            />
+                        </div>
                     </div>
                     <div ref={playerSectionRef} className={styles['section-container']}>
                         <div className={styles['section-title']}>{ t('SETTINGS_NAV_PLAYER') }</div>
