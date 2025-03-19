@@ -41,6 +41,8 @@ const ControlBar = ({
     onToggleOptionsMenu,
     onToggleStatisticsMenu,
     onContextMenu,
+    onTouchStart,
+    onTouchEnd,
     ...props
 }) => {
     const { chromecast } = useServices();
@@ -104,7 +106,7 @@ const ControlBar = ({
         };
     }, []);
     return (
-        <div {...props} className={classnames(className, styles['control-bar-container'])} onContextMenu={onContextMenu}>
+        <div {...props} className={classnames(className, styles['control-bar-container'])} onContextMenu={onContextMenu} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
             <SeekBar
                 className={styles['seek-bar']}
                 time={time}
@@ -139,6 +141,7 @@ const ControlBar = ({
                 <VolumeSlider
                     className={styles['volume-slider']}
                     volume={volume}
+                    muted={muted}
                     onVolumeChangeRequested={onVolumeChangeRequested}
                 />
                 <div className={styles['spacing']} />
@@ -207,6 +210,8 @@ ControlBar.propTypes = {
     onToggleOptionsMenu: PropTypes.func,
     onToggleStatisticsMenu: PropTypes.func,
     onContextMenu: PropTypes.func,
+    onTouchStart: PropTypes.func,
+    onTouchEnd: PropTypes.func,
 };
 
 module.exports = ControlBar;

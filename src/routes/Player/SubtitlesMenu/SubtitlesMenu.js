@@ -10,11 +10,13 @@ const styles = require('./styles');
 const { t } = require('i18next');
 
 const ORIGIN_PRIORITIES = {
+    'LOCAL': 3,
     'EMBEDDED': 2,
-    'EXCLUSIVE': 1
+    'EXCLUSIVE': 1,
 };
 const LANGUAGE_PRIORITIES = {
-    'eng': 1
+    'local': 2,
+    'eng': 1,
 };
 
 const SubtitlesMenu = React.memo((props) => {
@@ -161,7 +163,11 @@ const SubtitlesMenu = React.memo((props) => {
                     </Button>
                     {subtitlesLanguages.map((lang, index) => (
                         <Button key={index} title={languages.label(lang)} className={classnames(styles['language-option'], { 'selected': selectedSubtitlesLanguage === lang })} data-lang={lang} onClick={subtitlesLanguageOnClick}>
-                            <div className={styles['language-label']}>{languages.label(lang)}</div>
+                            <div className={styles['language-label']}>
+                                {
+                                    lang === 'local' ? t('LOCAL') : languages.label(lang)
+                                }
+                            </div>
                             {
                                 selectedSubtitlesLanguage === lang ?
                                     <div className={styles['icon']} />
@@ -207,60 +213,62 @@ const SubtitlesMenu = React.memo((props) => {
                 }
             </div>
             <div className={styles['subtitles-settings-container']}>
-                <div className={styles['settings-header']}>Subtitles Settings</div>
-                <DiscreteSelectInput
-                    className={styles['discrete-input']}
-                    label={t('DELAY')}
-                    value={typeof props.selectedExtraSubtitlesTrackId === 'string' && props.extraSubtitlesDelay !== null && !isNaN(props.extraSubtitlesDelay) ? `${(props.extraSubtitlesDelay / 1000).toFixed(2)}s` : '--'}
-                    disabled={typeof props.selectedExtraSubtitlesTrackId !== 'string' || props.extraSubtitlesDelay === null || isNaN(props.extraSubtitlesDelay)}
-                    onChange={onSubtitlesDelayChanged}
-                />
-                <DiscreteSelectInput
-                    className={styles['discrete-input']}
-                    label={t('SIZE')}
-                    value={
-                        typeof props.selectedSubtitlesTrackId === 'string' ?
-                            props.subtitlesSize !== null && !isNaN(props.subtitlesSize) ? `${props.subtitlesSize}%` : '--'
-                            :
-                            typeof props.selectedExtraSubtitlesTrackId === 'string' ?
-                                props.extraSubtitlesSize !== null && !isNaN(props.extraSubtitlesSize) ? `${props.extraSubtitlesSize}%` : '--'
+                <div className={styles['settings-header']}>{t('PLAYER_SUBTITLES_SETTINGS')}</div>
+                <div className={styles['settings-list']}>
+                    <DiscreteSelectInput
+                        className={styles['discrete-input']}
+                        label={t('DELAY')}
+                        value={typeof props.selectedExtraSubtitlesTrackId === 'string' && props.extraSubtitlesDelay !== null && !isNaN(props.extraSubtitlesDelay) ? `${(props.extraSubtitlesDelay / 1000).toFixed(2)}s` : '--'}
+                        disabled={typeof props.selectedExtraSubtitlesTrackId !== 'string' || props.extraSubtitlesDelay === null || isNaN(props.extraSubtitlesDelay)}
+                        onChange={onSubtitlesDelayChanged}
+                    />
+                    <DiscreteSelectInput
+                        className={styles['discrete-input']}
+                        label={t('SIZE')}
+                        value={
+                            typeof props.selectedSubtitlesTrackId === 'string' ?
+                                props.subtitlesSize !== null && !isNaN(props.subtitlesSize) ? `${props.subtitlesSize}%` : '--'
                                 :
-                                '--'
-                    }
-                    disabled={
-                        typeof props.selectedSubtitlesTrackId === 'string' ?
-                            props.subtitlesSize === null || isNaN(props.subtitlesSize)
-                            :
-                            typeof props.selectedExtraSubtitlesTrackId === 'string' ?
-                                props.extraSubtitlesSize === null || isNaN(props.extraSubtitlesSize)
+                                typeof props.selectedExtraSubtitlesTrackId === 'string' ?
+                                    props.extraSubtitlesSize !== null && !isNaN(props.extraSubtitlesSize) ? `${props.extraSubtitlesSize}%` : '--'
+                                    :
+                                    '--'
+                        }
+                        disabled={
+                            typeof props.selectedSubtitlesTrackId === 'string' ?
+                                props.subtitlesSize === null || isNaN(props.subtitlesSize)
                                 :
-                                true
-                    }
-                    onChange={onSubtitlesSizeChanged}
-                />
-                <DiscreteSelectInput
-                    className={styles['discrete-input']}
-                    label={t('PLAYER_SUBTITLES_VERTICAL_POSIITON')}
-                    value={
-                        typeof props.selectedSubtitlesTrackId === 'string' ?
-                            props.subtitlesOffset !== null && !isNaN(props.subtitlesOffset) ? `${props.subtitlesOffset}%` : '--'
-                            :
-                            typeof props.selectedExtraSubtitlesTrackId === 'string' ?
-                                props.extraSubtitlesOffset !== null && !isNaN(props.extraSubtitlesOffset) ? `${props.extraSubtitlesOffset}%` : '--'
+                                typeof props.selectedExtraSubtitlesTrackId === 'string' ?
+                                    props.extraSubtitlesSize === null || isNaN(props.extraSubtitlesSize)
+                                    :
+                                    true
+                        }
+                        onChange={onSubtitlesSizeChanged}
+                    />
+                    <DiscreteSelectInput
+                        className={styles['discrete-input']}
+                        label={t('PLAYER_SUBTITLES_VERTICAL_POSIITON')}
+                        value={
+                            typeof props.selectedSubtitlesTrackId === 'string' ?
+                                props.subtitlesOffset !== null && !isNaN(props.subtitlesOffset) ? `${props.subtitlesOffset}%` : '--'
                                 :
-                                '--'
-                    }
-                    disabled={
-                        typeof props.selectedSubtitlesTrackId === 'string' ?
-                            props.subtitlesOffset === null || isNaN(props.subtitlesOffset)
-                            :
-                            typeof props.selectedExtraSubtitlesTrackId === 'string' ?
-                                props.extraSubtitlesOffset === null || isNaN(props.extraSubtitlesOffset)
+                                typeof props.selectedExtraSubtitlesTrackId === 'string' ?
+                                    props.extraSubtitlesOffset !== null && !isNaN(props.extraSubtitlesOffset) ? `${props.extraSubtitlesOffset}%` : '--'
+                                    :
+                                    '--'
+                        }
+                        disabled={
+                            typeof props.selectedSubtitlesTrackId === 'string' ?
+                                props.subtitlesOffset === null || isNaN(props.subtitlesOffset)
                                 :
-                                true
-                    }
-                    onChange={onSubtitlesOffsetChanged}
-                />
+                                typeof props.selectedExtraSubtitlesTrackId === 'string' ?
+                                    props.extraSubtitlesOffset === null || isNaN(props.extraSubtitlesOffset)
+                                    :
+                                    true
+                        }
+                        onChange={onSubtitlesOffsetChanged}
+                    />
+                </div>
             </div>
         </div>
     );

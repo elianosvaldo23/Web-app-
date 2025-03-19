@@ -1,6 +1,7 @@
 import AddonDetailsModal from './AddonDetailsModal';
 import BottomSheet from './BottomSheet';
 import Button from './Button';
+import Checkbox from './Checkbox';
 import Chips from './Chips';
 import ColorInput from './ColorInput';
 import ContextMenu from './ContextMenu';
@@ -32,6 +33,7 @@ export {
     AddonDetailsModal,
     BottomSheet,
     Button,
+    Checkbox,
     Chips,
     ColorInput,
     ContextMenu,
