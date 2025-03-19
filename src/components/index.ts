@@ -3,6 +3,7 @@ import BottomSheet from './BottomSheet';
 import Button from './Button';
 import Chips from './Chips';
 import ColorInput from './ColorInput';
+import ContextMenu from './ContextMenu';
 import ContinueWatchingItem from './ContinueWatchingItem';
 import DelayedRenderer from './DelayedRenderer';
 import EventModal from './EventModal';
@@ -33,6 +34,7 @@ export {
     Button,
     Chips,
     ColorInput,
+    ContextMenu,
     ContinueWatchingItem,
     DelayedRenderer,
     EventModal,

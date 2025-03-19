@@ -6,9 +6,9 @@ const classnames = require('classnames');
 const { Image } = require('stremio/components');
 const styles = require('./styles');
 
-const BufferingLoader = ({ className, logo, onContextMenu }) => {
+const BufferingLoader = React.forwardRef(({ className, logo }, ref) => {
     return (
-        <div className={classnames(className, styles['buffering-loader-container'])} onContextMenu={onContextMenu}>
+        <div ref={ref} className={classnames(className, styles['buffering-loader-container'])}>
             <Image
                 className={styles['buffering-loader']}
                 src={logo}
@@ -17,12 +17,11 @@ const BufferingLoader = ({ className, logo, onContextMenu }) => {
             />
         </div>
     );
-};
+});
 
 BufferingLoader.propTypes = {
     className: PropTypes.string,
     logo: PropTypes.string,
-    onContextMenu: PropTypes.func
 };
 
 module.exports = BufferingLoader;
