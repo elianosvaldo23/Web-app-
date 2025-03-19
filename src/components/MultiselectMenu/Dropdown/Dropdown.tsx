@@ -63,7 +63,7 @@ const Dropdown = ({ level, setLevel, options, onSelect, selectedOption, menuOpen
                 .filter((option: MultiselectMenuOption) => !option.hidden)
                 .map((option: MultiselectMenuOption) => (
                     <Option
-                        key={option.value}
+                        key={option.id}
                         ref={handleSetOptionRef(option.value)}
                         option={option}
                         onSelect={onSelect}
