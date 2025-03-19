@@ -182,7 +182,12 @@ const Settings = () => {
                         { t('SETTINGS_NAV_SHORTCUTS') }
                     </Button>
                     <div className={styles['spacing']} />
-                    <div className={styles['version-info-label']} title={process.env.VERSION}>App Version: {process.env.VERSION}</div>
+                    <div className={styles['version-info-label']} title={process.env.VERSION}>
+                        App Version: {process.env.VERSION}
+                    </div>
+                    <div className={styles['version-info-label']} title={process.env.COMMIT_HASH}>
+                        Build Version: {process.env.COMMIT_HASH}
+                    </div>
                     {
                         streamingServer.settings !== null && streamingServer.settings.type === 'Ready' ?
                             <div className={styles['version-info-label']} title={streamingServer.settings.content.serverVersion}>Server Version: {streamingServer.settings.content.serverVersion}</div>
@@ -730,6 +735,18 @@ const Settings = () => {
                             <div className={classnames(styles['option-input-container'], styles['info-container'])}>
                                 <div className={styles['label']}>
                                     {process.env.VERSION}
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>
+                                    Build Version
+                                </div>
+                            </div>
+                            <div className={classnames(styles['option-input-container'], styles['info-container'])}>
+                                <div className={styles['label']}>
+                                    {process.env.COMMIT_HASH}
                                 </div>
                             </div>
                         </div>
