@@ -58,12 +58,8 @@ const ContextMenu = ({ children, on, autoClose }: Props) => {
     };
 
     useEffect(() => {
-        const containers = on.map((ref) => ref.current).filter((element) => !!element);
-        containers.forEach((container) => container.addEventListener('contextmenu', onContextMenu));
-
-        return () => {
-            containers.forEach((container) => container.removeEventListener('contextmenu', onContextMenu));
-        };
+        on.forEach((ref) => ref.current && ref.current.addEventListener('contextmenu', onContextMenu));
+        return () => on.forEach((ref) => ref.current && ref.current.removeEventListener('contextmenu', onContextMenu));
     }, [on]);
 
     return active && createPortal((
