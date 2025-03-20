@@ -33,6 +33,10 @@ const ContextMenu = ({ children, on, autoClose }: Props) => {
         setActive(false);
     };
 
+    const stopPropagation = (event: React.MouseEvent | React.TouchEvent) => {
+        event.stopPropagation();
+    };
+
     const onContextMenu = (event: MouseEvent) => {
         event.preventDefault();
         const { clientX, clientY } = event;
@@ -41,21 +45,9 @@ const ContextMenu = ({ children, on, autoClose }: Props) => {
         setActive(true);
     };
 
-    const onClickOutside = () => {
-        close();
-    };
-
     const onClick = useCallback(() => {
         autoClose && close();
     }, [autoClose]);
-
-    const onMouseDown = (event: React.MouseEvent) => {
-        event.stopPropagation();
-    };
-
-    const onTouchStart = (event: React.TouchEvent) => {
-        event.stopPropagation();
-    };
 
     useEffect(() => {
         on.forEach((ref) => ref.current && ref.current.addEventListener('contextmenu', onContextMenu));
@@ -65,15 +57,15 @@ const ContextMenu = ({ children, on, autoClose }: Props) => {
     return active && createPortal((
         <div
             className={styles['context-menu-container']}
-            onMouseDown={onClickOutside}
-            onTouchStart={onClickOutside}
+            onMouseDown={close}
+            onTouchStart={close}
         >
             <div
                 ref={ref}
                 className={styles['context-menu']}
                 style={style}
-                onMouseDown={onMouseDown}
-                onTouchStart={onTouchStart}
+                onMouseDown={stopPropagation}
+                onTouchStart={stopPropagation}
                 onClick={onClick}
             >
                 {children}
