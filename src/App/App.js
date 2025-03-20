@@ -107,6 +107,7 @@ const App = () => {
         };
 
         const onOpenMedia = (data) => {
+            if (data.startsWith('stremio:///')) return;
             if (data.startsWith('stremio://')) {
                 const transportUrl = data.replace('stremio://', 'https://');
                 if (URL.canParse(transportUrl)) {
