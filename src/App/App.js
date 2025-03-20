@@ -109,7 +109,9 @@ const App = () => {
         const onOpenMedia = (data) => {
             if (data.startsWith('stremio://')) {
                 const transportUrl = data.replace('stremio://', 'https://');
-                window.location.href = `#/addons?addon=${encodeURIComponent(transportUrl)}`;
+                if (URL.canParse(transportUrl)) {
+                    window.location.href = `#/addons?addon=${encodeURIComponent(transportUrl)}`;
+                }
             }
         };
 
