@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './ContextMenu.less';
 
@@ -86,4 +86,4 @@ const ContextMenu = ({ children, on, autoClose }: Props) => {
     ), document.body);
 };
 
-export default ContextMenu;
+export default memo(ContextMenu);
