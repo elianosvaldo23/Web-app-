@@ -6,10 +6,11 @@ const { useTranslation } = require('react-i18next');
 const { Router } = require('stremio-router');
 const { Core, Shell, Chromecast, DragAndDrop, KeyboardShortcuts, ServicesProvider } = require('stremio/services');
 const { NotFound } = require('stremio/routes');
-const { PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender } = require('stremio/common');
+const { FileDropProvider, PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender, useShell } = require('stremio/common');
 const ServicesToaster = require('./ServicesToaster');
 const DeepLinkHandler = require('./DeepLinkHandler');
 const SearchParamsHandler = require('./SearchParamsHandler');
+const { default: UpdaterBanner } = require('./UpdaterBanner');
 const ErrorDialog = require('./ErrorDialog');
 const withProtectedRoutes = require('./withProtectedRoutes');
 const routerViewsConfig = require('./routerViewsConfig');
@@ -19,6 +20,8 @@ const RouterWithProtectedRoutes = withCoreSuspender(withProtectedRoutes(Router))
 
 const App = () => {
     const { i18n } = useTranslation();
+    const shell = useShell();
+    const [windowHidden, setWindowHidden] = React.useState(false);
     const onPathNotMatch = React.useCallback(() => {
         return NotFound;
     }, []);
@@ -96,6 +99,32 @@ const App = () => {
             services.chromecast.off('stateChanged', onChromecastStateChange);
         };
     }, []);
+
+    // Handle shell events
+    React.useEffect(() => {
+        const onWindowVisibilityChanged = (state) => {
+            setWindowHidden(state.visible === false && state.visibility === 0);
+        };
+
+        const onOpenMedia = (data) => {
+            if (data.startsWith('stremio:///')) return;
+            if (data.startsWith('stremio://')) {
+                const transportUrl = data.replace('stremio://', 'https://');
+                if (URL.canParse(transportUrl)) {
+                    window.location.href = `#/addons?addon=${encodeURIComponent(transportUrl)}`;
+                }
+            }
+        };
+
+        shell.on('win-visibility-changed', onWindowVisibilityChanged);
+        shell.on('open-media', onOpenMedia);
+
+        return () => {
+            shell.off('win-visibility-changed', onWindowVisibilityChanged);
+            shell.off('open-media', onOpenMedia);
+        };
+    }, []);
+
     React.useEffect(() => {
         const onCoreEvent = ({ event, args }) => {
             switch (event) {
@@ -103,6 +132,11 @@ const App = () => {
                     if (args && args.settings && typeof args.settings.interfaceLanguage === 'string') {
                         i18n.changeLanguage(args.settings.interfaceLanguage);
                     }
+
+                    if (args?.settings?.quitOnClose && windowHidden) {
+                        shell.send('quit');
+                    }
+
                     break;
                 }
             }
@@ -110,6 +144,10 @@ const App = () => {
         const onCtxState = (state) => {
             if (state && state.profile && state.profile.settings && typeof state.profile.settings.interfaceLanguage === 'string') {
                 i18n.changeLanguage(state.profile.settings.interfaceLanguage);
+            }
+
+            if (state?.profile?.settings?.quitOnClose && windowHidden) {
+                shell.send('quit');
             }
         };
         const onWindowFocus = () => {
@@ -145,7 +183,7 @@ const App = () => {
             services.core.transport
                 .getState('ctx')
                 .then(onCtxState)
-                .catch((e) => console.error(e));
+                .catch(console.error);
         }
         return () => {
             if (services.core.active) {
@@ -153,7 +191,7 @@ const App = () => {
                 services.core.transport.off('CoreEvent', onCoreEvent);
             }
         };
-    }, [initialized]);
+    }, [initialized, windowHidden]);
     return (
         <React.StrictMode>
             <ServicesProvider services={services}>
@@ -165,14 +203,17 @@ const App = () => {
                             <PlatformProvider>
                                 <ToastProvider className={styles['toasts-container']}>
                                     <TooltipProvider className={styles['tooltip-container']}>
-                                        <ServicesToaster />
-                                        <DeepLinkHandler />
-                                        <SearchParamsHandler />
-                                        <RouterWithProtectedRoutes
-                                            className={styles['router']}
-                                            viewsConfig={routerViewsConfig}
-                                            onPathNotMatch={onPathNotMatch}
-                                        />
+                                        <FileDropProvider className={styles['file-drop-container']}>
+                                            <ServicesToaster />
+                                            <DeepLinkHandler />
+                                            <SearchParamsHandler />
+                                            <UpdaterBanner className={styles['updater-banner-container']} />
+                                            <RouterWithProtectedRoutes
+                                                className={styles['router']}
+                                                viewsConfig={routerViewsConfig}
+                                                onPathNotMatch={onPathNotMatch}
+                                            />
+                                        </FileDropProvider>
                                     </TooltipProvider>
                                 </ToastProvider>
                             </PlatformProvider>

@@ -31,6 +31,7 @@ const Settings = () => {
     const toast = useToast();
     const {
         interfaceLanguageSelect,
+        hideSpoilersToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
         subtitlesTextColorInput,
@@ -41,6 +42,7 @@ const Settings = () => {
         seekTimeDurationSelect,
         seekShortTimeDurationSelect,
         escExitFullscreenToggle,
+        quitOnCloseToggle,
         playInExternalPlayerSelect,
         nextVideoPopupDurationSelect,
         bingeWatchingToggle,
@@ -180,10 +182,21 @@ const Settings = () => {
                         { t('SETTINGS_NAV_SHORTCUTS') }
                     </Button>
                     <div className={styles['spacing']} />
-                    <div className={styles['version-info-label']} title={process.env.VERSION}>App Version: {process.env.VERSION}</div>
+                    <div className={styles['version-info-label']} title={process.env.VERSION}>
+                        App Version: {process.env.VERSION}
+                    </div>
+                    <div className={styles['version-info-label']} title={process.env.COMMIT_HASH}>
+                        Build Version: {process.env.COMMIT_HASH}
+                    </div>
                     {
                         streamingServer.settings !== null && streamingServer.settings.type === 'Ready' ?
                             <div className={styles['version-info-label']} title={streamingServer.settings.content.serverVersion}>Server Version: {streamingServer.settings.content.serverVersion}</div>
+                            :
+                            null
+                    }
+                    {
+                        typeof shell?.transport?.props?.shellVersion === 'string' ?
+                            <div className={styles['version-info-label']} title={shell.transport.props.shellVersion}>Shell Version: {shell.transport.props.shellVersion}</div>
                             :
                             null
                     }
@@ -316,12 +329,35 @@ const Settings = () => {
                                 {...interfaceLanguageSelect}
                             />
                         </div>
+                        {
+                            shell.active &&
+                                <div className={styles['option-container']}>
+                                    <div className={styles['option-name-container']}>
+                                        <div className={styles['label']}>{ t('SETTINGS_QUIT_ON_CLOSE') }</div>
+                                    </div>
+                                    <Toggle
+                                        className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                        tabIndex={-1}
+                                        {...quitOnCloseToggle}
+                                    />
+                                </div>
+                        }
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>{ t('SETTINGS_BLUR_UNWATCHED_IMAGE') }</div>
+                            </div>
+                            <Toggle
+                                className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                tabIndex={-1}
+                                {...hideSpoilersToggle}
+                            />
+                        </div>
                     </div>
                     <div ref={playerSectionRef} className={styles['section-container']}>
                         <div className={styles['section-title']}>{ t('SETTINGS_NAV_PLAYER') }</div>
                         <div className={styles['section-category-container']}>
                             <Icon className={styles['icon']} name={'subtitles'} />
-                            <div className={styles['label']}>{t('SETTINGS_SECTION_SUBTITLES')}</div>
+                            <div className={styles['label']}>{t('SETTINGS_CLOSE_WINDOW')}</div>
                         </div>
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
@@ -482,17 +518,19 @@ const Settings = () => {
                                 {...playInExternalPlayerSelect}
                             />
                         </div>
-                        <div className={styles['option-container']}>
-                            <div className={styles['option-name-container']}>
-                                <div className={styles['label']}>{ t('SETTINGS_HWDEC') }</div>
-                            </div>
-                            <Toggle
-                                className={classnames(styles['option-input-container'], styles['toggle-container'])}
-                                disabled={true}
-                                tabIndex={-1}
-                                {...hardwareDecodingToggle}
-                            />
-                        </div>
+                        {
+                            shell.active &&
+                                <div className={styles['option-container']}>
+                                    <div className={styles['option-name-container']}>
+                                        <div className={styles['label']}>{ t('SETTINGS_HWDEC') }</div>
+                                    </div>
+                                    <Toggle
+                                        className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                        tabIndex={-1}
+                                        {...hardwareDecodingToggle}
+                                    />
+                                </div>
+                        }
                     </div>
                     <div ref={streamingServerSectionRef} className={styles['section-container']}>
                         <div className={styles['section-title']}>{ t('SETTINGS_NAV_STREAMING') }</div>
@@ -700,6 +738,18 @@ const Settings = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>
+                                    Build Version
+                                </div>
+                            </div>
+                            <div className={classnames(styles['option-input-container'], styles['info-container'])}>
+                                <div className={styles['label']}>
+                                    {process.env.COMMIT_HASH}
+                                </div>
+                            </div>
+                        </div>
                         {
                             streamingServer.settings !== null && streamingServer.settings.type === 'Ready' ?
                                 <div className={styles['option-container']}>
@@ -711,6 +761,23 @@ const Settings = () => {
                                     <div className={classnames(styles['option-input-container'], styles['info-container'])}>
                                         <div className={styles['label']}>
                                             {streamingServer.settings.content.serverVersion}
+                                        </div>
+                                    </div>
+                                </div>
+                                :
+                                null
+                        }
+                        {
+                            typeof shell?.transport?.props?.shellVersion === 'string' ?
+                                <div className={styles['option-container']}>
+                                    <div className={styles['option-name-container']}>
+                                        <div className={styles['label']}>
+                                            Shell Version
+                                        </div>
+                                    </div>
+                                    <div className={classnames(styles['option-input-container'], styles['info-container'])}>
+                                        <div className={styles['label']}>
+                                            { shell.transport.props.shellVersion }
                                         </div>
                                     </div>
                                 </div>
