@@ -4,7 +4,7 @@ require('spatial-navigation-polyfill');
 const React = require('react');
 const { useTranslation } = require('react-i18next');
 const { Router } = require('stremio-router');
-const { Core, Shell, Chromecast, DragAndDrop, KeyboardShortcuts, ServicesProvider } = require('stremio/services');
+const { Core, Shell, Chromecast, DragAndDrop, KeyboardShortcuts, ServicesProvider, GamepadProvider } = require('stremio/services');
 const { NotFound } = require('stremio/routes');
 const { FileDropProvider, PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender, useShell } = require('stremio/common');
 const ServicesToaster = require('./ServicesToaster');
@@ -204,15 +204,17 @@ const App = () => {
                                 <ToastProvider className={styles['toasts-container']}>
                                     <TooltipProvider className={styles['tooltip-container']}>
                                         <FileDropProvider className={styles['file-drop-container']}>
-                                            <ServicesToaster />
-                                            <DeepLinkHandler />
-                                            <SearchParamsHandler />
-                                            <UpdaterBanner className={styles['updater-banner-container']} />
-                                            <RouterWithProtectedRoutes
-                                                className={styles['router']}
-                                                viewsConfig={routerViewsConfig}
-                                                onPathNotMatch={onPathNotMatch}
-                                            />
+                                            <GamepadProvider>
+                                                <ServicesToaster />
+                                                <DeepLinkHandler />
+                                                <SearchParamsHandler />
+                                                <UpdaterBanner className={styles['updater-banner-container']} />
+                                                <RouterWithProtectedRoutes
+                                                    className={styles['router']}
+                                                    viewsConfig={routerViewsConfig}
+                                                    onPathNotMatch={onPathNotMatch}
+                                                />
+                                            </GamepadProvider>
                                         </FileDropProvider>
                                     </TooltipProvider>
                                 </ToastProvider>
