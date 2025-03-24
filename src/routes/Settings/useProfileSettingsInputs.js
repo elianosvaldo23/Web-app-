@@ -32,6 +32,22 @@ const useProfileSettingsInputs = (profile) => {
         }
     }), [profile.settings]);
 
+    const gamepadSupportToggle = React.useMemo(() => ({
+        checked: profile.settings.gamepadSupport,
+        onClick: () => {
+            core.transport.dispatch({
+                action: 'Ctx',
+                args: {
+                    action: 'UpdateSettings',
+                    args: {
+                        ...profile.settings,
+                        gamepadSupport: !profile.settings.gamepadSupport
+                    }
+                }
+            });
+        }
+    }), [profile.settings]);
+
     const hideSpoilersToggle = React.useMemo(() => ({
         checked: profile.settings.hideSpoilers,
         onClick: () => {
@@ -341,6 +357,7 @@ const useProfileSettingsInputs = (profile) => {
     }), [profile.settings]);
     return {
         interfaceLanguageSelect,
+        gamepadSupportToggle,
         hideSpoilersToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,

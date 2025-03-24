@@ -31,6 +31,7 @@ const Settings = () => {
     const toast = useToast();
     const {
         interfaceLanguageSelect,
+        gamepadSupportToggle,
         hideSpoilersToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
@@ -350,6 +351,16 @@ const Settings = () => {
                                 className={classnames(styles['option-input-container'], styles['toggle-container'])}
                                 tabIndex={-1}
                                 {...hideSpoilersToggle}
+                            />
+                        </div>
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>{ t('SETTINGS_GAMEPAD') }</div>
+                            </div>
+                            <Toggle
+                                className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                tabIndex={-1}
+                                {...gamepadSupportToggle}
                             />
                         </div>
                     </div>

@@ -22,6 +22,7 @@ type Settings = {
     escExitFullscreen: boolean,
     interfaceLanguage: string,
     hideSpoilers: boolean,
+    gamepadSupport: boolean,
     nextVideoNotificationDuration: number,
     playInBackground: boolean,
     playerType: string | null,
