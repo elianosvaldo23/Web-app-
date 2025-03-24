@@ -717,6 +717,7 @@ const Player = ({ urlParams, queryParams }) => {
                 onToggleSideDrawer={toggleSideDrawer}
                 onMouseMove={onBarMouseMove}
                 onMouseOver={onBarMouseMove}
+                onTouchEnd={onContainerMouseLeave}
             />
             {
                 nextVideoPopupOpen ?
