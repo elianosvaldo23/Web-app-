@@ -131,9 +131,10 @@ const ControlBar = ({
                         name={
                             (typeof muted === 'boolean' && muted) ? 'volume-mute' :
                                 (volume === null || isNaN(volume)) ? 'volume-off' :
-                                    volume < 30 ? 'volume-low' :
-                                        volume < 70 ? 'volume-medium' :
-                                            'volume-high'
+                                    volume === 0 ? 'volume-mute' :
+                                        volume < 30 ? 'volume-low' :
+                                            volume < 70 ? 'volume-medium' :
+                                                'volume-high'
                         }
                     />
                 </Button>
