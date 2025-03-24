@@ -7,7 +7,7 @@ const debounce = require('lodash.debounce');
 const langs = require('langs');
 const { useTranslation } = require('react-i18next');
 const { useRouteFocused } = require('stremio-router');
-const { useServices } = require('stremio/services');
+const { useServices, useGamepad } = require('stremio/services');
 const { onFileDrop, useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender, CONSTANTS } = require('stremio/common');
 const { HorizontalNavBar, Transition } = require('stremio/components');
 const BufferingLoader = require('./BufferingLoader');
@@ -32,6 +32,7 @@ const Video = require('./Video');
 const Player = ({ urlParams, queryParams }) => {
     const { t } = useTranslation();
     const { chromecast, shell, core } = useServices();
+    const gamepad = useGamepad();
     const forceTranscoding = React.useMemo(() => {
         return queryParams.has('forceTranscoding');
     }, [queryParams]);
@@ -281,6 +282,77 @@ const Player = ({ urlParams, queryParams }) => {
         video.addLocalSubtitles(filename, buffer);
     });
 
+    const onPlayPause = React.useCallback(() => {
+        if (!menusOpen && !nextVideoPopupOpen && video.state.paused !== null) {
+            if (video.state.paused) {
+                onPlayRequested();
+                setSeeking(false);
+            } else {
+                onPauseRequested();
+            }
+        }
+    }, [menusOpen, nextVideoPopupOpen, video.state.paused]);
+
+    const onSeekPrev = React.useCallback((event) => {
+        if (!menusOpen && !nextVideoPopupOpen && video.state.time !== null) {
+            const seekDuration = event?.shiftKey ? settings.seekShortTimeDuration : settings.seekTimeDuration;
+            const seekTime = video.state.time - seekDuration;
+            setSeeking(true);
+            onSeekRequested(Math.max(seekTime, 0));
+        }
+    }, [menusOpen, nextVideoPopupOpen, video.state.time]);
+
+    const onSeekNext = React.useCallback((event) => {
+        if (!menusOpen && !nextVideoPopupOpen && video.state.time !== null) {
+            const seekDuration = event?.shiftKey ? settings.seekShortTimeDuration : settings.seekTimeDuration;
+            setSeeking(true);
+            onSeekRequested(video.state.time + seekDuration);
+        }
+    }, [menusOpen, nextVideoPopupOpen, video.state.time]);
+
+    const onVolumeUp = React.useCallback(() => {
+        if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
+            onVolumeChangeRequested(Math.min(video.state.volume + 5, 200));
+        }
+    }, [menusOpen, nextVideoPopupOpen, video.state.volume]);
+
+    const onVolumeDown = React.useCallback(() => {
+        if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
+            onVolumeChangeRequested(Math.max(video.state.volume - 5, 0));
+        }
+    }, [menusOpen, nextVideoPopupOpen, video.state.volume]);
+
+    const onGamepadSeekAndVol = React.useCallback((axis) => {
+        switch(axis) {
+            case 'left': {
+                onSeekPrev();
+                break;
+            }
+            case 'right': {
+                onSeekNext();
+                break;
+            }
+            case 'up': {
+                onVolumeUp();
+                break;
+            }
+            case 'down': {
+                onVolumeDown();
+                break;
+            }
+        }
+    }, [onSeekPrev, onSeekNext, onVolumeUp, onVolumeDown]);
+
+    React.useEffect(() => {
+        gamepad.on('buttonA', onPlayPause);
+        gamepad.on('analog', onGamepadSeekAndVol);
+
+        return () => {
+            gamepad.off('buttonA', onPlayPause);
+            gamepad.off('analog', onGamepadSeekAndVol);
+        };
+    }, [onPlayPause, onGamepadSeekAndVol]);
+
     React.useEffect(() => {
         setError(null);
         video.unload();
@@ -475,46 +547,27 @@ const Player = ({ urlParams, queryParams }) => {
         const onKeyDown = (event) => {
             switch (event.code) {
                 case 'Space': {
-                    if (!menusOpen && !nextVideoPopupOpen && video.state.paused !== null) {
-                        if (video.state.paused) {
-                            onPlayRequested();
-                            setSeeking(false);
-                        } else {
-                            onPauseRequested();
-                        }
-                    }
+                    onPlayPause();
 
                     break;
                 }
                 case 'ArrowRight': {
-                    if (!menusOpen && !nextVideoPopupOpen && video.state.time !== null) {
-                        const seekDuration = event.shiftKey ? settings.seekShortTimeDuration : settings.seekTimeDuration;
-                        setSeeking(true);
-                        onSeekRequested(video.state.time + seekDuration);
-                    }
+                    onSeekNext(event);
 
                     break;
                 }
                 case 'ArrowLeft': {
-                    if (!menusOpen && !nextVideoPopupOpen && video.state.time !== null) {
-                        const seekDuration = event.shiftKey ? settings.seekShortTimeDuration : settings.seekTimeDuration;
-                        setSeeking(true);
-                        onSeekRequested(video.state.time - seekDuration);
-                    }
+                    onSeekPrev(event);
 
                     break;
                 }
                 case 'ArrowUp': {
-                    if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
-                        onVolumeChangeRequested(Math.min(video.state.volume + 5, 200));
-                    }
+                    onVolumeUp();
 
                     break;
                 }
                 case 'ArrowDown': {
-                    if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
-                        onVolumeChangeRequested(Math.max(video.state.volume - 5, 0));
-                    }
+                    onVolumeDown();
 
                     break;
                 }
