@@ -22,6 +22,7 @@ const App = () => {
     const { i18n } = useTranslation();
     const shell = useShell();
     const [windowHidden, setWindowHidden] = React.useState(false);
+    const [gamepadSupportEnabled, setGamepadSupportEnabled] = React.useState(false);
     const onPathNotMatch = React.useCallback(() => {
         return NotFound;
     }, []);
@@ -133,6 +134,10 @@ const App = () => {
                         i18n.changeLanguage(args.settings.interfaceLanguage);
                     }
 
+                    if (args?.settings?.gamepadSupport !== undefined) {
+                        setGamepadSupportEnabled(args.settings.gamepadSupport);
+                    }
+
                     if (args?.settings?.quitOnClose && windowHidden) {
                         shell.send('quit');
                     }
@@ -144,6 +149,10 @@ const App = () => {
         const onCtxState = (state) => {
             if (state && state.profile && state.profile.settings && typeof state.profile.settings.interfaceLanguage === 'string') {
                 i18n.changeLanguage(state.profile.settings.interfaceLanguage);
+            }
+
+            if (typeof state.profile.settings.gamepadSupport === 'boolean') {
+                setGamepadSupportEnabled(state.profile.settings.gamepadSupport);
             }
 
             if (state?.profile?.settings?.quitOnClose && windowHidden) {
@@ -204,7 +213,7 @@ const App = () => {
                                 <ToastProvider className={styles['toasts-container']}>
                                     <TooltipProvider className={styles['tooltip-container']}>
                                         <FileDropProvider className={styles['file-drop-container']}>
-                                            <GamepadProvider>
+                                            <GamepadProvider enabled={gamepadSupportEnabled}>
                                                 <ServicesToaster />
                                                 <DeepLinkHandler />
                                                 <SearchParamsHandler />

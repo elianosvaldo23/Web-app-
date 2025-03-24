@@ -8,7 +8,8 @@ import GamepadContext from './GamepadContext';
 
 type GamepadEventHandlers = Record<string, ((data?: any) => void)[]>;
 
-const GamepadProvider: React.FC<{ children: React.ReactNode }> = ({
+const GamepadProvider: React.FC<{ enabled: boolean; children: React.ReactNode }> = ({
+    enabled,
     children,
 }) => {
     const [connectedGamepads, setConnectedGamepads] = useState<number>(0);
@@ -44,8 +45,7 @@ const GamepadProvider: React.FC<{ children: React.ReactNode }> = ({
         let animationFrameId: number;
 
         const updateStatus = () => {
-            // TODO: add check if profile settings allows this feature
-            if (document.hasFocus()) {
+            if (enabled && document.hasFocus()) {
                 const currentTime = Date.now();
                 const controllers = Array.from(navigator.getGamepads()).filter(
                     (gp) => gp !== null
