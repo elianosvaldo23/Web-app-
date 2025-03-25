@@ -12,20 +12,19 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
     className?: string;
     disabled?: boolean;
     showButtons?: boolean;
+    defaultValue?: number;
     label?: string;
     min?: number;
     max?: number;
     value?: number;
-    defaultValue?: number;
     onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
     onSubmit?: (event: KeyboardEvent<HTMLInputElement>) => void;
-    onUpdate?: (value: number) => void;
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
-const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue = 1, showButtons, onUpdate, onKeyDown, onSubmit, min, max, onChange, ...props }, ref) => {
+const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue = 0, showButtons, onKeyDown, onSubmit, min, max, onChange, ...props }, ref) => {
     const [value, setValue] = useState(defaultValue);
-    const displayValue = useMemo(() => props.value ?? value, [props.value, value]);
+    const displayValue = props.value ?? value;
     
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
         onKeyDown && onKeyDown(event);
@@ -35,12 +34,11 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue = 1, sho
         }
     }, [onKeyDown, onSubmit]);
 
-    const handleValueChange = (value: number) => {
+    const handleValueChange = (newValue: number) => {
         if (props.value === undefined) {
-            setValue(value);
+            setValue(newValue);
         }
-        onUpdate?.(value);
-        onChange?.({ target: { value: value.toString() }} as ChangeEvent<HTMLInputElement>);
+        onChange?.({ target: { value: newValue.toString() }} as ChangeEvent<HTMLInputElement>);
     };
 
     const handleIncrement = () => {

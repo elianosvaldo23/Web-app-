@@ -1,6 +1,6 @@
 // Copyright (C) 2017-2025 Smart code 203358507
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, NumberInput } from 'stremio/components';
 import styles from './EpisodePicker.less';
@@ -19,16 +19,21 @@ const EpisodePicker = ({ className, onSubmit }: Props) => {
         const videoId = decodeURIComponent(splitPath[splitPath.length - 1]);
         const [, pathSeason, pathEpisode] = videoId ? videoId.split(':') : [];
         return {
-            initialSeason: isNaN(parseInt(pathSeason)) ? 0 : parseInt(pathSeason),
-            initialEpisode: isNaN(parseInt(pathEpisode)) ? 1 : parseInt(pathEpisode)
+            initialSeason: parseInt(pathSeason) || 0,
+            initialEpisode: parseInt(pathEpisode) || 1
         };
     }, []);
 
     const [season, setSeason] = useState(initialSeason);
     const [episode, setEpisode] = useState(initialEpisode);
 
-    const handleSeasonChange = useCallback((value: number) => setSeason(!isNaN(value) ? value : 0), []);
-    const handleEpisodeChange = useCallback((value: number) => setEpisode(!isNaN(value) ? value : 1), []);
+    const handleSeasonChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        setSeason(parseInt(event.target.value));
+    }, []);
+
+    const handleEpisodeChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        setEpisode(parseInt(event.target.value));
+    }, []);
 
     const handleSubmit = useCallback(() => {
         if (typeof onSubmit === 'function' && !isNaN(season) && !isNaN(episode)) {
@@ -42,8 +47,8 @@ const EpisodePicker = ({ className, onSubmit }: Props) => {
 
     return (
         <div className={className}>
-            <NumberInput min={0} label={t('SEASON')} defaultValue={season} onUpdate={handleSeasonChange} showButtons />
-            <NumberInput min={1} label={t('EPISODE')} defaultValue={episode} onUpdate={handleEpisodeChange} showButtons />
+            <NumberInput min={0} label={t('SEASON')} defaultValue={season} onChange={handleSeasonChange} showButtons />
+            <NumberInput min={1} label={t('EPISODE')} defaultValue={episode} onChange={handleEpisodeChange} showButtons />
             <Button className={styles['button-container']} onClick={handleSubmit} disabled={disabled}>
                 <div className={styles['label']}>{t('SIDEBAR_SHOW_STREAMS')}</div>
             </Button>
