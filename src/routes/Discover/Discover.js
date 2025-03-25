@@ -30,7 +30,7 @@ const Discover = ({ urlParams, queryParams }) => {
         if (hasNextPage && metasContainerRef.current) {
             const containerHeight = metasContainerRef.current.scrollHeight;
             const viewportHeight = metasContainerRef.current.clientHeight;
-            if (containerHeight <= viewportHeight) {
+            if (containerHeight <= viewportHeight + SCROLL_TO_BOTTOM_TRESHOLD) {
                 loadNextPage();
             }
         }
