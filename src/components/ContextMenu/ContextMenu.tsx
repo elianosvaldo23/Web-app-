@@ -2,6 +2,11 @@ import React, { memo, RefObject, useCallback, useEffect, useMemo, useState } fro
 import { createPortal } from 'react-dom';
 import styles from './ContextMenu.less';
 
+const PADDING = 8;
+
+type Coordinates = [number, number];
+type Size = [number, number];
+
 type Props = {
     children: React.ReactNode,
     on: RefObject<HTMLElement>[],
@@ -10,8 +15,8 @@ type Props = {
 
 const ContextMenu = ({ children, on, autoClose }: Props) => {
     const [active, setActive] = useState(false);
-    const [position, setPosition] = useState([0, 0]);
-    const [containerSize, setContainerSize] = useState([0, 0]);
+    const [position, setPosition] = useState<Coordinates>([0, 0]);
+    const [containerSize, setContainerSize] = useState<Size>([0, 0]);
 
     const ref = useCallback((element: HTMLDivElement) => {
         element && setContainerSize([element.offsetWidth, element.offsetHeight]);
@@ -22,8 +27,21 @@ const ContextMenu = ({ children, on, autoClose }: Props) => {
         const [containerWidth, containerHeight] = containerSize;
         const [x, y] = position;
 
-        const left = (x + containerWidth) > viewportWidth ? x - containerWidth : x;
-        const top = (y + containerHeight) > viewportHeight ? y - containerHeight : y;
+        const left = Math.max(
+            PADDING,
+            Math.min(
+                x + containerWidth > viewportWidth - PADDING ? x - containerWidth : x,
+                viewportWidth - containerWidth - PADDING
+            )
+        );
+
+        const top = Math.max(
+            PADDING,
+            Math.min(
+                y + containerHeight > viewportHeight - PADDING ? y - containerHeight : y,
+                viewportHeight - containerHeight - PADDING
+            )
+        );
 
         return { top, left };
     }, [position, containerSize]);
@@ -39,11 +57,12 @@ const ContextMenu = ({ children, on, autoClose }: Props) => {
 
     const onContextMenu = (event: MouseEvent) => {
         event.preventDefault();
-        const { clientX, clientY } = event;
 
-        setPosition([clientX, clientY]);
+        setPosition([event.clientX, event.clientY]);
         setActive(true);
     };
+
+    const handleKeyDown = useCallback((event: KeyboardEvent) => event.key === 'Escape' && close(), []);
 
     const onClick = useCallback(() => {
         autoClose && close();
@@ -51,7 +70,12 @@ const ContextMenu = ({ children, on, autoClose }: Props) => {
 
     useEffect(() => {
         on.forEach((ref) => ref.current && ref.current.addEventListener('contextmenu', onContextMenu));
-        return () => on.forEach((ref) => ref.current && ref.current.removeEventListener('contextmenu', onContextMenu));
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            on.forEach((ref) => ref.current && ref.current.removeEventListener('contextmenu', onContextMenu));
+            document.removeEventListener('keydown', handleKeyDown);
+        }
     }, [on]);
 
     return active && createPortal((
