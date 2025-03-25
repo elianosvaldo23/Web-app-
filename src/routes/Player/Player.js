@@ -9,7 +9,7 @@ const { useTranslation } = require('react-i18next');
 const { useRouteFocused } = require('stremio-router');
 const { useServices } = require('stremio/services');
 const { onFileDrop, useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender, CONSTANTS } = require('stremio/common');
-const { HorizontalNavBar, Transition } = require('stremio/components');
+const { HorizontalNavBar, Transition, ContextMenu } = require('stremio/components');
 const BufferingLoader = require('./BufferingLoader');
 const VolumeChangeIndicator = require('./VolumeChangeIndicator');
 const Error = require('./Error');
@@ -49,6 +49,10 @@ const Player = ({ urlParams, queryParams }) => {
     const [casting, setCasting] = React.useState(() => {
         return chromecast.active && chromecast.transport.getCastState() === cast.framework.CastState.CONNECTED;
     });
+    const playbackDevices = React.useMemo(() => streamingServer.playbackDevices !== null && streamingServer.playbackDevices.type === 'Ready' ? streamingServer.playbackDevices.content : [], [streamingServer]);
+
+    const bufferingRef = React.useRef();
+    const errorRef = React.useRef();
 
     const [immersed, setImmersed] = React.useState(true);
     const setImmersedDebounced = React.useCallback(debounce(setImmersed, 3000), []);
@@ -626,7 +630,7 @@ const Player = ({ urlParams, queryParams }) => {
             onMouseOver={onContainerMouseMove}
             onMouseLeave={onContainerMouseLeave}>
             <Video
-                ref={video.containerElement}
+                ref={video.containerRef}
                 className={styles['layer']}
                 onClick={onVideoClick}
                 onDoubleClick={onVideoDoubleClick}
@@ -641,13 +645,18 @@ const Player = ({ urlParams, queryParams }) => {
             }
             {
                 (video.state.buffering || !video.state.loaded) && !error ?
-                    <BufferingLoader className={classnames(styles['layer'], styles['buffering-layer'])} logo={player?.metaItem?.content?.logo} />
+                    <BufferingLoader
+                        ref={bufferingRef}
+                        className={classnames(styles['layer'], styles['buffering-layer'])}
+                        logo={player?.metaItem?.content?.logo}
+                    />
                     :
                     null
             }
             {
                 error !== null ?
                     <Error
+                        ref={errorRef}
                         className={classnames(styles['layer'], styles['error-layer'])}
                         stream={video.state.stream}
                         {...error}
@@ -670,6 +679,13 @@ const Player = ({ urlParams, queryParams }) => {
                     :
                     null
             }
+            <ContextMenu on={[video.containerRef, bufferingRef, errorRef]} autoClose>
+                <OptionsMenu
+                    className={classnames(styles['layer'], styles['menu-layer'])}
+                    stream={player?.selected?.stream}
+                    playbackDevices={playbackDevices}
+                />
+            </ContextMenu>
             <HorizontalNavBar
                 className={classnames(styles['layer'], styles['nav-bar-layer'])}
                 title={player.title !== null ? player.title : ''}
@@ -798,7 +814,7 @@ const Player = ({ urlParams, queryParams }) => {
                     <OptionsMenu
                         className={classnames(styles['layer'], styles['menu-layer'])}
                         stream={player.selected.stream}
-                        playbackDevices={streamingServer.playbackDevices !== null && streamingServer.playbackDevices.type === 'Ready' ? streamingServer.playbackDevices.content : []}
+                        playbackDevices={playbackDevices}
                     />
                     :
                     null
