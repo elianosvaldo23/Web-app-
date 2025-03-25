@@ -1,38 +1,72 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import useToast from 'stremio/common/Toast/useToast';
 import GamepadContext from './GamepadContext';
 
-type GamepadEventHandlers = Record<string, ((data?: any) => void)[]>;
+type GamepadEventHandlers = Map<string, Map<string, (data?: any) => void>>;
 
 const GamepadProvider: React.FC<{
     enabled: boolean;
     children: React.ReactNode;
 }> = ({ enabled, children }) => {
+    const toast = useToast();
     const [connectedGamepads, setConnectedGamepads] = useState<number>(0);
     const lastButtonState = useRef<number[]>([]);
     const lastButtonPressedTime = useRef<number>(0);
     const axisTimer = useRef<number>(0);
-    const eventHandlers = useRef<GamepadEventHandlers>({});
+    const eventHandlers = useRef<GamepadEventHandlers>(new Map());
 
-    const on = useCallback((event: string, callback: (data?: any) => void) => {
-        if (!eventHandlers.current[event]) {
-            eventHandlers.current[event] = [];
+    const on = useCallback((event: string, id: string, callback: (data?: any) => void) => {
+        if (!eventHandlers.current.has(event)) {
+            eventHandlers.current.set(event, new Map());
         }
-        eventHandlers.current[event].push(callback);
+
+        const handlers = eventHandlers.current.get(event)!;
+
+        // Ensure only one handler per component
+        handlers.set(id, callback);
     }, []);
 
-    const off = useCallback((event: string, callback: (data?: any) => void) => {
-        if (eventHandlers.current[event]) {
-            eventHandlers.current[event] = eventHandlers.current[event].filter(
-                (cb) => cb !== callback
-            );
-        }
+    const off = useCallback((event: string, id: string) => {
+        eventHandlers.current.get(event)?.delete(id);
     }, []);
 
     const emit = (event: string, data?: any) => {
-        if (eventHandlers.current[event]) {
-            eventHandlers.current[event].forEach((callback) => callback(data));
+        if (eventHandlers.current.has(event)) {
+            eventHandlers.current.get(event)!.forEach((callback) => callback(data));
         }
     };
+
+    const onGamepadConnected = () => {
+        // @ts-ignore
+        toast.show({
+            type: 'info',
+            title: 'Gamepad detected',
+            timeout: 4000,
+        });
+    };
+
+    const onGamepadDisconnected = () => {
+        // @ts-ignore
+        toast.show({
+            type: 'info',
+            title: 'Gamepad disconnected',
+            timeout: 4000,
+        });
+    };
+
+    useEffect(() => {
+        if (enabled) {
+            window.addEventListener('gamepadconnected', onGamepadConnected);
+            window.addEventListener('gamepaddisconnected', onGamepadDisconnected);
+        }
+
+        return () => {
+            if (enabled) {
+                window.removeEventListener('gamepadconnected', onGamepadConnected);
+                window.removeEventListener('gamepaddisconnected', onGamepadDisconnected);
+            }
+        };
+    }, [enabled]);
 
     useEffect(() => {
         if (typeof navigator.getGamepads !== 'function') return;

@@ -29,6 +29,8 @@ const useVideo = require('./useVideo');
 const styles = require('./styles');
 const Video = require('./Video');
 
+const GAMEPAD_HANDLER_ID = 'player';
+
 const Player = ({ urlParams, queryParams }) => {
     const { t } = useTranslation();
     const { chromecast, shell, core } = useServices();
@@ -344,12 +346,12 @@ const Player = ({ urlParams, queryParams }) => {
     }, [onSeekPrev, onSeekNext, onVolumeUp, onVolumeDown]);
 
     React.useEffect(() => {
-        gamepad.on('buttonA', onPlayPause);
-        gamepad.on('analog', onGamepadSeekAndVol);
+        gamepad.on('buttonA', GAMEPAD_HANDLER_ID, onPlayPause);
+        gamepad.on('analog', GAMEPAD_HANDLER_ID, onGamepadSeekAndVol);
 
         return () => {
-            gamepad.off('buttonA', onPlayPause);
-            gamepad.off('analog', onGamepadSeekAndVol);
+            gamepad.off('buttonA', GAMEPAD_HANDLER_ID);
+            gamepad.off('analog', GAMEPAD_HANDLER_ID);
         };
     }, [onPlayPause, onGamepadSeekAndVol]);
 
