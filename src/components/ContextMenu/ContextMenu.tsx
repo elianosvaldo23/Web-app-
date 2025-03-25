@@ -75,7 +75,7 @@ const ContextMenu = ({ children, on, autoClose }: Props) => {
         return () => {
             on.forEach((ref) => ref.current && ref.current.removeEventListener('contextmenu', onContextMenu));
             document.removeEventListener('keydown', handleKeyDown);
-        }
+        };
     }, [on]);
 
     return active && createPortal((
