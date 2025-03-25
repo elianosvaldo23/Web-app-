@@ -1,7 +1,7 @@
 // Copyright (C) 2017-2025 Smart code 203358507
 
 import Icon from '@stremio/stremio-icons/react';
-import React, { ChangeEvent, forwardRef, memo, useCallback, useMemo, useState } from 'react';
+import React, { ChangeEvent, forwardRef, memo, useCallback, useState } from 'react';
 import { type KeyboardEvent, type InputHTMLAttributes } from 'react';
 import classnames from 'classnames';
 import styles from './NumberInput.less';
@@ -25,7 +25,7 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue = 0, showButtons, onKeyDown, onSubmit, min, max, onChange, ...props }, ref) => {
     const [value, setValue] = useState(defaultValue);
     const displayValue = props.value ?? value;
-    
+
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
         onKeyDown && onKeyDown(event);
 
@@ -51,15 +51,15 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue = 0, sho
 
     const clampValueToRange = (value: number): number => {
         const minValue = min ?? 0;
-        
+
         if (value < minValue) {
             return minValue;
         }
-        
+
         if (max !== undefined && value > max) {
             return max;
         }
-        
+
         return value;
     };
 
