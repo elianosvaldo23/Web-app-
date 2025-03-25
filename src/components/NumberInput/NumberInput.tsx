@@ -1,7 +1,7 @@
 // Copyright (C) 2017-2025 Smart code 203358507
 
 import Icon from '@stremio/stremio-icons/react';
-import React, { ChangeEvent, forwardRef, useCallback, useState } from 'react';
+import React, { ChangeEvent, forwardRef, memo, useCallback, useMemo, useState } from 'react';
 import { type KeyboardEvent, type InputHTMLAttributes } from 'react';
 import classnames from 'classnames';
 import styles from './NumberInput.less';
@@ -12,55 +12,61 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
     className?: string;
     disabled?: boolean;
     showButtons?: boolean;
-    defaultValue?: number;
     label?: string;
     min?: number;
     max?: number;
+    value?: number;
+    defaultValue?: number;
     onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
     onSubmit?: (event: KeyboardEvent<HTMLInputElement>) => void;
     onUpdate?: (value: number) => void;
+    onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
-const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, showButtons, onUpdate, ...props }, ref) => {
-    const [value, setValue] = useState<number>(defaultValue || 0);
-    const onKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
-        props.onKeyDown && props.onKeyDown(event);
+const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue = 1, showButtons, onUpdate, onKeyDown, onSubmit, min, max, onChange, ...props }, ref) => {
+    const [value, setValue] = useState(defaultValue);
+    const displayValue = useMemo(() => props.value ?? value, [props.value, value]);
+    
+    const handleKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
+        onKeyDown && onKeyDown(event);
 
         if (event.key === 'Enter') {
-            props.onSubmit && props.onSubmit(event);
+            onSubmit && onSubmit(event);
         }
-    }, [props.onKeyDown, props.onSubmit]);
+    }, [onKeyDown, onSubmit]);
 
-    const updateValueAndNotify = (valueAsNumber: number) => {
-        setValue(valueAsNumber);
-        onUpdate?.(valueAsNumber);
+    const handleValueChange = (value: number) => {
+        if (props.value === undefined) {
+            setValue(value);
+        }
+        onUpdate?.(value);
+        onChange?.({ target: { value: value.toString() }} as ChangeEvent<HTMLInputElement>);
     };
 
-    const handleIncrease = () => {
-        if (props.max !== undefined) {
-            updateValueAndNotify(Math.min(props.max, (value || 0) + 1));
-            return;
-        }
-        updateValueAndNotify((value || 0) + 1);
+    const handleIncrement = () => {
+        handleValueChange(clampValueToRange((displayValue || 0) + 1));
     };
 
-    const handleDecrease = () => {
-        if (props.min !== undefined) {
-            updateValueAndNotify(Math.max(props.min, (value || 0) - 1));
-            return;
-        }
-        updateValueAndNotify((value || 0) - 1);
+    const handleDecrement = () => {
+        handleValueChange(clampValueToRange((displayValue || 0) - 1));
     };
 
-    const handleChange = ({ target: { valueAsNumber }}: ChangeEvent<HTMLInputElement>) => {
-        const min = props.min || 0;
-        if (valueAsNumber && valueAsNumber < min) {
-            valueAsNumber = min;
+    const clampValueToRange = (value: number): number => {
+        const minValue = min ?? 0;
+        
+        if (value < minValue) {
+            return minValue;
         }
-        if (props.max !== undefined && valueAsNumber && valueAsNumber > props.max) {
-            valueAsNumber = props.max;
+        
+        if (max !== undefined && value > max) {
+            return max;
         }
-        updateValueAndNotify(valueAsNumber);
+        
+        return value;
+    };
+
+    const handleInputChange = ({ target: { valueAsNumber }}: ChangeEvent<HTMLInputElement>) => {
+        handleValueChange(clampValueToRange(valueAsNumber || 0));
     };
 
     return (
@@ -69,8 +75,8 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, showBut
                 showButtons ?
                     <Button
                         className={styles['button']}
-                        onClick={handleDecrease}
-                        disabled={props.disabled || (props.min !== undefined ? value <= props.min : false)}>
+                        onClick={handleDecrement}
+                        disabled={props.disabled || (min !== undefined ? displayValue <= min : false)}>
                         <Icon className={styles['icon']} name={'remove'} />
                     </Button>
                     : null
@@ -85,17 +91,17 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, showBut
                     ref={ref}
                     type={'number'}
                     tabIndex={0}
-                    value={value}
+                    value={displayValue}
                     {...props}
-                    className={classnames(props.className, styles['value'], { 'disabled': props.disabled })}
-                    onChange={handleChange}
-                    onKeyDown={onKeyDown}
+                    className={classnames(props.className, styles['value'], { [styles.disabled]: props.disabled })}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
                 />
             </div>
             {
                 showButtons ?
                     <Button
-                        className={styles['button']} onClick={handleIncrease} disabled={props.disabled || (props.max !== undefined ? value >= props.max : false)}>
+                        className={styles['button']} onClick={handleIncrement} disabled={props.disabled || (max !== undefined ? displayValue >= max : false)}>
                         <Icon className={styles['icon']} name={'add'} />
                     </Button>
                     : null
@@ -106,4 +112,4 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue, showBut
 
 NumberInput.displayName = 'NumberInput';
 
-export default NumberInput;
+export default memo(NumberInput);
