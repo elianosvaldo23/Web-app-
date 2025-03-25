@@ -8,7 +8,7 @@ const events = new EventEmitter();
 
 const useVideo = () => {
     const video = React.useRef(null);
-    const containerElement = React.useRef(null);
+    const containerRef = React.useRef(null);
 
     const [state, setState] = React.useState({
         manifest: null,
@@ -42,11 +42,11 @@ const useVideo = () => {
     });
 
     const dispatch = (action, options) => {
-        if (video.current && containerElement.current) {
+        if (video.current && containerRef.current) {
             try {
                 video.current.dispatch(action, {
                     ...options,
-                    containerElement: containerElement.current,
+                    containerElement: containerRef.current,
                 });
             } catch (error) {
                 console.error('Video:', error);
@@ -157,7 +157,7 @@ const useVideo = () => {
 
     return {
         events,
-        containerElement,
+        containerRef,
         state,
         load,
         unload,

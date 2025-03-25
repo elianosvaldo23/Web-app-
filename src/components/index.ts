@@ -4,6 +4,7 @@ import Button from './Button';
 import Checkbox from './Checkbox';
 import Chips from './Chips';
 import ColorInput from './ColorInput';
+import ContextMenu from './ContextMenu';
 import ContinueWatchingItem from './ContinueWatchingItem';
 import DelayedRenderer from './DelayedRenderer';
 import EventModal from './EventModal';
@@ -36,6 +37,7 @@ export {
     Checkbox,
     Chips,
     ColorInput,
+    ContextMenu,
     ContinueWatchingItem,
     DelayedRenderer,
     EventModal,
