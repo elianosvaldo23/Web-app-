@@ -11,7 +11,7 @@ const useDiscover = require('./useDiscover');
 const useSelectableInputs = require('./useSelectableInputs');
 const styles = require('./styles');
 
-const SCROLL_TO_BOTTOM_TRESHOLD = 400;
+const SCROLL_TO_BOTTOM_THRESHOLD = 400;
 
 const Discover = ({ urlParams, queryParams }) => {
     const { core } = useServices();
@@ -30,7 +30,7 @@ const Discover = ({ urlParams, queryParams }) => {
         if (hasNextPage && metasContainerRef.current) {
             const containerHeight = metasContainerRef.current.scrollHeight;
             const viewportHeight = metasContainerRef.current.clientHeight;
-            if (containerHeight <= viewportHeight + SCROLL_TO_BOTTOM_TRESHOLD) {
+            if (containerHeight <= viewportHeight + SCROLL_TO_BOTTOM_THRESHOLD) {
                 loadNextPage();
             }
         }
@@ -85,7 +85,7 @@ const Discover = ({ urlParams, queryParams }) => {
             loadNextPage();
         }
     }, [hasNextPage, loadNextPage]);
-    const onScroll = useOnScrollToBottom(onScrollToBottom, SCROLL_TO_BOTTOM_TRESHOLD);
+    const onScroll = useOnScrollToBottom(onScrollToBottom, SCROLL_TO_BOTTOM_THRESHOLD);
     React.useEffect(() => {
         closeInputsModal();
         closeAddonModal();
