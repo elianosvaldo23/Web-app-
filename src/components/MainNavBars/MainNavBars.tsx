@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import classnames from 'classnames';
 import { VerticalNavBar, HorizontalNavBar } from 'stremio/components/NavBar';
-import { useVerticalSpatialNavigation } from 'stremio/services';
+import { useContentGamepadNavigation, useVerticalNavGamepadNavigation } from 'stremio/services';
 import styles from './MainNavBars.less';
 
 const TABS = [
@@ -24,8 +24,10 @@ type Props = {
 
 const MainNavBars = memo(({ className, route, query, children }: Props) => {
     const navRef = React.useRef(null);
+    const contentRef = React.useRef(null);
 
-    useVerticalSpatialNavigation(navRef, route || '');
+    useContentGamepadNavigation(contentRef, route || '');
+    useVerticalNavGamepadNavigation(navRef, route || '');
 
     return (
         <div className={classnames(className, styles['main-nav-bars-container'])}>
@@ -44,7 +46,7 @@ const MainNavBars = memo(({ className, route, query, children }: Props) => {
                 selected={route}
                 tabs={TABS}
             />
-            <div className={styles['nav-content-container']}>{children}</div>
+            <div ref={contentRef} className={styles['nav-content-container']}>{children}</div>
         </div>
     );
 });

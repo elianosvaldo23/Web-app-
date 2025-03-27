@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useGamepad } from '../GamepadContext';
 
-const useVerticalSpatialNavigation = (sectionRef: React.RefObject<HTMLDivElement>, gamepadHandlerId: string) => {
+const useVerticalGamepadNavigation = (sectionRef: React.RefObject<HTMLDivElement>, gamepadHandlerId: string) => {
     const gamepad = useGamepad();
 
     useEffect(() => {
@@ -47,10 +47,6 @@ const useVerticalSpatialNavigation = (sectionRef: React.RefObject<HTMLDivElement
             gamepad?.off('buttonRT', gamepadHandlerId);
         };
     }, [gamepad, sectionRef]);
-
-    return sectionRef;
 };
 
-export {
-    useVerticalSpatialNavigation,
-};
+export default useVerticalGamepadNavigation;

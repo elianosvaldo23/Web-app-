@@ -7,7 +7,7 @@ const KeyboardShortcuts = require('./KeyboardShortcuts');
 const { ServicesProvider, useServices } = require('./ServicesContext');
 const { GamepadProvider, useGamepad } = require('./GamepadContext');
 const Shell = require('./Shell');
-const { useVerticalSpatialNavigation } = require('./SpatialNavigation/useSpatialNavigation');
+const { useVerticalNavGamepadNavigation, useContentGamepadNavigation } = require('./GamepadNavigation');
 
 module.exports = {
     Chromecast,
@@ -19,5 +19,6 @@ module.exports = {
     Shell,
     GamepadProvider,
     useGamepad,
-    useVerticalSpatialNavigation,
+    useVerticalNavGamepadNavigation,
+    useContentGamepadNavigation,
 };
