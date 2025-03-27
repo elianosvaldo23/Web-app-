@@ -1,10 +1,10 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import classnames from 'classnames';
 import { VerticalNavBar, HorizontalNavBar } from 'stremio/components/NavBar';
+import { useVerticalSpatialNavigation } from 'stremio/services';
 import styles from './MainNavBars.less';
-import { useGamepad, useVerticalSpatialNavigation } from 'stremio/services';
 
 const TABS = [
     { id: 'board', label: 'Board', icon: 'home', href: '#/' },
@@ -22,12 +22,10 @@ type Props = {
     children?: React.ReactNode,
 };
 
-const GAMEPAD_HANDLER_ID = 'vertical-nav';
-
 const MainNavBars = memo(({ className, route, query, children }: Props) => {
     const navRef = React.useRef(null);
 
-    useVerticalSpatialNavigation(navRef, GAMEPAD_HANDLER_ID);
+    useVerticalSpatialNavigation(navRef, route || '');
 
     return (
         <div className={classnames(className, styles['main-nav-bars-container'])}>
