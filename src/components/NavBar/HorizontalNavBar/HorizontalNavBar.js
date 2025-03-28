@@ -25,7 +25,7 @@ const HorizontalNavBar = React.memo(({ className, route, query, title, backButto
             {children}
         </Button>
     ), []);
-    useHorizontalNavGamepadNavigation(route, backButton);
+    useHorizontalNavGamepadNavigation(route || className, backButton);
     return (
         <nav {...props} className={classnames(className, styles['horizontal-nav-bar-container'])}>
             {
