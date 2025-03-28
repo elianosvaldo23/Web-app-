@@ -11,6 +11,7 @@ const SearchBar = require('./SearchBar');
 const NavMenu = require('./NavMenu');
 const styles = require('./styles');
 const { t } = require('i18next');
+const { useHorizontalNavGamepadNavigation } = require('stremio/services');
 
 const HorizontalNavBar = React.memo(({ className, route, query, title, backButton, searchBar, fullscreenButton, navMenu, ...props }) => {
     const backButtonOnClick = React.useCallback(() => {
@@ -24,6 +25,7 @@ const HorizontalNavBar = React.memo(({ className, route, query, title, backButto
             {children}
         </Button>
     ), []);
+    useHorizontalNavGamepadNavigation(route, backButton);
     return (
         <nav {...props} className={classnames(className, styles['horizontal-nav-bar-container'])}>
             {
