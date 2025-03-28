@@ -92,8 +92,10 @@ const useContentGamepadNavigation = (
                 elements[0].focus();
                 return;
             }
-
-            activeElement?.click();
+            const isActiveSelectElement = [activeElement.classList].some((className) => /^select-input/.test(className.toString()));
+            if(!isActiveSelectElement) {
+                activeElement?.click();
+            }
         };
 
         gamepad?.on('analog', gamepadHandlerId, handleGamepadNavigation);
