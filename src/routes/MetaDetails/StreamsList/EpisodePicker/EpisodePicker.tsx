@@ -39,7 +39,6 @@ const EpisodePicker = ({ className, onSubmit }: Props) => {
         return season === initialSeason && episode === initialEpisode;
     }, [season, episode, initialSeason, initialEpisode]);
 
-
     const handleSubmit = () => {
         onSubmit(season, episode);
     };
