@@ -10,8 +10,9 @@ const useVerticalGamepadNavigation = (sectionRef: React.RefObject<HTMLDivElement
             Array.from(sectionRef.current?.querySelectorAll(focusableSelector) || []);
 
         const moveFocus = (direction: 'prev' | 'next') => {
+            const route = window.location.hash.replace('#/', '') || 'board';
             const elements = focusableElements();
-            if (!elements.length) return;
+            if (!elements.length || route !== gamepadHandlerId) return;
 
             const currentIndex = elements.findIndex((item) => item.classList.contains('selected'));
 
