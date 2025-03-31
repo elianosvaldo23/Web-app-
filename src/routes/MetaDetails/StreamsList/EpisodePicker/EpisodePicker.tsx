@@ -35,15 +35,14 @@ const EpisodePicker = ({ className, onSubmit }: Props) => {
         setEpisode(parseInt(event.target.value));
     }, []);
 
-    const handleSubmit = useCallback(() => {
-        if (typeof onSubmit === 'function' && !isNaN(season) && !isNaN(episode)) {
-            onSubmit(season, episode);
-        }
-    }, [onSubmit, season, episode]);
-
     const disabled = useMemo(() => {
         return season === initialSeason && episode === initialEpisode;
     }, [season, episode, initialSeason, initialEpisode]);
+
+
+    const handleSubmit = () => {
+        onSubmit(season, episode);
+    };
 
     return (
         <div className={className}>
