@@ -9,8 +9,7 @@ const useHorizontalNavGamepadNavigation = (gamepadHandlerId: string, enableGoBac
     useEffect(() => {
         const goBack = () => enableGoBack && window.history.back();
 
-        // @ts-ignore
-        gamepad?.on('buttonY', gamepadHandlerId, toggleFullscreen);
+        gamepad?.on('buttonY', gamepadHandlerId, toggleFullscreen as () => void);
         gamepad?.on('buttonB', gamepadHandlerId, goBack);
 
         return () => {

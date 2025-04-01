@@ -45,7 +45,7 @@ const GamepadProvider: React.FC<{
     };
 
     const onGamepadConnected = () => {
-        // @ts-ignore
+        // @ts-expect-error show() expects no arguments
         toast.show({
             type: 'info',
             title: 'Gamepad detected',
@@ -54,7 +54,7 @@ const GamepadProvider: React.FC<{
     };
 
     const onGamepadDisconnected = () => {
-        // @ts-ignore
+        // @ts-expect-error show() expects no arguments
         toast.show({
             type: 'info',
             title: 'Gamepad disconnected',
