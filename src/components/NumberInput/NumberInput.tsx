@@ -27,10 +27,10 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue = 0, sho
     const displayValue = props.value ?? value;
 
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
-        onKeyDown && onKeyDown(event);
+        onKeyDown?.(event);
 
         if (event.key === 'Enter') {
-            onSubmit && onSubmit(event);
+            onSubmit?.(event);
         }
     }, [onKeyDown, onSubmit]);
 
@@ -63,9 +63,9 @@ const NumberInput = forwardRef<HTMLInputElement, Props>(({ defaultValue = 0, sho
         return value;
     };
 
-    const handleInputChange = ({ target: { valueAsNumber }}: ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = useCallback(({ target: { valueAsNumber }}: ChangeEvent<HTMLInputElement>) => {
         handleValueChange(clampValueToRange(valueAsNumber || 0));
-    };
+    }, []);
 
     return (
         <div className={classnames(props.containerClassName, styles['number-input'])}>
