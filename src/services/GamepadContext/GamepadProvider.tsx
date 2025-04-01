@@ -27,12 +27,20 @@ const GamepadProvider: React.FC<{
     }, []);
 
     const off = useCallback((event: string, id: string) => {
-        eventHandlers.current.get(event)?.delete(id);
+        const handlersMap = eventHandlers.current.get(event);
+        handlersMap?.delete(id);
+        if (handlersMap?.size === 0) {
+            eventHandlers.current.delete(event);
+        }
     }, []);
 
     const emit = (event: string, data?: any) => {
         if (eventHandlers.current.has(event)) {
-            eventHandlers.current.get(event)!.forEach((callback) => callback(data));
+            const handlersMap = eventHandlers.current.get(event)!;
+            const latestHandler = Array.from(handlersMap.values()).at(-1);
+            if (latestHandler) {
+                latestHandler(data);
+            }
         }
     };
 
