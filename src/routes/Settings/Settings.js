@@ -342,6 +342,18 @@ const Settings = () => {
                                     />
                                 </div>
                         }
+                        {
+                            shell.active &&
+                                <div className={styles['option-container']}>
+                                    <div className={styles['option-name-container']}>
+                                        <div className={styles['label']}>{ t('SETTINGS_FULLSCREEN_EXIT') }</div>
+                                    </div>
+                                    <Toggle
+                                        className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                        {...escExitFullscreenToggle}
+                                    />
+                                </div>
+                        }
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_BLUR_UNWATCHED_IMAGE') }</div>
@@ -368,20 +380,6 @@ const Settings = () => {
                                 {...subtitlesLanguageSelect}
                             />
                         </div>
-                        {
-                            shell.active ?
-                                <div className={styles['option-container']}>
-                                    <div className={styles['option-name-container']}>
-                                        <div className={styles['label']}>{ t('SETTINGS_FULLSCREEN_EXIT') }</div>
-                                    </div>
-                                    <Toggle
-                                        className={classnames(styles['option-input-container'], styles['toggle-container'])}
-                                        {...escExitFullscreenToggle}
-                                    />
-                                </div>
-                                :
-                                null
-                        }
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SUBTITLES_SIZE') }</div>

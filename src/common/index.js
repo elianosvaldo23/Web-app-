@@ -14,12 +14,13 @@ const languages = require('./languages');
 const routesRegexp = require('./routesRegexp');
 const useAnimationFrame = require('./useAnimationFrame');
 const useBinaryState = require('./useBinaryState');
-const useFullscreen = require('./useFullscreen');
+const { default: useFullscreen } = require('./useFullscreen');
 const useLiveRef = require('./useLiveRef');
 const useModelState = require('./useModelState');
 const useNotifications = require('./useNotifications');
 const useOnScrollToBottom = require('./useOnScrollToBottom');
 const useProfile = require('./useProfile');
+const { default: useSettings } = require('./useSettings');
 const { default: useShell } = require('./useShell');
 const useStreamingServer = require('./useStreamingServer');
 const useTorrent = require('./useTorrent');
@@ -52,6 +53,7 @@ module.exports = {
     useNotifications,
     useOnScrollToBottom,
     useProfile,
+    useSettings,
     useShell,
     useStreamingServer,
     useTorrent,

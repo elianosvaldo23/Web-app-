@@ -17,6 +17,10 @@ type ShellEvent = {
     args: string[];
 };
 
+export type WindowVisibilityState = {
+    isFullscreen: boolean;
+};
+
 const createId = () => Math.floor(Math.random() * 9999) + 1;
 
 const useShell = () => {
@@ -28,7 +32,7 @@ const useShell = () => {
         events.off(name, listener);
     };
 
-    const send = (method: string, ...args: (string | number)[]) => {
+    const send = (method: string, ...args: (string | number | object)[]) => {
         try {
             transport?.postMessage(JSON.stringify({
                 id: createId(),
