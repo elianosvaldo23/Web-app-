@@ -8,7 +8,7 @@ const langs = require('langs');
 const { useTranslation } = require('react-i18next');
 const { useRouteFocused } = require('stremio-router');
 const { useServices, useGamepad } = require('stremio/services');
-const { onFileDrop, useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender, CONSTANTS } = require('stremio/common');
+const { onFileDrop, useSettings, useFullscreen, useBinaryState, useToast, useStreamingServer, withCoreSuspender, CONSTANTS } = require('stremio/common');
 const { HorizontalNavBar, Transition, ContextMenu } = require('stremio/components');
 const BufferingLoader = require('./BufferingLoader');
 const VolumeChangeIndicator = require('./VolumeChangeIndicator');
@@ -23,7 +23,6 @@ const SpeedMenu = require('./SpeedMenu');
 const { default: SideDrawerButton } = require('./SideDrawerButton');
 const { default: SideDrawer } = require('./SideDrawer');
 const usePlayer = require('./usePlayer');
-const useSettings = require('./useSettings');
 const useStatistics = require('./useStatistics');
 const useVideo = require('./useVideo');
 const styles = require('./styles');
@@ -620,6 +619,7 @@ const Player = ({ urlParams, queryParams }) => {
                 }
                 case 'Escape': {
                     closeMenus();
+                    !settings.escExitFullscreen && window.history.back();
                     break;
                 }
             }
@@ -650,7 +650,7 @@ const Player = ({ urlParams, queryParams }) => {
             window.removeEventListener('keyup', onKeyUp);
             window.removeEventListener('wheel', onWheel);
         };
-    }, [player.metaItem, player.selected, streamingServer.statistics, settings.seekTimeDuration, settings.seekShortTimeDuration, routeFocused, menusOpen, nextVideoPopupOpen, video.state.paused, video.state.time, video.state.volume, video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks, video.state.playbackSpeed, toggleSubtitlesMenu, toggleStatisticsMenu, toggleSideDrawer]);
+    }, [player.metaItem, player.selected, streamingServer.statistics, settings.seekTimeDuration, settings.seekShortTimeDuration, settings.escExitFullscreen, routeFocused, menusOpen, nextVideoPopupOpen, video.state.paused, video.state.time, video.state.volume, video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks, video.state.playbackSpeed, toggleSubtitlesMenu, toggleStatisticsMenu, toggleSideDrawer]);
 
     React.useEffect(() => {
         video.events.on('error', onError);
