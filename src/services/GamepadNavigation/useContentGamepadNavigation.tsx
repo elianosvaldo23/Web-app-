@@ -23,57 +23,66 @@ const useContentGamepadNavigation = (
                 return;
             }
 
-            const activeElementIndex = elements.indexOf(activeElement);
             let closestElement: HTMLDivElement | null = null;
 
-            if (direction === 'left') {
-                const prevIndex = activeElementIndex - 1 || 0;
-                closestElement = elements[prevIndex];
-            }
-            if (direction === 'right') {
-                const nextIndex = activeElementIndex + 1 > elements.length - 1 ? elements.length - 1 : activeElementIndex + 1;
-                closestElement = elements[nextIndex];
-            }
+            const currentRect = activeElement.getBoundingClientRect();
 
-            if (direction === 'up' || direction === 'down') {
-                const currentRect = activeElement.getBoundingClientRect();
+            let closestDistance = Infinity;
 
-                let closestDistance = Infinity;
+            elements.forEach((el) => {
+                if (el === activeElement) return;
+                const rect = el.getBoundingClientRect();
 
-                elements.forEach((el) => {
-                    if (el === activeElement) return;
-                    const rect = el.getBoundingClientRect();
+                let distance = Infinity;
 
-                    let distance = Infinity;
-                    switch (direction) {
-                        case 'up':
-                            if (
-                                rect.bottom <= currentRect.top &&
-                                (rect.left === currentRect.left ||
-                                    (rect.left < currentRect.left && rect.right > currentRect.left)
-                                )
-                            ) {
-                                distance = currentRect.top - rect.bottom;
-                            }
-                            break;
-                        case 'down':
-                            if (
-                                rect.top >= currentRect.bottom &&
-                                (rect.left === currentRect.left ||
-                                    (rect.left < currentRect.left && rect.right > currentRect.left)
-                                )
-                            ) {
-                                distance = rect.top - currentRect.bottom;
-                            }
-                            break;
-                    }
+                switch (direction) {
+                    case 'left':
+                        if (
+                            rect.right <= currentRect.left &&
+                            (rect.top === currentRect.top ||
+                                (rect.top < currentRect.top && rect.bottom > currentRect.top)
+                            )
+                        ) {
+                            distance = currentRect.left - rect.right;
+                        }
+                        break;
+                    case 'right':
+                        if (
+                            currentRect.right <= rect.left &&
+                            (rect.top === currentRect.top ||
+                                (rect.top < currentRect.top && rect.bottom > currentRect.top)
+                            )
+                        ) {
+                            distance = rect.left - currentRect.right;
+                        }
+                        break;
+                    case 'up':
+                        if (
+                            rect.bottom <= currentRect.top &&
+                            (rect.left === currentRect.left ||
+                                (rect.left < currentRect.left && rect.right > currentRect.left)
+                            )
+                        ) {
+                            distance = currentRect.top - rect.bottom;
+                        }
+                        break;
+                    case 'down':
+                        if (
+                            rect.top >= currentRect.bottom &&
+                            (rect.left === currentRect.left ||
+                                (rect.left < currentRect.left && rect.right > currentRect.left)
+                            )
+                        ) {
+                            distance = rect.top - currentRect.bottom;
+                        }
+                        break;
+                }
 
-                    if (distance < closestDistance) {
-                        closestDistance = distance;
-                        closestElement = el;
-                    }
-                });
-            }
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestElement = el;
+                }
+            });
 
             if (closestElement) {
                 closestElement.focus();
@@ -93,7 +102,7 @@ const useContentGamepadNavigation = (
                 return;
             }
             const isActiveSelectElement = [activeElement.classList].some((className) => /^select-input/.test(className.toString()));
-            if(!isActiveSelectElement) {
+            if (!isActiveSelectElement) {
                 activeElement?.click();
             }
         };
