@@ -37,7 +37,10 @@ const GamepadProvider: React.FC<{
     const emit = (event: string, data?: any) => {
         if (eventHandlers.current.has(event)) {
             const handlersMap = eventHandlers.current.get(event)!;
-            const latestHandler = Array.from(handlersMap.values()).at(-1);
+
+            if (!handlersMap || handlersMap.size === 0) return;
+
+            const latestHandler = Array.from(handlersMap.values()).slice(-1)[0];
             if (latestHandler) {
                 latestHandler(data);
             }
