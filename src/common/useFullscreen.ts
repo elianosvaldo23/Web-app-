@@ -44,7 +44,7 @@ const useFullscreen = () => {
                 exitFullscreen();
             }
 
-            if ((event.code === 'F11' || event.code === 'KeyF') && shell.active) {
+            if (event.code === 'F11' && shell.active) {
                 toggleFullscreen();
             }
         };
