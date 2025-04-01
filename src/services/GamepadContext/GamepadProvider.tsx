@@ -1,3 +1,5 @@
+// Copyright (C) 2017-2025 Smart code 203358507
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import useToast from 'stremio/common/Toast/useToast';
 import GamepadContext from './GamepadContext';

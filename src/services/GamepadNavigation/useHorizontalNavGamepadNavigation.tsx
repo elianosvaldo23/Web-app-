@@ -1,3 +1,5 @@
+// Copyright (C) 2017-2025 Smart code 203358507
+
 import { useEffect } from 'react';
 import { useGamepad } from '../GamepadContext';
 import useFullscreen from 'stremio/common/useFullscreen';
