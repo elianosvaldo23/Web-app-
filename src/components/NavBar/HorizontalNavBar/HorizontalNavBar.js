@@ -7,11 +7,11 @@ const { default: Icon } = require('@stremio/stremio-icons/react');
 const { Button, Image } = require('stremio/components');
 const { default: useFullscreen } = require('stremio/common/useFullscreen');
 const usePWA = require('stremio/common/usePWA');
+const { useHorizontalNavGamepadNavigation } = require('stremio/services/GamepadNavigation');
 const SearchBar = require('./SearchBar');
 const NavMenu = require('./NavMenu');
 const styles = require('./styles');
 const { t } = require('i18next');
-const { useHorizontalNavGamepadNavigation } = require('stremio/services');
 
 const HorizontalNavBar = React.memo(({ className, route, query, title, backButton, searchBar, fullscreenButton, navMenu, ...props }) => {
     const backButtonOnClick = React.useCallback(() => {
