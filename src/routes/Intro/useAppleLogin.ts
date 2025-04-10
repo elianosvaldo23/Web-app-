@@ -43,7 +43,7 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
             window.AppleID.auth.init({
                 clientId: CLIENT_ID,
                 scope: 'name email',
-                redirectURI: 'https://www.stremio.com/login',
+                redirectURI: 'https://stremio.github.io/stremio-web/feat/example-apple-login/',
                 state: 'signin',
                 usePopup: true,
             });
