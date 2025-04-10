@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react';
+import jwtDecode from 'jwt-decode';
 
 type AppleLoginResponse = {
     token: string;
@@ -9,10 +10,9 @@ type AppleLoginResponse = {
 
 type AppleSignInResponse = {
     authorization: {
+        code?: string;
         id_token: string;
-    };
-    authorizedData: {
-        userId: string;
+        state?: string;
     };
     email?: string;
     fullName?: {
@@ -20,7 +20,6 @@ type AppleSignInResponse = {
         lastName?: string;
     };
 };
-
 const CLIENT_ID = 'com.stremio.services';
 
 const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
@@ -48,13 +47,15 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                 usePopup: true,
             });
 
-            window.AppleID.auth
-                .signIn()
-                .then((response: AppleSignInResponse) => {
-                    if (response.authorization) {
-                        console.log('Apple Sign-In response:', response); // eslint-disable-line no-console
+            window.AppleID.auth.signIn().then((response: AppleSignInResponse) => {
+                if (response.authorization) {
+                    console.log('Apple Sign-In response:', response); // eslint-disable-line no-console
+
+                    try {
+                        const idToken = response.authorization.id_token;
                         const email = response.email || '';
-                        const sub = response.authorizedData.userId;
+                        const payload = jwtDecode.jwtDecode(response.authorization.id_token);
+                        const sub = payload.sub;
 
                         let name = '';
                         if (response.fullName) {
@@ -69,22 +70,18 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                         }
 
                         resolve({
-                            token: response.authorization.id_token,
+                            token: idToken,
                             sub: sub,
                             email: email,
                             name: name,
                         });
-                    } else {
-                        reject(new Error('No authorization received from Apple'));
+                    } catch (error) {
+                        reject(new Error(`Failed to parse id_token: ${error}`));
                     }
-                })
-                .catch((error: Error) => {
-                    console.error('Error during Apple Sign-In:', error);
-                    reject(error);
-                })
-                .finally(() => {
-                    started.current = false;
-                });
+                } else {
+                    reject(new Error('No authorization received from Apple'));
+                }
+            });
         });
     }, []);
 
