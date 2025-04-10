@@ -55,6 +55,7 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                         const idToken = response.authorization.id_token;
                         const email = response.email || '';
                         const payload = jwtDecode.jwtDecode(response.authorization.id_token);
+                        console.log('Decoded id_token:', payload); // eslint-disable-line no-console
                         const sub = payload.sub;
 
                         let name = '';
