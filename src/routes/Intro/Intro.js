@@ -112,16 +112,17 @@ const Intro = ({ queryParams }) => {
     const loginWithApple = React.useCallback(() => {
         openLoaderModal();
         startAppleLogin()
-            .then(({ email, password }) => {
+            .then(({ email, token, sub, name }) => {
                 core.transport.dispatch({
                     action: 'Ctx',
                     args: {
                         action: 'Authenticate',
                         args: {
-                            type: 'Login',
+                            type: 'AuthWithApple',
+                            token,
+                            sub,
                             email,
-                            password,
-                            apple: true
+                            name
                         }
                     }
                 });

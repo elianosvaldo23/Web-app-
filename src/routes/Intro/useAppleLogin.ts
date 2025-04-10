@@ -1,8 +1,10 @@
 import { useCallback, useRef } from 'react';
 
 type AppleLoginResponse = {
+    token: string;
+    sub: string;
     email: string;
-    password: string;
+    name: string;
 };
 
 type AppleSignInResponse = {
@@ -13,6 +15,10 @@ type AppleSignInResponse = {
     };
     user: string;
     email?: string;
+    fullName?: {
+        firstName?: string;
+        lastName?: string;
+    };
 };
 
 const CLIENT_ID = 'com.stremio.one';
@@ -45,16 +51,26 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
             window.AppleID.auth.signIn()
                 .then((response: AppleSignInResponse) => {
                     if (response.authorization) {
-                        const userEmail = response.email || response.user;
+                        const email = response.email || '';
+                        const sub = response.user;
+                        
+                        let name = '';
+                        if (response.fullName) {
+                            const firstName = response.fullName.firstName || '';
+                            const lastName = response.fullName.lastName || '';
+                            name = [firstName, lastName].filter(Boolean).join(' ');
+                        }
 
-                        if (!userEmail) {
-                            reject(new Error('No email received from Apple'));
+                        if (!sub) {
+                            reject(new Error('No sub token received from Apple'));
                             return;
                         }
 
                         resolve({
-                            email: userEmail as string,
-                            password: response.authorization.id_token
+                            token: response.authorization.id_token,
+                            sub: sub,
+                            email: email,
+                            name: name
                         });
                     } else {
                         reject(new Error('No authorization received from Apple'));
