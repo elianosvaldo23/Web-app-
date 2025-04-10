@@ -381,7 +381,7 @@ const Intro = ({ queryParams }) => {
                         <div className={styles['label']}>Continue with Facebook</div>
                     </Button>
                     <Button className={classnames(styles['form-button'], styles['apple-button'])} onClick={loginWithApple}>
-                        <Icon className={styles['icon']} name={'apple'} />
+                        <Icon className={styles['icon']} name={'macos'} />
                         <div className={styles['label']}>Continue with Apple</div>
                     </Button>
                     {

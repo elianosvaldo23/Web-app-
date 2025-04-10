@@ -175,12 +175,24 @@
             position: relative;
             width: 22rem;
             margin-left: 2rem;
+            display: flex;
+            flex-direction: column;
 
             .facebook-button {
                 background: var(--color-facebook);
+                margin-bottom: 1rem;
                 
                 &:hover, &:focus {
                     outline: var(--focus-outline-size) solid var(--color-facebook);
+                    background-color: transparent;
+                }
+            }
+
+            .apple-button {
+                background: var(--color-x);
+                
+                &:hover, &:focus {
+                    outline: var(--focus-outline-size) solid var(--color-x);
                     background-color: transparent;
                 }
             }
