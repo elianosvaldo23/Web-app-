@@ -45,15 +45,16 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                 scope: 'name email',
                 redirectURI: window.location.origin,
                 state: 'signin',
-                usePopup: true
+                usePopup: true,
             });
 
-            window.AppleID.auth.signIn()
+            window.AppleID.auth
+                .signIn()
                 .then((response: AppleSignInResponse) => {
                     if (response.authorization) {
                         const email = response.email || '';
                         const sub = response.user;
-                        
+
                         let name = '';
                         if (response.fullName) {
                             const firstName = response.fullName.firstName || '';
@@ -70,7 +71,7 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                             token: response.authorization.id_token,
                             sub: sub,
                             email: email,
-                            name: name
+                            name: name,
                         });
                     } else {
                         reject(new Error('No authorization received from Apple'));
