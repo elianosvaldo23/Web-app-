@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 type AppleLoginResponse = {
     token: string;
@@ -20,6 +20,12 @@ type AppleSignInResponse = {
         lastName?: string;
     };
 };
+
+type CustomJWTPayload = JwtPayload & {
+    sub: string;
+    email?: string;
+};
+
 const CLIENT_ID = 'com.stremio.services';
 
 const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
@@ -49,14 +55,14 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
 
             window.AppleID.auth.signIn().then((response: AppleSignInResponse) => {
                 if (response.authorization) {
-                    console.log('Apple Sign-In response:', response); // eslint-disable-line no-console
+                    console.log('Apple Sign-In response:', response.authorization); // eslint-disable-line no-console
 
                     try {
                         const idToken = response.authorization.id_token;
-                        const email = response.email || '';
-                        const payload = jwtDecode.jwtDecode(response.authorization.id_token);
+                        const payload: CustomJWTPayload = jwtDecode(idToken);
                         console.log('Decoded id_token:', payload); // eslint-disable-line no-console
                         const sub = payload.sub;
+                        const email = payload.email ?? response.email ?? '';
 
                         let name = '';
                         if (response.fullName) {
