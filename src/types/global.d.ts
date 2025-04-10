@@ -42,8 +42,11 @@ declare global {
                         id_token: string;
                         state?: string;
                     };
-                    user: string;
                     email?: string;
+                    fullName?: {
+                        firstName?: string;
+                        lastName?: string;
+                    };
                 }>;
             };
         };
