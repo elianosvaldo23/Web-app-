@@ -9,11 +9,11 @@ type AppleLoginResponse = {
 
 type AppleSignInResponse = {
     authorization: {
-        code: string;
         id_token: string;
-        state: string;
     };
-    user: string;
+    authorizedData: {
+        userId: string;
+    };
     email?: string;
     fullName?: {
         firstName?: string;
@@ -52,8 +52,9 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                 .signIn()
                 .then((response: AppleSignInResponse) => {
                     if (response.authorization) {
+                        console.log('Apple Sign-In response:', response); // eslint-disable-line no-console
                         const email = response.email || '';
-                        const sub = response.user;
+                        const sub = response.authorizedData.userId;
 
                         let name = '';
                         if (response.fullName) {

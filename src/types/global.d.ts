@@ -38,9 +38,10 @@ declare global {
                 }) => void;
                 signIn: () => Promise<{
                     authorization: {
-                        code: string;
                         id_token: string;
-                        state: string;
+                    };
+                    authorizedData: {
+                        userId: string;
                     };
                     user: string;
                     email?: string;
