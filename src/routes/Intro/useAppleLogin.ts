@@ -21,7 +21,7 @@ type AppleSignInResponse = {
     };
 };
 
-const CLIENT_ID = 'com.stremio.one';
+const CLIENT_ID = 'com.stremio.services';
 
 const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
     const started = useRef(false);
