@@ -22,7 +22,6 @@ type AppleSignInResponse = {
 };
 
 type CustomJWTPayload = JwtPayload & {
-    sub: string;
     email?: string;
 };
 
@@ -55,12 +54,9 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
 
             window.AppleID.auth.signIn().then((response: AppleSignInResponse) => {
                 if (response.authorization) {
-                    console.log('Apple Sign-In response:', response.authorization); // eslint-disable-line no-console
-
                     try {
                         const idToken = response.authorization.id_token;
                         const payload: CustomJWTPayload = jwtDecode(idToken);
-                        console.log('Decoded id_token:', payload); // eslint-disable-line no-console
                         const sub = payload.sub;
                         const email = payload.email ?? response.email ?? '';
 

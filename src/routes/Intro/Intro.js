@@ -118,7 +118,7 @@ const Intro = ({ queryParams }) => {
                     args: {
                         action: 'Authenticate',
                         args: {
-                            type: 'AuthWithApple',
+                            type: 'Apple',
                             token,
                             sub,
                             email,
