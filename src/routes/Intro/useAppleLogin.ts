@@ -52,17 +52,8 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                 usePopup: true,
             });
 
-            const timeoutId = setTimeout(() => {
-                if (started.current) {
-                    started.current = false;
-                    reject(new Error('Apple login popup was closed'));
-                }
-            }, 1000);
 
             window.AppleID.auth.signIn().then((response: AppleSignInResponse) => {
-                clearTimeout(timeoutId);
-                started.current = false;
-
                 if (response.authorization) {
                     try {
                         const idToken = response.authorization.id_token;
@@ -95,8 +86,6 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                     reject(new Error('No authorization received from Apple'));
                 }
             }).catch((error) => {
-                clearTimeout(timeoutId);
-                started.current = false;
                 reject(error);
             });
         });
