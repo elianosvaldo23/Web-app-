@@ -189,11 +189,27 @@
             }
 
             .apple-button {
-                background: var(--color-x);
+                background: var(--primary-foreground-color);
+
+                .icon {
+                    color: var(--primary-background-color);
+                }
+
+                .label {
+                    color: var(--primary-background-color);
+                }
                 
                 &:hover, &:focus {
-                    outline: var(--focus-outline-size) solid var(--color-x);
+                    outline: var(--focus-outline-size) solid var(--primary-foreground-color);
                     background-color: transparent;
+
+                    .icon {
+                        color: var(--primary-foreground-color);
+                    }
+
+                    .label {
+                        color: var(--primary-foreground-color);
+                    }
                 }
             }
         }
