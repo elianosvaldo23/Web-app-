@@ -129,7 +129,11 @@ const Intro = ({ queryParams }) => {
             })
             .catch((error) => {
                 closeLoaderModal();
-                dispatch({ type: 'error', error: error.message });
+                if (error.error === 'popup_closed_by_user') {
+                    dispatch({ type: 'error', error: 'Apple login popup was closed.' });
+                } else {
+                    dispatch({ type: 'error', error: error.error });
+                }
             });
     }, []);
     const cancelLoginWithApple = React.useCallback(() => {

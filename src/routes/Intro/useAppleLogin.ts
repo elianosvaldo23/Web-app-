@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 type AppleLoginResponse = {
@@ -92,6 +92,10 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
 
     const stop = useCallback(() => {
         started.current = false;
+    }, []);
+
+    useEffect(() => {
+        return () => stop();
     }, []);
 
     return [start, stop];
