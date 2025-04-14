@@ -52,7 +52,6 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                 usePopup: true,
             });
 
-
             window.AppleID.auth.signIn().then((response: AppleSignInResponse) => {
                 if (response.authorization) {
                     try {
