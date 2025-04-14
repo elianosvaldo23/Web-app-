@@ -33,6 +33,7 @@ declare global {
                     clientId: string;
                     scope: string;
                     redirectURI: string;
+                    state: string;
                     usePopup: boolean;
                 }) => void;
                 signIn: () => Promise<{

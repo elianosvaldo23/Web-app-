@@ -48,6 +48,7 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                 clientId: CLIENT_ID,
                 scope: 'name email',
                 redirectURI: 'https://stremio.github.io/stremio-web/feat/example-apple-login/',
+                state: 'signin',
                 usePopup: true,
             });
 
