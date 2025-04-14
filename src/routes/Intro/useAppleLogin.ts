@@ -72,6 +72,7 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                             return;
                         }
 
+                        console.log('Apple login response:', payload, idToken, sub, email, name); // eslint-disable-line no-console
                         resolve({
                             token: idToken,
                             sub: sub,
