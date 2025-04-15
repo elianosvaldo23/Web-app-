@@ -63,6 +63,11 @@ const Library = ({ model, urlParams, queryParams }) => {
             scrollContainerRef.current.scrollTop = 0;
         }
     }, [profile.auth, library.selected]);
+    React.useEffect(() => {
+        if (!library.selected?.type && typeSelect.selected) {
+            window.location = typeSelect.selected[0];
+        }
+    }, [typeSelect.selected, library.selected]);
     return (
         <MainNavBars className={styles['library-container']} route={model}>
             {

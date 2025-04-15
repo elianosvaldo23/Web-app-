@@ -31,6 +31,7 @@ const Settings = () => {
     const toast = useToast();
     const {
         interfaceLanguageSelect,
+        hideSpoilersToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
         subtitlesTextColorInput,
@@ -47,6 +48,7 @@ const Settings = () => {
         bingeWatchingToggle,
         playInBackgroundToggle,
         hardwareDecodingToggle,
+        pauseOnMinimizeToggle,
     } = useProfileSettingsInputs(profile);
     const {
         streamingServerRemoteUrlInput,
@@ -181,7 +183,12 @@ const Settings = () => {
                         { t('SETTINGS_NAV_SHORTCUTS') }
                     </Button>
                     <div className={styles['spacing']} />
-                    <div className={styles['version-info-label']} title={process.env.VERSION}>App Version: {process.env.VERSION}</div>
+                    <div className={styles['version-info-label']} title={process.env.VERSION}>
+                        App Version: {process.env.VERSION}
+                    </div>
+                    <div className={styles['version-info-label']} title={process.env.COMMIT_HASH}>
+                        Build Version: {process.env.COMMIT_HASH}
+                    </div>
                     {
                         streamingServer.settings !== null && streamingServer.settings.type === 'Ready' ?
                             <div className={styles['version-info-label']} title={streamingServer.settings.content.serverVersion}>Server Version: {streamingServer.settings.content.serverVersion}</div>
@@ -336,12 +343,34 @@ const Settings = () => {
                                     />
                                 </div>
                         }
+                        {
+                            shell.active &&
+                                <div className={styles['option-container']}>
+                                    <div className={styles['option-name-container']}>
+                                        <div className={styles['label']}>{ t('SETTINGS_FULLSCREEN_EXIT') }</div>
+                                    </div>
+                                    <Toggle
+                                        className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                        {...escExitFullscreenToggle}
+                                    />
+                                </div>
+                        }
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>{ t('SETTINGS_BLUR_UNWATCHED_IMAGE') }</div>
+                            </div>
+                            <Toggle
+                                className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                tabIndex={-1}
+                                {...hideSpoilersToggle}
+                            />
+                        </div>
                     </div>
                     <div ref={playerSectionRef} className={styles['section-container']}>
                         <div className={styles['section-title']}>{ t('SETTINGS_NAV_PLAYER') }</div>
                         <div className={styles['section-category-container']}>
                             <Icon className={styles['icon']} name={'subtitles'} />
-                            <div className={styles['label']}>{t('SETTINGS_CLOSE_WINDOW')}</div>
+                            <div className={styles['label']}>{t('SETTINGS_SECTION_SUBTITLES')}</div>
                         </div>
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
@@ -352,20 +381,6 @@ const Settings = () => {
                                 {...subtitlesLanguageSelect}
                             />
                         </div>
-                        {
-                            shell.active ?
-                                <div className={styles['option-container']}>
-                                    <div className={styles['option-name-container']}>
-                                        <div className={styles['label']}>{ t('SETTINGS_FULLSCREEN_EXIT') }</div>
-                                    </div>
-                                    <Toggle
-                                        className={classnames(styles['option-input-container'], styles['toggle-container'])}
-                                        {...escExitFullscreenToggle}
-                                    />
-                                </div>
-                                :
-                                null
-                        }
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SUBTITLES_SIZE') }</div>
@@ -512,6 +527,18 @@ const Settings = () => {
                                         className={classnames(styles['option-input-container'], styles['toggle-container'])}
                                         tabIndex={-1}
                                         {...hardwareDecodingToggle}
+                                    />
+                                </div>
+                        }
+                        {
+                            shell.active &&
+                                <div className={styles['option-container']}>
+                                    <div className={styles['option-name-container']}>
+                                        <div className={styles['label']}>{ t('SETTINGS_PAUSE_MINIMIZED') }</div>
+                                    </div>
+                                    <Toggle
+                                        className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                        {...pauseOnMinimizeToggle}
                                     />
                                 </div>
                         }
@@ -719,6 +746,18 @@ const Settings = () => {
                             <div className={classnames(styles['option-input-container'], styles['info-container'])}>
                                 <div className={styles['label']}>
                                     {process.env.VERSION}
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>
+                                    Build Version
+                                </div>
+                            </div>
+                            <div className={classnames(styles['option-input-container'], styles['info-container'])}>
+                                <div className={styles['label']}>
+                                    {process.env.COMMIT_HASH}
                                 </div>
                             </div>
                         </div>
