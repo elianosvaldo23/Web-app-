@@ -33,6 +33,22 @@ const useProfileSettingsInputs = (profile) => {
         }
     }), [profile.settings]);
 
+    const hideSpoilersToggle = React.useMemo(() => ({
+        checked: profile.settings.hideSpoilers,
+        onClick: () => {
+            core.transport.dispatch({
+                action: 'Ctx',
+                args: {
+                    action: 'UpdateSettings',
+                    args: {
+                        ...profile.settings,
+                        hideSpoilers: !profile.settings.hideSpoilers
+                    }
+                }
+            });
+        }
+    }), [profile.settings]);
+
     const quitOnCloseToggle = React.useMemo(() => ({
         checked: profile.settings.quitOnClose,
         onClick: () => {
@@ -347,8 +363,24 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
+    const pauseOnMinimizeToggle = React.useMemo(() => ({
+        checked: profile.settings.pauseOnMinimize,
+        onClick: () => {
+            core.transport.dispatch({
+                action: 'Ctx',
+                args: {
+                    action: 'UpdateSettings',
+                    args: {
+                        ...profile.settings,
+                        pauseOnMinimize: !profile.settings.pauseOnMinimize,
+                    }
+                }
+            });
+        }
+    }), [profile.settings]);
     return {
         interfaceLanguageSelect,
+        hideSpoilersToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
         subtitlesTextColorInput,
@@ -365,6 +397,7 @@ const useProfileSettingsInputs = (profile) => {
         bingeWatchingToggle,
         playInBackgroundToggle,
         hardwareDecodingToggle,
+        pauseOnMinimizeToggle,
     };
 };
 

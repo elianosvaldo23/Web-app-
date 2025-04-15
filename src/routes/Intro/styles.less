@@ -175,13 +175,41 @@
             position: relative;
             width: 22rem;
             margin-left: 2rem;
+            display: flex;
+            flex-direction: column;
 
             .facebook-button {
                 background: var(--color-facebook);
+                margin-bottom: 1rem;
                 
                 &:hover, &:focus {
                     outline: var(--focus-outline-size) solid var(--color-facebook);
                     background-color: transparent;
+                }
+            }
+
+            .apple-button {
+                background: var(--primary-foreground-color);
+
+                .icon {
+                    color: var(--primary-background-color);
+                }
+
+                .label {
+                    color: var(--primary-background-color);
+                }
+                
+                &:hover, &:focus {
+                    outline: var(--focus-outline-size) solid var(--primary-foreground-color);
+                    background-color: transparent;
+
+                    .icon {
+                        color: var(--primary-foreground-color);
+                    }
+
+                    .label {
+                        color: var(--primary-foreground-color);
+                    }
                 }
             }
         }
