@@ -620,7 +620,14 @@ const Player = ({ urlParams, queryParams }) => {
             video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
             video.events.off('implementationChanged', onImplementationChanged);
         };
-    }, []);
+    }, [
+        onError,
+        onEnded,
+        onSubtitlesTrackLoaded,
+        onExtraSubtitlesTrackLoaded,
+        onExtraSubtitlesTrackAdded,
+        onImplementationChanged
+    ]);
 
     React.useLayoutEffect(() => {
         return () => {
