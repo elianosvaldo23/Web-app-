@@ -26,31 +26,6 @@ interface Chrome {
 declare global {
     var qt: Qt | undefined;
     var chrome: Chrome | undefined;
-    interface Window {
-        AppleID: {
-            auth: {
-                init: (config: {
-                    clientId: string;
-                    scope: string;
-                    redirectURI: string;
-                    state: string;
-                    // usePopup: boolean;
-                }) => void;
-                signIn: () => Promise<{
-                    authorization: {
-                        code?: string;
-                        id_token: string;
-                        state?: string;
-                    };
-                    email?: string;
-                    fullName?: {
-                        firstName?: string;
-                        lastName?: string;
-                    };
-                }>;
-            };
-        };
-    }
 }
 
 export {};
