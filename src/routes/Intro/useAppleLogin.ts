@@ -11,7 +11,6 @@ type AppleLoginResponse = {
     name: string;
 };
 
-
 const STREMIO_URL = 'http://localhost:3001';
 const MAX_TRIES = 25;
 
