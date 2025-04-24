@@ -34,7 +34,7 @@ declare global {
                     scope: string;
                     redirectURI: string;
                     state: string;
-                    usePopup: boolean;
+                    // usePopup: boolean;
                 }) => void;
                 signIn: () => Promise<{
                     authorization: {

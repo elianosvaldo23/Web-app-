@@ -49,7 +49,7 @@ const useAppleLogin = (): [() => Promise<AppleLoginResponse>, () => void] => {
                 scope: 'name email',
                 redirectURI: 'https://web.stremio.com/',
                 state: 'signin',
-                usePopup: true,
+                // usePopup: true,
             });
 
             window.AppleID.auth.signIn().then((response: AppleSignInResponse) => {
