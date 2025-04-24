@@ -11,7 +11,7 @@ type AppleLoginResponse = {
     name: string;
 };
 
-const STREMIO_URL = 'http://localhost:3001';
+const STREMIO_URL = 'https://www.strem.io';
 const MAX_TRIES = 25;
 
 const getCredentials = async (state: string): Promise<AppleLoginResponse> => {
