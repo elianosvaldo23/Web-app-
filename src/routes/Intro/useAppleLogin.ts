@@ -23,7 +23,8 @@ const getCredentials = async (state: string): Promise<AppleLoginResponse> => {
             token: user.token,
             sub: user.sub,
             email: user.email,
-            name: user.name
+            // We might not receive a name from Apple, so we use an empty string as a fallback
+            name: user.name ?? '',
         });
     } catch (e) {
         console.error('Failed to get credentials from Apple auth', e);
