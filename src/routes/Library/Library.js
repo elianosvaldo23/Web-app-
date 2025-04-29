@@ -1,10 +1,12 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useLocation, useParams } = require('react-router');
+const { useSearchParams } = require('react-router-dom');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const NotFound = require('stremio/routes/NotFound');
-const { useProfile, useNotifications, routesRegexp, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
+const { useProfile, useNotifications, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
 const { DelayedRenderer, Chips, Image, MainNavBars, Multiselect, LibItem } = require('stremio/components');
 const { default: Placeholder } = require('./Placeholder');
 const useLibrary = require('./useLibrary');
@@ -13,40 +15,33 @@ const styles = require('./styles');
 
 const SCROLL_TO_BOTTOM_TRESHOLD = 400;
 
-function withModel(Library) {
-    const withModel = ({ urlParams, queryParams }) => {
+function withModel(Library, useLocation) {
+    const withModel = () => {
+        const location = useLocation();
         const model = React.useMemo(() => {
-            return typeof urlParams.path === 'string' ?
-                urlParams.path.match(routesRegexp.library.regexp) ?
+            return typeof location.pathname === 'string' ?
+                location.pathname.match('/library') ?
                     'library'
                     :
-                    urlParams.path.match(routesRegexp.continuewatching.regexp) ?
+                    location.pathname.match('/continuewatching') ?
                         'continue_watching'
                         :
                         null
                 :
                 null;
-        }, [urlParams.path]);
-        if (model === null) {
-            return (
-                <NotFound />
-            );
-        }
+        }, [location?.pathname]);
 
-        return (
-            <Library
-                key={model}
-                model={model}
-                urlParams={urlParams}
-                queryParams={queryParams}
-            />
-        );
+        if (model === null) return <NotFound />;
+
+        return <Library model={model} />;
     };
     withModel.displayName = 'withModel';
     return withModel;
 }
 
-const Library = ({ model, urlParams, queryParams }) => {
+const Library = ({ model }) => {
+    const urlParams = useParams();
+    const [queryParams] = useSearchParams();
     const profile = useProfile();
     const notifications = useNotifications();
     const [library, loadNextPage] = useLibrary(model, urlParams, queryParams);
@@ -118,10 +113,6 @@ const Library = ({ model, urlParams, queryParams }) => {
 
 Library.propTypes = {
     model: PropTypes.oneOf(['library', 'continue_watching']),
-    urlParams: PropTypes.shape({
-        type: PropTypes.string
-    }),
-    queryParams: PropTypes.instanceOf(URLSearchParams)
 };
 
 const LibraryFallback = ({ model }) => (
@@ -130,4 +121,4 @@ const LibraryFallback = ({ model }) => (
 
 LibraryFallback.propTypes = Library.propTypes;
 
-module.exports = withModel(withCoreSuspender(Library, LibraryFallback));
+module.exports = withModel(withCoreSuspender(Library, LibraryFallback), useLocation);
