@@ -12,11 +12,10 @@ const DeepLinkHandler = require('./DeepLinkHandler');
 const SearchParamsHandler = require('./SearchParamsHandler');
 const { default: UpdaterBanner } = require('./UpdaterBanner');
 const ErrorDialog = require('./ErrorDialog');
-const withProtectedRoutes = require('./withProtectedRoutes');
 const routerViewsConfig = require('./routerViewsConfig');
 const styles = require('./styles');
 
-const RouterWithProtectedRoutes = withCoreSuspender(withProtectedRoutes(Router));
+const RouterWithProtectedRoutes = withCoreSuspender(Router);
 
 const App = () => {
     const { i18n } = useTranslation();
