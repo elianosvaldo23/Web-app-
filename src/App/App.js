@@ -5,14 +5,12 @@ const React = require('react');
 const { useTranslation } = require('react-i18next');
 const { Router } = require('stremio-router');
 const { Core, Shell, Chromecast, DragAndDrop, KeyboardShortcuts, ServicesProvider } = require('stremio/services');
-const { NotFound } = require('stremio/routes');
 const { FileDropProvider, PlatformProvider, ToastProvider, TooltipProvider, CONSTANTS, withCoreSuspender, useShell } = require('stremio/common');
 const ServicesToaster = require('./ServicesToaster');
 const DeepLinkHandler = require('./DeepLinkHandler');
 const SearchParamsHandler = require('./SearchParamsHandler');
 const { default: UpdaterBanner } = require('./UpdaterBanner');
 const ErrorDialog = require('./ErrorDialog');
-const routerViewsConfig = require('./routerViewsConfig');
 const styles = require('./styles');
 
 const RouterWithProtectedRoutes = withCoreSuspender(Router);
@@ -20,9 +18,6 @@ const RouterWithProtectedRoutes = withCoreSuspender(Router);
 const App = () => {
     const { i18n } = useTranslation();
     const shell = useShell();
-    const onPathNotMatch = React.useCallback(() => {
-        return NotFound;
-    }, []);
     const services = React.useMemo(() => {
         const core = new Core({
             appVersion: process.env.VERSION,
@@ -200,11 +195,7 @@ const App = () => {
                                             <DeepLinkHandler />
                                             <SearchParamsHandler />
                                             <UpdaterBanner className={styles['updater-banner-container']} />
-                                            <RouterWithProtectedRoutes
-                                                className={styles['router']}
-                                                viewsConfig={routerViewsConfig}
-                                                onPathNotMatch={onPathNotMatch}
-                                            />
+                                            <RouterWithProtectedRoutes className={styles['router']} />
                                         </FileDropProvider>
                                     </TooltipProvider>
                                 </ToastProvider>
