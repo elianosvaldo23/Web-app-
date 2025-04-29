@@ -130,7 +130,7 @@ const Search = () => {
 
 const SearchFallback = () => {
     const [queryParams] = useSearchParams();
-    return <MainNavBars className={styles['search-container']} route={'search'} query={queryParams.get('search') ?? queryParams.get('query')} />
+    return <MainNavBars className={styles['search-container']} route={'search'} query={queryParams.get('search') ?? queryParams.get('query')} />;
 };
 
 module.exports = withCoreSuspender(Search, SearchFallback);
