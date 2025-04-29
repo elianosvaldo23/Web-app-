@@ -1,7 +1,8 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
-const PropTypes = require('prop-types');
+const { useParams, useNavigate } = require('react-router');
+const { useSearchParams } = require('react-router-dom');
 const classnames = require('classnames');
 const debounce = require('lodash.debounce');
 const langs = require('langs');
@@ -28,7 +29,10 @@ const useVideo = require('./useVideo');
 const styles = require('./styles');
 const Video = require('./Video');
 
-const Player = ({ urlParams, queryParams }) => {
+const Player = () => {
+    const urlParams = useParams();
+    const [queryParams] = useSearchParams();
+    const navigate = useNavigate();
     const { t } = useTranslation();
     const services = useServices();
     const shell = useShell();
@@ -106,7 +110,7 @@ const Player = ({ urlParams, queryParams }) => {
         if (player.nextVideo !== null) {
             onNextVideoRequested();
         } else {
-            window.history.back();
+            navigate(-1);
         }
     }, [player.nextVideo, onNextVideoRequested]);
 
@@ -835,18 +839,6 @@ const Player = ({ urlParams, queryParams }) => {
             }
         </div>
     );
-};
-
-Player.propTypes = {
-    urlParams: PropTypes.shape({
-        stream: PropTypes.string,
-        streamTransportUrl: PropTypes.string,
-        metaTransportUrl: PropTypes.string,
-        type: PropTypes.string,
-        id: PropTypes.string,
-        videoId: PropTypes.string
-    }),
-    queryParams: PropTypes.instanceOf(URLSearchParams)
 };
 
 const PlayerFallback = () => (
