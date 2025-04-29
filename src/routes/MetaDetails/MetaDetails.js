@@ -1,7 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
-const PropTypes = require('prop-types');
+const { useParams } = require('react-router');
 const classnames = require('classnames');
 const { useServices } = require('stremio/services');
 const { withCoreSuspender } = require('stremio/common');
@@ -13,10 +13,11 @@ const useSeason = require('./useSeason');
 const useMetaExtensionTabs = require('./useMetaExtensionTabs');
 const styles = require('./styles');
 
-const MetaDetails = ({ urlParams, queryParams }) => {
+const MetaDetails = () => {
+    const urlParams = useParams();
     const { core } = useServices();
     const metaDetails = useMetaDetails(urlParams);
-    const [season, setSeason] = useSeason(urlParams, queryParams);
+    const [season, setSeason] = useSeason(urlParams);
     const [tabs, metaExtension, clearMetaExtension] = useMetaExtensionTabs(metaDetails.metaExtensions);
     const [metaPath, streamPath] = React.useMemo(() => {
         return metaDetails.selected !== null ?
@@ -210,15 +211,6 @@ const MetaDetails = ({ urlParams, queryParams }) => {
             }
         </div>
     );
-};
-
-MetaDetails.propTypes = {
-    urlParams: PropTypes.shape({
-        type: PropTypes.string,
-        id: PropTypes.string,
-        videoId: PropTypes.string
-    }),
-    queryParams: PropTypes.instanceOf(URLSearchParams)
 };
 
 const MetaDetailsFallback = () => (
