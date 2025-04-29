@@ -8,7 +8,7 @@ const { t } = require('i18next');
 const { useProfile, usePlatform, useToast, useBinaryState } = require('stremio/common');
 const { Button, Image, Popup } = require('stremio/components');
 const { useServices } = require('stremio/services');
-const { useRouteFocused } = require('stremio-router');
+const { default: useRouteFocused } = require('stremio/common/useRouteFocused');
 const StreamPlaceholder = require('./StreamPlaceholder');
 const styles = require('./styles');
 

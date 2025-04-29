@@ -5,7 +5,7 @@ const classnames = require('classnames');
 const throttle = require('lodash.throttle');
 const { useTranslation } = require('react-i18next');
 const { default: Icon } = require('@stremio/stremio-icons/react');
-const { useRouteFocused } = require('stremio-router');
+const { default: useRouteFocused } = require('stremio/common/useRouteFocused');
 const { useServices } = require('stremio/services');
 const { useProfile, usePlatform, useStreamingServer, withCoreSuspender, useToast } = require('stremio/common');
 const { Button, ColorInput, MainNavBars, Multiselect, Toggle } = require('stremio/components');
@@ -23,7 +23,7 @@ const SHORTCUTS_SECTION = 'shortcuts';
 const Settings = () => {
     const { t } = useTranslation();
     const { core, shell } = useServices();
-    const { routeFocused } = useRouteFocused();
+    const routeFocused = useRouteFocused();
     const profile = useProfile();
     const [dataExport, loadDataExport] = useDataExport();
     const streamingServer = useStreamingServer();

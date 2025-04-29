@@ -5,7 +5,7 @@ const throttle = require('lodash.throttle');
 const isEqual = require('lodash.isequal');
 const intersection = require('lodash.intersection');
 const { useCoreSuspender } = require('stremio/common/CoreSuspender');
-const { useRouteFocused } = require('stremio-router');
+const { default: useRouteFocused } = require('stremio/common/useRouteFocused');
 const { useServices } = require('stremio/services');
 
 const useModelState = ({ action, ...args }) => {
