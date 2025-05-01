@@ -505,7 +505,7 @@ const Player = ({ urlParams, queryParams }) => {
             video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
             video.events.off('implementationChanged', onImplementationChanged);
         };
-    }, [onEnded]);
+    }, []);
 
     React.useLayoutEffect(() => {
         const onKeyDown = (event) => {
