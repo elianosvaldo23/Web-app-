@@ -83,7 +83,6 @@ const Player = ({ urlParams, queryParams }) => {
         return immersed && !casting && video.state.paused !== null && !video.state.paused && !menusOpen && !nextVideoPopupOpen;
     }, [immersed, casting, video.state.paused, menusOpen, nextVideoPopupOpen]);
 
-    const nextVideoHandledRef = React.useRef(false);
     const nextVideoPopupDismissed = React.useRef(false);
     const nextVideoInitialData = React.useRef(player.nextVideo);
     nextVideoInitialData.current = player.nextVideo;
@@ -220,6 +219,7 @@ const Player = ({ urlParams, queryParams }) => {
     const onNextVideoRequested = React.useCallback(() => {
         if (player.nextVideo !== null) {
             nextVideo();
+
             const deepLinks = player.nextVideo.deepLinks;
             if (deepLinks.metaDetailsStreams && deepLinks.player) {
                 window.location.replace(deepLinks.metaDetailsStreams);
@@ -421,7 +421,6 @@ const Player = ({ urlParams, queryParams }) => {
         defaultSubtitlesSelected.current = false;
         defaultAudioTrackSelected.current = false;
         nextVideoPopupDismissed.current = false;
-        nextVideoHandledRef.current = false;
     }, [video.state.stream]);
 
     React.useEffect(() => {
@@ -484,28 +483,6 @@ const Player = ({ urlParams, queryParams }) => {
             onPauseRequested();
         }
     }, [settings.pauseOnMinimize, shell.windowClosed, shell.windowHidden]);
-
-    React.useEffect(() => {
-        nextVideoHandledRef.current = false;
-    }, [player.selected]);
-
-    React.useEffect(() => {
-        video.events.on('error', onError);
-        video.events.on('ended', onEnded);
-        video.events.on('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
-        video.events.on('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
-        video.events.on('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
-        video.events.on('implementationChanged', onImplementationChanged);
-
-        return () => {
-            video.events.off('error', onError);
-            video.events.off('ended', onEnded);
-            video.events.off('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
-            video.events.off('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
-            video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
-            video.events.off('implementationChanged', onImplementationChanged);
-        };
-    }, []);
 
     React.useLayoutEffect(() => {
         const onKeyDown = (event) => {
@@ -629,6 +606,24 @@ const Player = ({ urlParams, queryParams }) => {
             window.removeEventListener('wheel', onWheel);
         };
     }, [player.metaItem, player.selected, streamingServer.statistics, settings.seekTimeDuration, settings.seekShortTimeDuration, settings.escExitFullscreen, routeFocused, menusOpen, nextVideoPopupOpen, video.state.paused, video.state.time, video.state.volume, video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks, video.state.playbackSpeed, toggleSubtitlesMenu, toggleStatisticsMenu, toggleSideDrawer]);
+
+    React.useEffect(() => {
+        video.events.on('error', onError);
+        video.events.on('ended', onEnded);
+        video.events.on('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
+        video.events.on('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
+        video.events.on('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
+        video.events.on('implementationChanged', onImplementationChanged);
+
+        return () => {
+            video.events.off('error', onError);
+            video.events.off('ended', onEnded);
+            video.events.off('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
+            video.events.off('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
+            video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
+            video.events.off('implementationChanged', onImplementationChanged);
+        };
+    }, []);
 
     React.useLayoutEffect(() => {
         return () => {
