@@ -219,7 +219,7 @@ const Player = ({ urlParams, queryParams }) => {
 
             const deepLinks = player.nextVideo.deepLinks;
             if (deepLinks.metaDetailsStreams && deepLinks.player) {
-                window.location.href = deepLinks.player;
+                window.location.replace(deepLinks.player);
             } else {
                 window.location.replace(deepLinks.player ?? deepLinks.metaDetailsStreams);
             }
@@ -620,11 +620,7 @@ const Player = ({ urlParams, queryParams }) => {
             video.events.off('implementationChanged', onImplementationChanged);
         };
     }, [
-        onError,
         onEnded,
-        onSubtitlesTrackLoaded,
-        onExtraSubtitlesTrackLoaded,
-        onExtraSubtitlesTrackAdded,
         onImplementationChanged
     ]);
 
