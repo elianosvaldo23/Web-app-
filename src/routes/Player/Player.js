@@ -215,14 +215,19 @@ const Player = ({ urlParams, queryParams }) => {
 
     const onNextVideoRequested = React.useCallback(() => {
         if (player.nextVideo !== null) {
-            nextVideo();
             const deepLinks = player.nextVideo.deepLinks;
-
-            if (deepLinks.player) {
-                window.location.replace(deepLinks.player);
-            } else if (deepLinks.metaDetailsStreams) {
-                window.location.replace(deepLinks.metaDetailsStreams);
-            }
+            const navigateToPlayer = deepLinks.player ? deepLinks.player : null;
+            const navigateToDetails = deepLinks.metaDetailsStreams ? deepLinks.metaDetailsStreams : null;
+            
+            nextVideo();
+            
+            requestAnimationFrame(() => {
+                if (navigateToPlayer) {
+                    window.location.replace(navigateToPlayer);
+                } else if (navigateToDetails) {
+                    window.location.replace(navigateToDetails);
+                }
+            });
         }
     }, [player.nextVideo]);
 
