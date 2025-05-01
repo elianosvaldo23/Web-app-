@@ -216,12 +216,12 @@ const Player = ({ urlParams, queryParams }) => {
     const onNextVideoRequested = React.useCallback(() => {
         if (player.nextVideo !== null) {
             nextVideo();
-
             const deepLinks = player.nextVideo.deepLinks;
-            if (deepLinks.metaDetailsStreams && deepLinks.player) {
+
+            if (deepLinks.player) {
                 window.location.replace(deepLinks.player);
-            } else {
-                window.location.replace(deepLinks.player ?? deepLinks.metaDetailsStreams);
+            } else if (deepLinks.metaDetailsStreams) {
+                window.location.replace(deepLinks.metaDetailsStreams);
             }
         }
     }, [player.nextVideo]);
