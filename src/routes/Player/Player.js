@@ -218,9 +218,9 @@ const Player = ({ urlParams, queryParams }) => {
             const deepLinks = player.nextVideo.deepLinks;
             const navigateToPlayer = deepLinks.player ? deepLinks.player : null;
             const navigateToDetails = deepLinks.metaDetailsStreams ? deepLinks.metaDetailsStreams : null;
-            
+    
             nextVideo();
-            
+    
             requestAnimationFrame(() => {
                 if (navigateToPlayer) {
                     window.location.replace(navigateToPlayer);
