@@ -85,6 +85,8 @@ const Player = ({ urlParams, queryParams }) => {
 
     const nextVideoHandledRef = React.useRef(false);
     const nextVideoPopupDismissed = React.useRef(false);
+    const nextVideoInitialData = React.useRef(player.nextVideo);
+    nextVideoInitialData.current = player.nextVideo;
     const defaultSubtitlesSelected = React.useRef(false);
     const defaultAudioTrackSelected = React.useRef(false);
     const [error, setError] = React.useState(null);
@@ -103,6 +105,7 @@ const Player = ({ urlParams, queryParams }) => {
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
     const onEnded = React.useCallback(() => {
+        player.nextVideo = nextVideoInitialData.current;
         ended();
         if (player.nextVideo !== null) {
             onNextVideoRequested();
@@ -216,35 +219,13 @@ const Player = ({ urlParams, queryParams }) => {
 
     const onNextVideoRequested = React.useCallback(() => {
         if (player.nextVideo !== null) {
-            // Call nextVideo only for analytics
             nextVideo();
-
-            // Capture navigation data
-            const navigationLink = player.nextVideo.deepLinks.player ||
-                player.nextVideo.deepLinks.metaDetailsStreams;
-
-            if (navigationLink) {
-                // Force immediate navigation with no chance of React re-renders affecting it
-                // This bypasses the React lifecycle entirely
-                const navigateImmediately = () => {
-                    const form = document.createElement('form');
-                    form.style.display = 'none';
-                    form.method = 'GET';
-                    form.action = navigationLink;
-
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'navigationFromPlayer';
-                    input.value = 'true';
-                    form.appendChild(input);
-
-                    // Force immediate navigation
-                    document.body.appendChild(form);
-                    form.submit();
-                };
-
-                // Execute immediately
-                navigateImmediately();
+            const deepLinks = player.nextVideo.deepLinks;
+            if (deepLinks.metaDetailsStreams && deepLinks.player) {
+                window.location.replace(deepLinks.metaDetailsStreams);
+                window.location.href = deepLinks.player;
+            } else {
+                window.location.replace(deepLinks.player ?? deepLinks.metaDetailsStreams);
             }
         }
     }, [player.nextVideo]);
@@ -655,22 +636,6 @@ const Player = ({ urlParams, queryParams }) => {
             onPlayRequestedDebounced.cancel();
             onPauseRequestedDebounced.cancel();
         };
-    }, []);
-
-    React.useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        // eslint-disable-next-line
-        const cameFromPlayer = urlParams.get('navigationFromPlayer');
-
-        if (cameFromPlayer === 'true') {
-            // eslint-disable-next-line
-            urlParams.delete('navigationFromPlayer');
-            const newUrl = window.location.pathname +
-                (urlParams.toString() ? '?' + urlParams.toString() : '') +
-                window.location.hash;
-
-            window.history.replaceState({}, '', newUrl);
-        }
     }, []);
 
     return (
