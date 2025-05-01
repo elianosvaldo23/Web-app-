@@ -219,7 +219,6 @@ const Player = ({ urlParams, queryParams }) => {
 
             const deepLinks = player.nextVideo.deepLinks;
             if (deepLinks.metaDetailsStreams && deepLinks.player) {
-                window.location.replace(deepLinks.metaDetailsStreams);
                 window.location.href = deepLinks.player;
             } else {
                 window.location.replace(deepLinks.player ?? deepLinks.metaDetailsStreams);
