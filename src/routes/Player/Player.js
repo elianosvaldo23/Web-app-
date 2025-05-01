@@ -102,6 +102,7 @@ const Player = ({ urlParams, queryParams }) => {
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
     const onEnded = React.useCallback(() => {
+        console.log('Player in on ended callback', player.nextVideo); // eslint-disable-line no-console
         ended();
         if (player.nextVideo !== null) {
             onNextVideoRequested();
@@ -215,19 +216,26 @@ const Player = ({ urlParams, queryParams }) => {
 
     const onNextVideoRequested = React.useCallback(() => {
         if (player.nextVideo !== null) {
-            const deepLinks = player.nextVideo.deepLinks;
-            const navigateToPlayer = deepLinks.player ? deepLinks.player : null;
-            const navigateToDetails = deepLinks.metaDetailsStreams ? deepLinks.metaDetailsStreams : null;
+            const navigationData = {
+                playerLink: player.nextVideo.deepLinks.player,
+                metaDetailsLink: player.nextVideo.deepLinks.metaDetailsStreams
+            };
 
-            nextVideo();
-
-            requestAnimationFrame(() => {
-                if (navigateToPlayer) {
-                    window.location.replace(navigateToPlayer);
-                } else if (navigateToDetails) {
-                    window.location.replace(navigateToDetails);
-                }
-            });
+            if (navigationData.playerLink) {
+                requestAnimationFrame(() => {
+                    window.location.replace(navigationData.playerLink);
+                });
+                setTimeout(() => {
+                    nextVideo();
+                }, 500);
+            } else if (navigationData.metaDetailsLink) {
+                requestAnimationFrame(() => {
+                    window.location.replace(navigationData.metaDetailsLink);
+                });
+                setTimeout(() => {
+                    nextVideo();
+                }, 500);
+            }
         }
     }, [player.nextVideo]);
 
@@ -628,6 +636,10 @@ const Player = ({ urlParams, queryParams }) => {
         onEnded,
         onImplementationChanged
     ]);
+
+    React.useEffect(() => {
+        console.log('Player next video in use effect', player.nextVideo); // eslint-disable-line no-console
+    }, [player.nextVideo]);
 
     React.useLayoutEffect(() => {
         return () => {
