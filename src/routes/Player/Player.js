@@ -83,6 +83,7 @@ const Player = ({ urlParams, queryParams }) => {
         return immersed && !casting && video.state.paused !== null && !video.state.paused && !menusOpen && !nextVideoPopupOpen;
     }, [immersed, casting, video.state.paused, menusOpen, nextVideoPopupOpen]);
 
+    const nextVideoHandledRef = React.useRef(false);
     const nextVideoPopupDismissed = React.useRef(false);
     const defaultSubtitlesSelected = React.useRef(false);
     const defaultAudioTrackSelected = React.useRef(false);
@@ -215,26 +216,22 @@ const Player = ({ urlParams, queryParams }) => {
     }, []);
 
     const onNextVideoRequested = React.useCallback(() => {
-        if (player.nextVideo !== null) {
+        if (player.nextVideo !== null && !nextVideoHandledRef.current) {
+            nextVideoHandledRef.current = true;
+
             const navigationData = {
                 playerLink: player.nextVideo.deepLinks.player,
                 metaDetailsLink: player.nextVideo.deepLinks.metaDetailsStreams
             };
 
-            if (navigationData.playerLink) {
-                requestAnimationFrame(() => {
-                    window.location.replace(navigationData.playerLink);
-                });
-                setTimeout(() => {
-                    nextVideo();
-                }, 500);
-            } else if (navigationData.metaDetailsLink) {
-                requestAnimationFrame(() => {
-                    window.location.replace(navigationData.metaDetailsLink);
-                });
-                setTimeout(() => {
-                    nextVideo();
-                }, 500);
+            const targetLink = navigationData.playerLink || navigationData.metaDetailsLink;
+
+            if (targetLink) {
+                nextVideo();
+
+                window.location.replace(targetLink);
+            } else {
+                nextVideo();
             }
         }
     }, [player.nextVideo]);
@@ -430,6 +427,7 @@ const Player = ({ urlParams, queryParams }) => {
         defaultSubtitlesSelected.current = false;
         defaultAudioTrackSelected.current = false;
         nextVideoPopupDismissed.current = false;
+        nextVideoHandledRef.current = false;
     }, [video.state.stream]);
 
     React.useEffect(() => {
@@ -492,6 +490,31 @@ const Player = ({ urlParams, queryParams }) => {
             onPauseRequested();
         }
     }, [settings.pauseOnMinimize, shell.windowClosed, shell.windowHidden]);
+
+    React.useEffect(() => {
+        nextVideoHandledRef.current = false;
+    }, [player.selected]);
+
+    React.useEffect(() => {
+        video.events.on('error', onError);
+        video.events.on('ended', onEnded);
+        video.events.on('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
+        video.events.on('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
+        video.events.on('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
+        video.events.on('implementationChanged', onImplementationChanged);
+
+        return () => {
+            video.events.off('error', onError);
+            video.events.off('ended', onEnded);
+            video.events.off('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
+            video.events.off('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
+            video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
+            video.events.off('implementationChanged', onImplementationChanged);
+        };
+    }, [
+        onEnded,
+        onImplementationChanged
+    ]);
 
     React.useLayoutEffect(() => {
         const onKeyDown = (event) => {
@@ -615,31 +638,6 @@ const Player = ({ urlParams, queryParams }) => {
             window.removeEventListener('wheel', onWheel);
         };
     }, [player.metaItem, player.selected, streamingServer.statistics, settings.seekTimeDuration, settings.seekShortTimeDuration, settings.escExitFullscreen, routeFocused, menusOpen, nextVideoPopupOpen, video.state.paused, video.state.time, video.state.volume, video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks, video.state.playbackSpeed, toggleSubtitlesMenu, toggleStatisticsMenu, toggleSideDrawer]);
-
-    React.useEffect(() => {
-        video.events.on('error', onError);
-        video.events.on('ended', onEnded);
-        video.events.on('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
-        video.events.on('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
-        video.events.on('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
-        video.events.on('implementationChanged', onImplementationChanged);
-
-        return () => {
-            video.events.off('error', onError);
-            video.events.off('ended', onEnded);
-            video.events.off('subtitlesTrackLoaded', onSubtitlesTrackLoaded);
-            video.events.off('extraSubtitlesTrackLoaded', onExtraSubtitlesTrackLoaded);
-            video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
-            video.events.off('implementationChanged', onImplementationChanged);
-        };
-    }, [
-        onEnded,
-        onImplementationChanged
-    ]);
-
-    React.useEffect(() => {
-        console.log('Player next video in use effect', player.nextVideo); // eslint-disable-line no-console
-    }, [player.nextVideo]);
 
     React.useLayoutEffect(() => {
         return () => {
