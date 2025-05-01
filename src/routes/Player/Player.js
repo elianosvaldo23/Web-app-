@@ -103,7 +103,6 @@ const Player = ({ urlParams, queryParams }) => {
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
     const onEnded = React.useCallback(() => {
-        console.log('Player in on ended callback', player.nextVideo); // eslint-disable-line no-console
         ended();
         if (player.nextVideo !== null) {
             onNextVideoRequested();
@@ -216,22 +215,36 @@ const Player = ({ urlParams, queryParams }) => {
     }, []);
 
     const onNextVideoRequested = React.useCallback(() => {
-        if (player.nextVideo !== null && !nextVideoHandledRef.current) {
-            nextVideoHandledRef.current = true;
+        if (player.nextVideo !== null) {
+            // Call nextVideo only for analytics
+            nextVideo();
 
-            const navigationData = {
-                playerLink: player.nextVideo.deepLinks.player,
-                metaDetailsLink: player.nextVideo.deepLinks.metaDetailsStreams
-            };
+            // Capture navigation data
+            const navigationLink = player.nextVideo.deepLinks.player ||
+                player.nextVideo.deepLinks.metaDetailsStreams;
 
-            const targetLink = navigationData.playerLink || navigationData.metaDetailsLink;
+            if (navigationLink) {
+                // Force immediate navigation with no chance of React re-renders affecting it
+                // This bypasses the React lifecycle entirely
+                const navigateImmediately = () => {
+                    const form = document.createElement('form');
+                    form.style.display = 'none';
+                    form.method = 'GET';
+                    form.action = navigationLink;
 
-            if (targetLink) {
-                nextVideo();
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'navigationFromPlayer';
+                    input.value = 'true';
+                    form.appendChild(input);
 
-                window.location.replace(targetLink);
-            } else {
-                nextVideo();
+                    // Force immediate navigation
+                    document.body.appendChild(form);
+                    form.submit();
+                };
+
+                // Execute immediately
+                navigateImmediately();
             }
         }
     }, [player.nextVideo]);
@@ -511,10 +524,7 @@ const Player = ({ urlParams, queryParams }) => {
             video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
             video.events.off('implementationChanged', onImplementationChanged);
         };
-    }, [
-        onEnded,
-        onImplementationChanged
-    ]);
+    }, [onEnded]);
 
     React.useLayoutEffect(() => {
         const onKeyDown = (event) => {
@@ -645,6 +655,22 @@ const Player = ({ urlParams, queryParams }) => {
             onPlayRequestedDebounced.cancel();
             onPauseRequestedDebounced.cancel();
         };
+    }, []);
+
+    React.useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        // eslint-disable-next-line
+        const cameFromPlayer = urlParams.get('navigationFromPlayer');
+
+        if (cameFromPlayer === 'true') {
+            // eslint-disable-next-line
+            urlParams.delete('navigationFromPlayer');
+            const newUrl = window.location.pathname +
+                (urlParams.toString() ? '?' + urlParams.toString() : '') +
+                window.location.hash;
+
+            window.history.replaceState({}, '', newUrl);
+        }
     }, []);
 
     return (
