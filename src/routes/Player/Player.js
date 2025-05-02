@@ -123,11 +123,13 @@ const Player = ({ urlParams, queryParams }) => {
         
         ended();
         if (player.nextVideo !== null) {
-            onNextVideoRequested();
+            nextVideo();
+            const deepLinks = player.nextVideo.deepLinks;
+            handleNextVideoNavigation(deepLinks);
         } else {
             window.history.back();
         }
-    }, [player.nextVideo, onNextVideoRequested]);
+    }, [player.nextVideo, nextVideo, handleNextVideoNavigation]);
 
     const onError = React.useCallback((error) => {
         console.error('Player', error);
