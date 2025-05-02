@@ -120,7 +120,7 @@ const Player = ({ urlParams, queryParams }) => {
         if (isNavigating.current) {
             return;
         }
-        
+
         ended();
         if (player.nextVideo !== null) {
             nextVideo();
