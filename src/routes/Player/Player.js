@@ -106,11 +106,11 @@ const Player = ({ urlParams, queryParams }) => {
     const handleNextVideoNavigation = React.useCallback((deepLinks) => {
         if (deepLinks.player) {
             isNavigating.current = true;
-            window.location.href = deepLinks.player;
+            window.location.replace(deepLinks.player);
             return true;
         } else if (deepLinks.metaDetailsStreams) {
             isNavigating.current = true;
-            window.location.href = deepLinks.metaDetailsStreams;
+            window.location.replace(deepLinks.metaDetailsStreams);
             return true;
         }
         return false;
