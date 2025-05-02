@@ -88,6 +88,8 @@ const Player = ({ urlParams, queryParams }) => {
     const defaultAudioTrackSelected = React.useRef(false);
     const [error, setError] = React.useState(null);
 
+    const isNavigating = React.useRef(false);
+
     const onImplementationChanged = React.useCallback(() => {
         video.setProp('subtitlesSize', settings.subtitlesSize);
         video.setProp('subtitlesOffset', settings.subtitlesOffset);
@@ -101,7 +103,24 @@ const Player = ({ urlParams, queryParams }) => {
         video.setProp('extraSubtitlesOutlineColor', settings.subtitlesOutlineColor);
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
+    const handleNextVideoNavigation = React.useCallback((deepLinks) => {
+        if (deepLinks.player) {
+            isNavigating.current = true;
+            window.location.href = deepLinks.player;
+            return true;
+        } else if (deepLinks.metaDetailsStreams) {
+            isNavigating.current = true;
+            window.location.href = deepLinks.metaDetailsStreams;
+            return true;
+        }
+        return false;
+    }, []);
+
     const onEnded = React.useCallback(() => {
+        if (isNavigating.current) {
+            return;
+        }
+        
         ended();
         if (player.nextVideo !== null) {
             onNextVideoRequested();
@@ -218,14 +237,9 @@ const Player = ({ urlParams, queryParams }) => {
             nextVideo();
 
             const deepLinks = player.nextVideo.deepLinks;
-            if (deepLinks.metaDetailsStreams && deepLinks.player) {
-                window.location.replace(deepLinks.metaDetailsStreams);
-                window.location.href = deepLinks.player;
-            } else {
-                window.location.replace(deepLinks.player ?? deepLinks.metaDetailsStreams);
-            }
+            handleNextVideoNavigation(deepLinks);
         }
-    }, [player.nextVideo]);
+    }, [player.nextVideo, handleNextVideoNavigation]);
 
     const onVideoClick = React.useCallback(() => {
         if (video.state.paused !== null) {
