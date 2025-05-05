@@ -107,13 +107,10 @@ const Player = ({ urlParams, queryParams }) => {
         if (deepLinks.player) {
             isNavigating.current = true;
             window.location.replace(deepLinks.player);
-            return true;
         } else if (deepLinks.metaDetailsStreams) {
             isNavigating.current = true;
             window.location.replace(deepLinks.metaDetailsStreams);
-            return true;
         }
-        return false;
     }, []);
 
     const onEnded = React.useCallback(() => {
