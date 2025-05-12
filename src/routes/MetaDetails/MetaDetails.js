@@ -36,6 +36,12 @@ const MetaDetails = ({ urlParams, queryParams }) => {
             :
             null;
     }, [metaDetails.metaItem, streamPath]);
+    const rating = React.useMemo(() => {
+        return metaDetails.rating !== null && metaDetails.rating.type === 'Ready' ?
+            metaDetails.rating.content
+            :
+            null;
+    }, [metaDetails.rating]);
     const addToLibrary = React.useCallback(() => {
         if (metaDetails.metaItem === null || metaDetails.metaItem.content.type !== 'Ready') {
             return;
@@ -73,6 +79,22 @@ const MetaDetails = ({ urlParams, queryParams }) => {
             });
         }
     }, [metaDetails.libraryItem]);
+    const setRating = React.useCallback((status) => {
+        if ((metaDetails.metaItem === null || metaDetails.metaItem.content.type !== 'Ready') || (metaDetails.rating === null || metaDetails.rating.type === 'Loading') || (metaDetails.sentRating === null || metaDetails.sentRating.type === 'Loading')) {
+            return;
+        }
+
+        core.transport.dispatch({
+            action: 'MetaDetails',
+            args: {
+                action: 'Rate',
+                args: {
+                    id: metaDetails.metaItem.id,
+                    status: status
+                }
+            }
+        });
+    }, [metaDetails]);
     const seasonOnSelect = React.useCallback((event) => {
         setSeason(event.value);
     }, [setSeason]);
@@ -156,6 +178,8 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                                             runtime={metaDetails.metaItem.content.content.runtime}
                                             releaseInfo={metaDetails.metaItem.content.content.releaseInfo}
                                             released={metaDetails.metaItem.content.content.released}
+                                            rating={rating}
+                                            setRating={setRating}
                                             description={
                                                 video !== null && typeof video.overview === 'string' && video.overview.length > 0 ?
                                                     video.overview

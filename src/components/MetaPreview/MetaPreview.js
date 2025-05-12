@@ -24,7 +24,7 @@ const ALLOWED_LINK_REDIRECTS = [
     routesRegexp.metadetails.regexp
 ];
 
-const MetaPreview = ({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary }) => {
+const MetaPreview = ({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary, rating, setRating }) => {
     const { t } = useTranslation();
     const [shareModalOpen, openShareModal, closeShareModal] = useBinaryState(false);
     const linksGroups = React.useMemo(() => {
@@ -97,6 +97,12 @@ const MetaPreview = ({ className, compact, name, logo, background, runtime, rele
     const renderLogoFallback = React.useCallback(() => (
         <div className={styles['logo-placeholder']}>{name}</div>
     ), [name]);
+    const onLiked = React.useCallback(() => {
+        setRating(rating === 'liked' ? null : 'liked');
+    }, [rating]);
+    const onLoved = React.useCallback(() => {
+        setRating(rating === 'loved' ? null : 'loved');
+    }, [rating]);
     return (
         <div className={classnames(className, styles['meta-preview-container'], { [styles['compact']]: compact })}>
             {
@@ -153,9 +159,21 @@ const MetaPreview = ({ className, compact, name, logo, background, runtime, rele
                                     :
                                     null
                             }
+                            {
+                                <div className={styles['release-info-label']}>
+                                    <div className={styles['icon-container']}>
+                                        <Button className={styles['icon-button']} onClick={onLiked}>
+                                            <Icon name={'volume-medium'} className={styles['icon']} />
+                                        </Button>
+                                        <Button className={styles['icon-button']} onClick={onLoved}>
+                                            <Icon name={'volume-high'} className={styles['icon']} />
+                                        </Button>
+                                    </div>
+                                    {rating}
+                                </div>
+                            }
                         </div>
-                        :
-                        null
+                        : null
                 }
                 {
                     compact && typeof description === 'string' && description.length > 0 ?
@@ -275,6 +293,8 @@ MetaPreview.propTypes = {
     releaseInfo: PropTypes.string,
     released: PropTypes.instanceOf(Date),
     description: PropTypes.string,
+    rating: PropTypes.string,
+    setRating: PropTypes.func,
     deepLinks: PropTypes.shape({
         metaDetailsVideos: PropTypes.string,
         metaDetailsStreams: PropTypes.string,
