@@ -1,6 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useNavigate } = require('react-router');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const { t } = require('i18next');
@@ -15,6 +16,7 @@ const styles = require('./styles');
 const Video = ({ className, id, title, thumbnail, season, episode, released, upcoming, watched, progress, scheduled, seasonWatched, deepLinks, onMarkVideoAsWatched, onMarkSeasonAsWatched, ...props }) => {
     const routeFocused = useRouteFocused();
     const profile = useProfile();
+    const navigate = useNavigate();
     const [menuOpen, , closeMenu, toggleMenu] = useBinaryState(false);
     const popupLabelOnMouseUp = React.useCallback((event) => {
         if (!event.nativeEvent.togglePopupPrevented) {
@@ -61,9 +63,10 @@ const Video = ({ className, id, title, thumbnail, season, episode, released, upc
     const videoButtonOnClick = React.useCallback(() => {
         if (deepLinks) {
             if (typeof deepLinks.player === 'string') {
-                window.location = deepLinks.player;
+                // TODO: remove # from deeplinks in core
+                navigate(deepLinks.player.replace('#', ''));
             } else if (typeof deepLinks.metaDetailsStreams === 'string') {
-                window.location.replace(deepLinks.metaDetailsStreams);
+                navigate(deepLinks.metaDetailsStreams.replace('#', ''), { replace: true });
             }
         }
     }, [deepLinks]);
