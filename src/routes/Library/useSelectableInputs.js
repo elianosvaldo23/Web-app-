@@ -1,9 +1,10 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useNavigate } = require('react-router');
 const { useTranslate } = require('stremio/common');
 
-const mapSelectableInputs = (library, t) => {
+const mapSelectableInputs = (library, t, navigate) => {
     const selectedType = library.selectable.types
         .filter(({ selected }) => selected).map(({ deepLinks }) => deepLinks.library);
     const typeSelect = {
@@ -17,7 +18,7 @@ const mapSelectableInputs = (library, t) => {
             ? selectedType
             : [library.selectable.types[0]].map(({ deepLinks }) => deepLinks.library),
         onSelect: (event) => {
-            window.location = event.value;
+            navigate(event.value.replace('#', ''));
         }
     };
     const sortChips = {
@@ -30,7 +31,7 @@ const mapSelectableInputs = (library, t) => {
             .filter(({ selected }) => selected)
             .map(({ deepLinks }) => deepLinks.library),
         onSelect: (value) => {
-            window.location = value;
+            navigate(value.replace('#', ''));
         }
     };
     return [typeSelect, sortChips, library.selectable.nextPage];
@@ -38,8 +39,9 @@ const mapSelectableInputs = (library, t) => {
 
 const useSelectableInputs = (library) => {
     const t = useTranslate();
+    const navigate = useNavigate();
     const selectableInputs = React.useMemo(() => {
-        return mapSelectableInputs(library, t);
+        return mapSelectableInputs(library, t, navigate);
     }, [library]);
     return selectableInputs;
 };

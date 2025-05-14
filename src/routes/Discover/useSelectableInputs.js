@@ -1,9 +1,10 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useNavigate } = require('react-router');
 const { useTranslate } = require('stremio/common');
 
-const mapSelectableInputs = (discover, t) => {
+const mapSelectableInputs = (discover, t, navigate) => {
     const typeSelect = {
         title: t.string('SELECT_TYPE'),
         options: discover.selectable.types
@@ -19,7 +20,7 @@ const mapSelectableInputs = (discover, t) => {
             :
             null,
         onSelect: (event) => {
-            window.location = event.value;
+            navigate(event.value.replace('#', ''));
         }
     };
     const catalogSelect = {
@@ -42,7 +43,7 @@ const mapSelectableInputs = (discover, t) => {
             :
             null,
         onSelect: (event) => {
-            window.location = event.value;
+            navigate(event.value.replace('#', ''));
         }
     };
     const extraSelects = discover.selectable.extra.map(({ name, isRequired, options }) => ({
@@ -67,7 +68,7 @@ const mapSelectableInputs = (discover, t) => {
             null,
         onSelect: (event) => {
             const { href } = JSON.parse(event.value);
-            window.location = href;
+            navigate(href.replace('#', ''));
         }
     }));
     return [[typeSelect, catalogSelect, ...extraSelects], discover.selectable.nextPage];
@@ -75,8 +76,9 @@ const mapSelectableInputs = (discover, t) => {
 
 const useSelectableInputs = (discover) => {
     const t = useTranslate();
+    const navigate = useNavigate();
     const selectableInputs = React.useMemo(() => {
-        return mapSelectableInputs(discover, t);
+        return mapSelectableInputs(discover, t, navigate);
     }, [discover.selected, discover.selectable]);
     return selectableInputs;
 };

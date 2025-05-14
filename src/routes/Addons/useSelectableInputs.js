@@ -1,9 +1,10 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useNavigate } = require('react-router');
 const { useTranslate } = require('stremio/common');
 
-const mapSelectableInputs = (installedAddons, remoteAddons, t) => {
+const mapSelectableInputs = (installedAddons, remoteAddons, t, navigate) => {
     const catalogSelect = {
         title: t.string('SELECT_CATALOG'),
         options: remoteAddons.selectable.catalogs
@@ -26,7 +27,7 @@ const mapSelectableInputs = (installedAddons, remoteAddons, t) => {
             :
             null,
         onSelect: (event) => {
-            window.location = event.value;
+            navigate(event.value.replace('#', ''));
         }
     };
     const typeSelect = {
@@ -62,7 +63,7 @@ const mapSelectableInputs = (installedAddons, remoteAddons, t) => {
                     typeSelect.title;
         },
         onSelect: (event) => {
-            window.location = event.value;
+            navigate(event.value.replace('#', ''));
         }
     };
     return [catalogSelect, typeSelect];
@@ -70,8 +71,9 @@ const mapSelectableInputs = (installedAddons, remoteAddons, t) => {
 
 const useSelectableInputs = (installedAddons, remoteAddons) => {
     const t = useTranslate();
+    const navigate = useNavigate();
     const selectableInputs = React.useMemo(() => {
-        return mapSelectableInputs(installedAddons, remoteAddons, t);
+        return mapSelectableInputs(installedAddons, remoteAddons, t, navigate);
     }, [installedAddons, remoteAddons]);
     return selectableInputs;
 };
