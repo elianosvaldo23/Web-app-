@@ -22,7 +22,9 @@ const useFullscreen = () => {
         if (shell.active) {
             shell.send('win-set-visibility', { fullscreen: false });
         } else {
-            document.exitFullscreen();
+            if (document.fullscreenElement === document.documentElement) {
+                document.exitFullscreen();
+            }
         }
     }, []);
 
