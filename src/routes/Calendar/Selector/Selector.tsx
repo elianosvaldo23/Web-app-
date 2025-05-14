@@ -1,6 +1,7 @@
 // Copyright (C) 2017-2024 Smart code 203358507
 
 import React, { useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router';
 import Icon from '@stremio/stremio-icons/react';
 import { Button } from 'stremio/components';
 import useCalendarDate from '../useCalendarDate';
@@ -14,17 +15,18 @@ type Props = {
 
 const Selector = ({ selected, selectable, profile }: Props) => {
     const { toMonth } = useCalendarDate(profile);
+    const navigate = useNavigate();
 
     const [prev, next] = useMemo(() => (
         [selectable.prev, selectable.next]
     ), [selectable]);
 
     const onPrev = useCallback(() => {
-        window.location.href = prev.deepLinks.calendar;
+        navigate(prev.deepLinks.calendar.replace('#', ''));
     }, [prev]);
 
     const onNext = useCallback(() => {
-        window.location.href = next.deepLinks.calendar;
+        navigate(next.deepLinks.calendar.replace('#', ''));
     }, [next]);
 
     return (
