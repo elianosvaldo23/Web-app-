@@ -1,7 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
-const { useParams } = require('react-router');
+const { useParams, useLocation, useNavigate } = require('react-router');
 const classnames = require('classnames');
 const { useServices } = require('stremio/services');
 const { withCoreSuspender } = require('stremio/common');
@@ -15,6 +15,8 @@ const styles = require('./styles');
 
 const MetaDetails = () => {
     const urlParams = useParams();
+    const location = useLocation();
+    const navigate = useNavigate();
     const { core } = useServices();
     const metaDetails = useMetaDetails(urlParams);
     const [season, setSeason] = useSeason(urlParams);
@@ -79,10 +81,11 @@ const MetaDetails = () => {
     }, [setSeason]);
     const handleEpisodeSearch = React.useCallback((season, episode) => {
         const searchVideoHash = encodeURIComponent(`${urlParams.id}:${season}:${episode}`);
-        const url = window.location.hash;
+        const url = location.hash;
+        console.log(location);
         const searchVideoPath = url.replace(encodeURIComponent(urlParams.videoId), searchVideoHash);
-        window.location = searchVideoPath;
-    }, [urlParams, window.location]);
+        navigate(searchVideoPath.replace('#', ''));
+    }, [urlParams, location]);
 
     const renderBackgroundImageFallback = React.useCallback(() => null, []);
     const renderBackground = React.useMemo(() => !!(
