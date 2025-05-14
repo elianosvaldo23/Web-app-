@@ -81,10 +81,9 @@ const MetaDetails = () => {
     }, [setSeason]);
     const handleEpisodeSearch = React.useCallback((season, episode) => {
         const searchVideoHash = encodeURIComponent(`${urlParams.id}:${season}:${episode}`);
-        const url = location.hash;
-        console.log(location);
+        const url = location.pathname;
         const searchVideoPath = url.replace(encodeURIComponent(urlParams.videoId), searchVideoHash);
-        navigate(searchVideoPath.replace('#', ''));
+        navigate(searchVideoPath);
     }, [urlParams, location]);
 
     const renderBackgroundImageFallback = React.useCallback(() => null, []);

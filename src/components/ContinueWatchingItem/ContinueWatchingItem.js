@@ -13,7 +13,7 @@ const ContinueWatchingItem = ({ _id, notifications, deepLinks, ...props }) => {
     const onClick = React.useCallback(() => {
         if (deepLinks?.metaDetailsVideos ?? deepLinks?.metaDetailsStreams) {
             // TODO - remove # from deeplinks in core if possible
-            const navigateTo = deepLinks?.metaDetailsVideos ?? deepLinks?.metaDetailsStreams
+            const navigateTo = deepLinks?.metaDetailsVideos ?? deepLinks?.metaDetailsStreams;
             navigate(navigateTo.replace('#', ''));
         }
     }, [deepLinks]);
@@ -21,7 +21,7 @@ const ContinueWatchingItem = ({ _id, notifications, deepLinks, ...props }) => {
     const onPlayClick = React.useCallback((event) => {
         event.stopPropagation();
         if (deepLinks?.player ?? deepLinks?.metaDetailsStreams ?? deepLinks?.metaDetailsVideos) {
-            const navigateTo = deepLinks?.player ?? deepLinks?.metaDetailsStreams ?? deepLinks?.metaDetailsVideos
+            const navigateTo = deepLinks?.player ?? deepLinks?.metaDetailsStreams ?? deepLinks?.metaDetailsVideos;
             navigate(navigateTo.replace('#', ''));
         }
     }, [deepLinks]);
