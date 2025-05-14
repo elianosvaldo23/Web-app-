@@ -1,7 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
-const { useLocation, useParams } = require('react-router');
+const { useLocation, useParams, useNavigate } = require('react-router');
 const { useSearchParams } = require('react-router-dom');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
@@ -42,6 +42,7 @@ function withModel(Library, useLocation) {
 const Library = ({ model }) => {
     const urlParams = useParams();
     const [queryParams] = useSearchParams();
+    const navigate = useNavigate();
     const profile = useProfile();
     const notifications = useNotifications();
     const [library, loadNextPage] = useLibrary(model, urlParams, queryParams);
@@ -60,7 +61,7 @@ const Library = ({ model }) => {
     }, [profile.auth, library.selected]);
     React.useEffect(() => {
         if (!library.selected?.type && typeSelect.selected) {
-            window.location = typeSelect.selected[0];
+            navigate(typeSelect.selected[0].replace('#', ''));
         }
     }, [typeSelect.selected, library.selected]);
     return (
