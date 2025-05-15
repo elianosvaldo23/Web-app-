@@ -223,10 +223,13 @@ const Player = () => {
 
             const deepLinks = player.nextVideo.deepLinks;
             if (deepLinks.metaDetailsStreams && deepLinks.player) {
-                window.location.replace(deepLinks.metaDetailsStreams);
-                window.location.href = deepLinks.player;
+                navigate(deepLinks.metaDetailsStreams.replace('#', ''), { replace: true });
+                setTimeout(() => {
+                    navigate(deepLinks.player.replace('#', ''));
+                }, 0);
             } else {
-                window.location.replace(deepLinks.player ?? deepLinks.metaDetailsStreams);
+                const navigateTo = deepLinks.player ?? deepLinks.metaDetailsStreams;
+                navigate(navigateTo.replace('#', ''));
             }
         }
     }, [player.nextVideo]);
