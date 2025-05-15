@@ -578,7 +578,7 @@ const Player = () => {
                 }
                 case 'Escape': {
                     closeMenus();
-                    !settings.escExitFullscreen && window.history.back();
+                    !settings.escExitFullscreen && navigate(-1);
                     break;
                 }
             }

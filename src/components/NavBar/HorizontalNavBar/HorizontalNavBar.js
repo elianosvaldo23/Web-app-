@@ -1,6 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useNavigate } = require('react-router');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const { default: Icon } = require('@stremio/stremio-icons/react');
@@ -13,8 +14,9 @@ const styles = require('./styles');
 const { t } = require('i18next');
 
 const HorizontalNavBar = React.memo(({ className, route, query, title, backButton, searchBar, fullscreenButton, navMenu, ...props }) => {
+    const navigate = useNavigate();
     const backButtonOnClick = React.useCallback(() => {
-        window.history.back();
+        navigate(-1);
     }, []);
     const [fullscreen, requestFullscreen, exitFullscreen] = useFullscreen();
     const [isIOSPWA] = usePWA();
