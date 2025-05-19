@@ -32,17 +32,17 @@ const useModelState = ({ action, ...args }) => {
             }
         }
     );
-    React.useInsertionEffect(() => {
+    React.useLayoutEffect(() => {
         if (action) {
             core.transport.dispatch(action, model);
         }
-    }, [action]);
-    React.useInsertionEffect(() => {
+    }, []);
+    React.useLayoutEffect(() => {
         return () => {
             core.transport.dispatch({ action: 'Unload' }, model);
         };
     }, []);
-    React.useInsertionEffect(() => {
+    React.useLayoutEffect(() => {
         const onNewState = async (models) => {
             if (models.indexOf(model) === -1 && (!Array.isArray(deps) || intersection(deps, models).length === 0)) {
                 return;
@@ -67,7 +67,7 @@ const useModelState = ({ action, ...args }) => {
             core.transport.off('NewState', onNewStateThrottled);
         };
     }, [routeFocused]);
-    React.useInsertionEffect(() => {
+    React.useLayoutEffect(() => {
         mountedRef.current = true;
     }, []);
     return state;
