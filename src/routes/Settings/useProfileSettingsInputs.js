@@ -65,10 +65,13 @@ const useProfileSettingsInputs = (profile) => {
     }), [profile.settings]);
 
     const subtitlesLanguageSelect = React.useMemo(() => ({
-        options: Object.keys(languageNames).map((code) => ({
-            value: code,
-            label: languageNames[code]
-        })),
+        options: [
+            { value: null, label: t('NONE') },
+            ...Object.keys(languageNames).map((code) => ({
+                value: code,
+                label: languageNames[code]
+            }))
+        ],
         selected: [profile.settings.subtitlesLanguage],
         onSelect: (event) => {
             core.transport.dispatch({
