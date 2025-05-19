@@ -1,7 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
-const { useParams, useNavigate } = require('react-router');
+const { useParams, useNavigate, replace } = require('react-router');
 const { useSearchParams } = require('react-router-dom');
 const classnames = require('classnames');
 const debounce = require('lodash.debounce');
@@ -92,6 +92,8 @@ const Player = () => {
     const defaultAudioTrackSelected = React.useRef(false);
     const [error, setError] = React.useState(null);
 
+    const isNavigating = React.useRef(false);
+
     const onImplementationChanged = React.useCallback(() => {
         video.setProp('subtitlesSize', settings.subtitlesSize);
         video.setProp('subtitlesOffset', settings.subtitlesOffset);
@@ -105,7 +107,21 @@ const Player = () => {
         video.setProp('extraSubtitlesOutlineColor', settings.subtitlesOutlineColor);
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
+    const handleNextVideoNavigation = React.useCallback((deepLinks) => {
+        if (deepLinks.player) {
+            isNavigating.current = true;
+            navigate(deepLinks.player.replace('#', '', { replace: true }));
+        } else if (deepLinks.metaDetailsStreams) {
+            isNavigating.current = true;
+            navigate(deepLinks.metaDetailsStreams.replace('#', '', { replace: true }));
+        }
+    }, []);
+
     const onEnded = React.useCallback(() => {
+        if (isNavigating.current) {
+            return;
+        }
+
         ended();
         if (player.nextVideo !== null) {
             onNextVideoRequested();
@@ -222,17 +238,9 @@ const Player = () => {
             nextVideo();
 
             const deepLinks = player.nextVideo.deepLinks;
-            if (deepLinks.metaDetailsStreams && deepLinks.player) {
-                navigate(deepLinks.metaDetailsStreams.replace('#', ''), { replace: true });
-                setTimeout(() => {
-                    navigate(deepLinks.player.replace('#', ''));
-                }, 0);
-            } else {
-                const navigateTo = deepLinks.player ?? deepLinks.metaDetailsStreams;
-                navigate(navigateTo.replace('#', ''));
-            }
+            handleNextVideoNavigation(deepLinks);
         }
-    }, [player.nextVideo]);
+    }, [player.nextVideo, handleNextVideoNavigation]);
 
     const onVideoClick = React.useCallback(() => {
         if (video.state.paused !== null) {
@@ -627,14 +635,7 @@ const Player = () => {
             video.events.off('extraSubtitlesTrackAdded', onExtraSubtitlesTrackAdded);
             video.events.off('implementationChanged', onImplementationChanged);
         };
-    }, [
-        onError,
-        onEnded,
-        onSubtitlesTrackLoaded,
-        onExtraSubtitlesTrackLoaded,
-        onExtraSubtitlesTrackAdded,
-        onImplementationChanged
-    ]);
+    }, []);
 
     React.useLayoutEffect(() => {
         return () => {
