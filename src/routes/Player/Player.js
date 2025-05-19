@@ -103,7 +103,7 @@ const Player = ({ urlParams, queryParams }) => {
         video.setProp('extraSubtitlesOutlineColor', settings.subtitlesOutlineColor);
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
-    const handleNextVideoNavigation = React.useCallback((deepLinks) => {
+    const handleNextVideoNavigation = (deepLinks) => {
         if (deepLinks.player) {
             isNavigating.current = true;
             window.location.replace(deepLinks.player);
@@ -111,20 +111,16 @@ const Player = ({ urlParams, queryParams }) => {
             isNavigating.current = true;
             window.location.replace(deepLinks.metaDetailsStreams);
         }
-    }, []);
+    };
 
-    const onEnded = React.useCallback(() => {
-        if (isNavigating.current) {
-            return;
-        }
-
+    const onEnded = () => {
         ended();
-        if (player.nextVideo !== null) {
+        if (window.playerNextVideo !== null) {
             onNextVideoRequested();
         } else {
             window.history.back();
         }
-    }, [player.nextVideo, onNextVideoRequested]);
+    };
 
     const onError = React.useCallback((error) => {
         console.error('Player', error);
@@ -229,14 +225,14 @@ const Player = ({ urlParams, queryParams }) => {
         nextVideoPopupDismissed.current = true;
     }, []);
 
-    const onNextVideoRequested = React.useCallback(() => {
-        if (player.nextVideo !== null) {
+    const onNextVideoRequested = () => {
+        if (window.playerNextVideo !== null) {
             nextVideo();
 
-            const deepLinks = player.nextVideo.deepLinks;
+            const deepLinks = window.playerNextVideo.deepLinks;
             handleNextVideoNavigation(deepLinks);
         }
-    }, [player.nextVideo, handleNextVideoNavigation]);
+    };
 
     const onVideoClick = React.useCallback(() => {
         if (video.state.paused !== null) {
@@ -394,6 +390,12 @@ const Player = ({ urlParams, queryParams }) => {
                 closeNextVideoPopup();
             }
         }
+        if (player.nextVideo) {
+            // This is a workaround for the fact that when we call onEnded nextVideo from the player is already set to null since core unloads the stream
+            // we explicitly set it to a global variable so we can access it in the onEnded function
+            // this is not a good solution but it works for now
+            window.playerNextVideo = player.nextVideo;
+        }
     }, [player.nextVideo, video.state.time, video.state.duration]);
 
     React.useEffect(() => {
@@ -429,6 +431,7 @@ const Player = ({ urlParams, queryParams }) => {
         defaultSubtitlesSelected.current = false;
         defaultAudioTrackSelected.current = false;
         nextVideoPopupDismissed.current = false;
+        isNavigating.current = false;
     }, [video.state.stream]);
 
     React.useEffect(() => {
