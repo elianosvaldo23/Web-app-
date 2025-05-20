@@ -12,21 +12,22 @@ const Routes = () => {
     const profile = useProfile();
     const previousAuthRef = React.useRef(profile.auth);
 
-    React.useEffect(() => {
-        if (previousAuthRef.current !== null && profile.auth === null) {
-            previousAuthRef.current = profile.auth;
-            navigate('/intro', { replace: true });
-        }
-    }, [profile]);
-
     /**
      * Replaced onRouteChange with following useEffect:
      */
     React.useEffect(() => {
+        // Handle redirect if user logs out
+        if (previousAuthRef.current !== null && profile.auth === null) {
+            previousAuthRef.current = profile.auth;
+            navigate('/intro', { replace: true });
+        }
+
+        // Handle redirect if user is logged in on intro screen
         if (profile.auth !== null && location.pathname === '/intro') {
             navigate('/', { replace: true });
         }
-    }, [location, profile.auth, navigate]);
+        previousAuthRef.current = profile.auth;
+    }, [location, profile.auth, navigate, previousAuthRef.current]);
 
     const routes = routerPaths.map((route) =>
         <RRoute key={route.path} path={route.path} element={<Route component={route.element} />} />
