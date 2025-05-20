@@ -5,7 +5,7 @@ const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const { default: Icon } = require('@stremio/stremio-icons/react');
 const { useServices } = require('stremio/services');
-const { CONSTANTS, useBinaryState, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
+const { CONSTANTS, useBinaryState, useOnScrollToBottom, withCoreSuspender, usePlatform } = require('stremio/common');
 const { AddonDetailsModal, Button, DelayedRenderer, Image, MainNavBars, MetaItem, MetaPreview, Multiselect, ModalDialog } = require('stremio/components');
 const useDiscover = require('./useDiscover');
 const useSelectableInputs = require('./useSelectableInputs');
@@ -15,6 +15,7 @@ const SCROLL_TO_BOTTOM_THRESHOLD = 400;
 
 const Discover = ({ urlParams, queryParams }) => {
     const { core } = useServices();
+    const platform = usePlatform();
     const [discover, loadNextPage] = useDiscover(urlParams, queryParams);
     const [selectInputs, hasNextPage] = useSelectableInputs(discover);
     const [inputsModalOpen, openInputsModal, closeInputsModal] = useBinaryState(false);
@@ -75,7 +76,7 @@ const Discover = ({ urlParams, queryParams }) => {
         }
     }, []);
     const metaItemOnClick = React.useCallback((event) => {
-        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString()) {
+        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString() && !platform.isMobile) {
             event.preventDefault();
             event.currentTarget.focus();
         }
