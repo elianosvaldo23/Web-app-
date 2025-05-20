@@ -440,6 +440,9 @@ const Player = ({ urlParams, queryParams }) => {
         defaultSubtitlesSelected.current = false;
         defaultAudioTrackSelected.current = false;
         nextVideoPopupDismissed.current = false;
+        // we need a timeout here to make sure that previous page unloads and the new one loads
+        // avoiding race conditions and flickering
+        setTimeout(() => isNavigating.current = false, 1000);
     }, [video.state.stream]);
 
     React.useEffect(() => {
