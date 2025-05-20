@@ -103,7 +103,7 @@ const Player = ({ urlParams, queryParams }) => {
         video.setProp('extraSubtitlesOutlineColor', settings.subtitlesOutlineColor);
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
-    const handleNextVideoNavigation = (deepLinks) => {
+    const handleNextVideoNavigation = React.useCallback((deepLinks) => {
         if (deepLinks.player) {
             isNavigating.current = true;
             window.location.replace(deepLinks.player);
@@ -111,16 +111,23 @@ const Player = ({ urlParams, queryParams }) => {
             isNavigating.current = true;
             window.location.replace(deepLinks.metaDetailsStreams);
         }
-    };
+    }, []);
 
-    const onEnded = () => {
+    const onEnded = React.useCallback(() => {
+        if (isNavigating.current) {
+            return;
+        }
+
         ended();
         if (window.playerNextVideo !== null) {
-            onNextVideoRequested();
+            nextVideo();
+
+            const deepLinks = window.playerNextVideo.deepLinks;
+            handleNextVideoNavigation(deepLinks);
         } else {
             window.history.back();
         }
-    };
+    }, []);
 
     const onError = React.useCallback((error) => {
         console.error('Player', error);
@@ -225,14 +232,14 @@ const Player = ({ urlParams, queryParams }) => {
         nextVideoPopupDismissed.current = true;
     }, []);
 
-    const onNextVideoRequested = () => {
-        if (window.playerNextVideo !== null) {
+    const onNextVideoRequested = React.useCallback(() => {
+        if (player.nextVideo !== null) {
             nextVideo();
 
-            const deepLinks = window.playerNextVideo.deepLinks;
+            const deepLinks = player.nextVideo.deepLinks;
             handleNextVideoNavigation(deepLinks);
         }
-    };
+    }, [player.nextVideo, handleNextVideoNavigation]);
 
     const onVideoClick = React.useCallback(() => {
         if (video.state.paused !== null) {
@@ -431,7 +438,6 @@ const Player = ({ urlParams, queryParams }) => {
         defaultSubtitlesSelected.current = false;
         defaultAudioTrackSelected.current = false;
         nextVideoPopupDismissed.current = false;
-        isNavigating.current = false;
     }, [video.state.stream]);
 
     React.useEffect(() => {
