@@ -115,7 +115,7 @@ const Player = ({ urlParams, queryParams }) => {
 
     const onEnded = React.useCallback(() => {
         // here we need to explicitly check for isNavigating.current
-        // because the ended event can be calleb multiple times by MPV inside Shell
+        // the ended event can be called multiple times by MPV inside Shell
         if (isNavigating.current) {
             return;
         }
