@@ -404,6 +404,8 @@ const Player = ({ urlParams, queryParams }) => {
             // we explicitly set it to a global variable so we can access it in the onEnded function
             // this is not a good solution but it works for now
             window.playerNextVideo = player.nextVideo;
+        } else {
+            window.playerNextVideo = null;
         }
     }, [player.nextVideo, video.state.time, video.state.duration]);
 
