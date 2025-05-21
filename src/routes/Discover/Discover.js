@@ -5,7 +5,7 @@ const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const { default: Icon } = require('@stremio/stremio-icons/react');
 const { useServices } = require('stremio/services');
-const { CONSTANTS, useBinaryState, useOnScrollToBottom, withCoreSuspender, usePlatform } = require('stremio/common');
+const { CONSTANTS, useBinaryState, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
 const { AddonDetailsModal, Button, DelayedRenderer, Image, MainNavBars, MetaItem, MetaPreview, Multiselect, ModalDialog } = require('stremio/components');
 const useDiscover = require('./useDiscover');
 const useSelectableInputs = require('./useSelectableInputs');
@@ -15,13 +15,24 @@ const SCROLL_TO_BOTTOM_THRESHOLD = 400;
 
 const Discover = ({ urlParams, queryParams }) => {
     const { core } = useServices();
-    const platform = usePlatform();
     const [discover, loadNextPage] = useDiscover(urlParams, queryParams);
     const [selectInputs, hasNextPage] = useSelectableInputs(discover);
     const [inputsModalOpen, openInputsModal, closeInputsModal] = useBinaryState(false);
     const [addonModalOpen, openAddonModal, closeAddonModal] = useBinaryState(false);
     const [selectedMetaItemIndex, setSelectedMetaItemIndex] = React.useState(0);
+    const [showMetaPreview, setShowMetaPreview] = React.useState(window.innerWidth > 1000);
+
     const metasContainerRef = React.useRef();
+    React.useEffect(() => {
+        const handleResize = () => {
+            setShowMetaPreview(window.innerWidth > 1000);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     React.useEffect(() => {
         if (discover.catalog?.content.type === 'Loading') {
             metasContainerRef.current.scrollTop = 0;
@@ -76,7 +87,7 @@ const Discover = ({ urlParams, queryParams }) => {
         }
     }, []);
     const metaItemOnClick = React.useCallback((event) => {
-        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString() && !platform.isMobile) {
+        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString() && showMetaPreview) {
             event.preventDefault();
             event.currentTarget.focus();
         }
@@ -173,22 +184,24 @@ const Discover = ({ urlParams, queryParams }) => {
                 </div>
                 {
                     selectedMetaItem !== null ?
-                        <MetaPreview
-                            className={styles['meta-preview-container']}
-                            compact={true}
-                            name={selectedMetaItem.name}
-                            logo={selectedMetaItem.logo}
-                            background={selectedMetaItem.poster}
-                            runtime={selectedMetaItem.runtime}
-                            releaseInfo={selectedMetaItem.releaseInfo}
-                            released={selectedMetaItem.released}
-                            description={selectedMetaItem.description}
-                            links={selectedMetaItem.links}
-                            deepLinks={selectedMetaItem.deepLinks}
-                            trailerStreams={selectedMetaItem.trailerStreams}
-                            inLibrary={selectedMetaItem.inLibrary}
-                            toggleInLibrary={selectedMetaItem.inLibrary ? removeFromLibrary : addToLibrary}
-                        />
+                        showMetaPreview ?
+                            <MetaPreview
+                                className={styles['meta-preview-container']}
+                                compact={true}
+                                name={selectedMetaItem.name}
+                                logo={selectedMetaItem.logo}
+                                background={selectedMetaItem.poster}
+                                runtime={selectedMetaItem.runtime}
+                                releaseInfo={selectedMetaItem.releaseInfo}
+                                released={selectedMetaItem.released}
+                                description={selectedMetaItem.description}
+                                links={selectedMetaItem.links}
+                                deepLinks={selectedMetaItem.deepLinks}
+                                trailerStreams={selectedMetaItem.trailerStreams}
+                                inLibrary={selectedMetaItem.inLibrary}
+                                toggleInLibrary={selectedMetaItem.inLibrary ? removeFromLibrary : addToLibrary}
+                            />
+                            : null
                         :
                         discover.catalog !== null && discover.catalog.content.type === 'Loading' ?
                             <div className={styles['meta-preview-container']} />
