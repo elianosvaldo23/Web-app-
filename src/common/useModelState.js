@@ -36,7 +36,7 @@ const useModelState = ({ action, ...args }) => {
         if (action) {
             core.transport.dispatch(action, model);
         }
-    }, []);
+    }, [action]);
     React.useLayoutEffect(() => {
         return () => {
             core.transport.dispatch({ action: 'Unload' }, model);
