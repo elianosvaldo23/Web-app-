@@ -35,7 +35,7 @@ type Settings = {
     subtitlesBackgroundColor: string,
     subtitlesBold: boolean,
     subtitlesFont: string,
-    subtitlesLanguage: string,
+    subtitlesLanguage: string | null,
     subtitlesOffset: number,
     subtitlesOutlineColor: string,
     subtitlesSize: number,
