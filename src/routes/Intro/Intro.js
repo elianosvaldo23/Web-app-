@@ -112,7 +112,7 @@ const Intro = ({ queryParams }) => {
     const loginWithApple = React.useCallback(() => {
         openLoaderModal();
         startAppleLogin()
-            .then(({ email, token, sub, name }) => {
+            .then(({ token, sub, email, name }) => {
                 core.transport.dispatch({
                     action: 'Ctx',
                     args: {
@@ -129,11 +129,7 @@ const Intro = ({ queryParams }) => {
             })
             .catch((error) => {
                 closeLoaderModal();
-                if (error.error === 'popup_closed_by_user') {
-                    dispatch({ type: 'error', error: 'Apple login popup was closed.' });
-                } else {
-                    dispatch({ type: 'error', error: error.error });
-                }
+                dispatch({ type: 'error', error: error.message });
             });
     }, []);
     const cancelLoginWithApple = React.useCallback(() => {

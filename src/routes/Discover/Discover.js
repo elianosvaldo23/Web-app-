@@ -20,7 +20,10 @@ const Discover = ({ urlParams, queryParams }) => {
     const [inputsModalOpen, openInputsModal, closeInputsModal] = useBinaryState(false);
     const [addonModalOpen, openAddonModal, closeAddonModal] = useBinaryState(false);
     const [selectedMetaItemIndex, setSelectedMetaItemIndex] = React.useState(0);
+
     const metasContainerRef = React.useRef();
+    const metaPreviewRef = React.useRef();
+
     React.useEffect(() => {
         if (discover.catalog?.content.type === 'Loading') {
             metasContainerRef.current.scrollTop = 0;
@@ -75,7 +78,8 @@ const Discover = ({ urlParams, queryParams }) => {
         }
     }, []);
     const metaItemOnClick = React.useCallback((event) => {
-        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString()) {
+        const visible = window.getComputedStyle(metaPreviewRef.current).display !== 'none';
+        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString() && visible) {
             event.preventDefault();
             event.currentTarget.focus();
         }
@@ -175,6 +179,7 @@ const Discover = ({ urlParams, queryParams }) => {
                         <MetaPreview
                             className={styles['meta-preview-container']}
                             compact={true}
+                            ref={metaPreviewRef}
                             name={selectedMetaItem.name}
                             logo={selectedMetaItem.logo}
                             background={selectedMetaItem.poster}

@@ -88,6 +88,8 @@ const Player = ({ urlParams, queryParams }) => {
     const defaultAudioTrackSelected = React.useRef(false);
     const [error, setError] = React.useState(null);
 
+    const isNavigating = React.useRef(false);
+
     const onImplementationChanged = React.useCallback(() => {
         video.setProp('subtitlesSize', settings.subtitlesSize);
         video.setProp('subtitlesOffset', settings.subtitlesOffset);
@@ -101,7 +103,21 @@ const Player = ({ urlParams, queryParams }) => {
         video.setProp('extraSubtitlesOutlineColor', settings.subtitlesOutlineColor);
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
+    const handleNextVideoNavigation = React.useCallback((deepLinks) => {
+        if (deepLinks.player) {
+            isNavigating.current = true;
+            window.location.replace(deepLinks.player);
+        } else if (deepLinks.metaDetailsStreams) {
+            isNavigating.current = true;
+            window.location.replace(deepLinks.metaDetailsStreams);
+        }
+    }, []);
+
     const onEnded = React.useCallback(() => {
+        if (isNavigating.current) {
+            return;
+        }
+
         ended();
         if (player.nextVideo !== null) {
             onNextVideoRequested();
@@ -218,14 +234,9 @@ const Player = ({ urlParams, queryParams }) => {
             nextVideo();
 
             const deepLinks = player.nextVideo.deepLinks;
-            if (deepLinks.metaDetailsStreams && deepLinks.player) {
-                window.location.replace(deepLinks.metaDetailsStreams);
-                window.location.href = deepLinks.player;
-            } else {
-                window.location.replace(deepLinks.player ?? deepLinks.metaDetailsStreams);
-            }
+            handleNextVideoNavigation(deepLinks);
         }
-    }, [player.nextVideo]);
+    }, [player.nextVideo, handleNextVideoNavigation]);
 
     const onVideoClick = React.useCallback(() => {
         if (video.state.paused !== null) {
@@ -388,6 +399,13 @@ const Player = ({ urlParams, queryParams }) => {
     React.useEffect(() => {
         if (!defaultSubtitlesSelected.current) {
             const findTrackByLang = (tracks, lang) => tracks.find((track) => track.lang === lang || langs.where('1', track.lang)?.[2] === lang);
+
+            if (settings.subtitlesLanguage === null) {
+                onSubtitlesTrackSelected(null);
+                onExtraSubtitlesTrackSelected(null);
+                defaultSubtitlesSelected.current = true;
+                return;
+            }
 
             const subtitlesTrack = findTrackByLang(video.state.subtitlesTracks, settings.subtitlesLanguage);
             const extraSubtitlesTrack = findTrackByLang(video.state.extraSubtitlesTracks, settings.subtitlesLanguage);
