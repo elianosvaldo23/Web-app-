@@ -5,7 +5,7 @@ const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const { useTranslation } = require('react-i18next');
 const { default: Icon } = require('@stremio/stremio-icons/react');
-const { Button, Image, Multiselect } = require('stremio/components');
+const { Button, Image, MultiselectMenu } = require('stremio/components');
 const { useServices } = require('stremio/services');
 const Stream = require('./Stream');
 const styles = require('./styles');
@@ -21,9 +21,9 @@ const StreamsList = ({ className, video, type, onEpisodeSearch, ...props }) => {
     const profile = useProfile();
     const streamsContainerRef = React.useRef(null);
     const [selectedAddon, setSelectedAddon] = React.useState(ALL_ADDONS_KEY);
-    const onAddonSelected = React.useCallback((event) => {
+    const onAddonSelected = React.useCallback((value) => {
         streamsContainerRef.current.scrollTo({ top: 0, left: 0, behavior: platform.name === 'ios' ? 'smooth' : 'instant' });
-        setSelectedAddon(event.value);
+        setSelectedAddon(value);
     }, [platform]);
     const showInstallAddonsButton = React.useMemo(() => {
         return !profile || profile.auth === null || profile.auth?.user?.isNewUser === true && !video?.upcoming;
@@ -77,7 +77,6 @@ const StreamsList = ({ className, video, type, onEpisodeSearch, ...props }) => {
     }, [streamsByAddon, selectedAddon]);
     const selectableOptions = React.useMemo(() => {
         return {
-            title: 'Select Addon',
             options: [
                 {
                     value: ALL_ADDONS_KEY,
@@ -90,7 +89,10 @@ const StreamsList = ({ className, video, type, onEpisodeSearch, ...props }) => {
                     title: streamsByAddon[transportUrl].addon.manifest.name,
                 }))
             ],
-            selected: [selectedAddon],
+            selectedOption: {
+                label: selectedAddon === ALL_ADDONS_KEY ? t('ALL_ADDONS') : streamsByAddon[selectedAddon]?.addon.manifest.name,
+                value: selectedAddon
+            },
             onSelect: onAddonSelected
         };
     }, [streamsByAddon, selectedAddon]);
@@ -117,7 +119,7 @@ const StreamsList = ({ className, video, type, onEpisodeSearch, ...props }) => {
                 }
                 {
                     Object.keys(streamsByAddon).length > 1 ?
-                        <Multiselect
+                        <MultiselectMenu
                             {...selectableOptions}
                             className={styles['select-input-container']}
                         />
