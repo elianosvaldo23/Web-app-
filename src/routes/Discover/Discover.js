@@ -20,18 +20,9 @@ const Discover = ({ urlParams, queryParams }) => {
     const [inputsModalOpen, openInputsModal, closeInputsModal] = useBinaryState(false);
     const [addonModalOpen, openAddonModal, closeAddonModal] = useBinaryState(false);
     const [selectedMetaItemIndex, setSelectedMetaItemIndex] = React.useState(0);
-    const [showMetaPreview, setShowMetaPreview] = React.useState(window.innerWidth > 1000);
 
     const metasContainerRef = React.useRef();
-    React.useEffect(() => {
-        const handleResize = () => {
-            setShowMetaPreview(window.innerWidth > 1000);
-        };
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    const metaPreviewRef = React.useRef();
 
     React.useEffect(() => {
         if (discover.catalog?.content.type === 'Loading') {
@@ -87,7 +78,8 @@ const Discover = ({ urlParams, queryParams }) => {
         }
     }, []);
     const metaItemOnClick = React.useCallback((event) => {
-        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString() && showMetaPreview) {
+        const visible = window.getComputedStyle(metaPreviewRef.current).display !== 'none';
+        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString() && visible) {
             event.preventDefault();
             event.currentTarget.focus();
         }
@@ -184,24 +176,23 @@ const Discover = ({ urlParams, queryParams }) => {
                 </div>
                 {
                     selectedMetaItem !== null ?
-                        showMetaPreview ?
-                            <MetaPreview
-                                className={styles['meta-preview-container']}
-                                compact={true}
-                                name={selectedMetaItem.name}
-                                logo={selectedMetaItem.logo}
-                                background={selectedMetaItem.poster}
-                                runtime={selectedMetaItem.runtime}
-                                releaseInfo={selectedMetaItem.releaseInfo}
-                                released={selectedMetaItem.released}
-                                description={selectedMetaItem.description}
-                                links={selectedMetaItem.links}
-                                deepLinks={selectedMetaItem.deepLinks}
-                                trailerStreams={selectedMetaItem.trailerStreams}
-                                inLibrary={selectedMetaItem.inLibrary}
-                                toggleInLibrary={selectedMetaItem.inLibrary ? removeFromLibrary : addToLibrary}
-                            />
-                            : null
+                        <MetaPreview
+                            className={styles['meta-preview-container']}
+                            compact={true}
+                            ref={metaPreviewRef}
+                            name={selectedMetaItem.name}
+                            logo={selectedMetaItem.logo}
+                            background={selectedMetaItem.poster}
+                            runtime={selectedMetaItem.runtime}
+                            releaseInfo={selectedMetaItem.releaseInfo}
+                            released={selectedMetaItem.released}
+                            description={selectedMetaItem.description}
+                            links={selectedMetaItem.links}
+                            deepLinks={selectedMetaItem.deepLinks}
+                            trailerStreams={selectedMetaItem.trailerStreams}
+                            inLibrary={selectedMetaItem.inLibrary}
+                            toggleInLibrary={selectedMetaItem.inLibrary ? removeFromLibrary : addToLibrary}
+                        />
                         :
                         discover.catalog !== null && discover.catalog.content.type === 'Loading' ?
                             <div className={styles['meta-preview-container']} />
