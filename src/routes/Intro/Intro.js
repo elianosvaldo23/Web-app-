@@ -299,10 +299,10 @@ const Intro = ({ queryParams }) => {
                     <Image className={styles['logo']} src={require('/images/logo.png')} alt={' '} />
                 </div>
                 <div className={styles['title-container']}>
-                    Freedom to Stream
+                    {t('WEBSITE_SLOGAN_NEW_NEW')}
                 </div>
                 <div className={styles['slogan-container']}>
-                    All the Video Content You Enjoy in One Place
+                    {t('WEBSITE_SLOGAN_ALL')}
                 </div>
             </div>
             <div className={styles['content-container']}>
@@ -362,7 +362,7 @@ const Intro = ({ queryParams }) => {
                             </React.Fragment>
                             :
                             <div className={styles['forgot-password-link-container']}>
-                                <Button className={styles['forgot-password-link']} onClick={openPasswordRestModal}>Forgot password?</Button>
+                                <Button className={styles['forgot-password-link']} onClick={openPasswordRestModal}>{t('FORGOT_PASSWORD')}</Button>
                             </div>
                     }
                     {
@@ -372,22 +372,22 @@ const Intro = ({ queryParams }) => {
                             null
                     }
                     <Button className={classnames(styles['form-button'], styles['submit-button'])} onClick={state.form === SIGNUP_FORM ? signup : loginWithEmail}>
-                        <div className={styles['label']}>{state.form === SIGNUP_FORM ? 'Sign up' : 'Log in'}</div>
+                        <div className={styles['label']}>{state.form === SIGNUP_FORM ? t('SIGN_UP') : t('LOG_IN')}</div>
                     </Button>
                 </div>
                 <div className={styles['options-container']}>
                     <Button className={classnames(styles['form-button'], styles['facebook-button'])} onClick={loginWithFacebook}>
                         <Icon className={styles['icon']} name={'facebook'} />
-                        <div className={styles['label']}>Continue with Facebook</div>
+                        <div className={styles['label']}>{t('FB_LOGIN')}</div>
                     </Button>
                     <Button className={classnames(styles['form-button'], styles['apple-button'])} onClick={loginWithApple}>
                         <Icon className={styles['icon']} name={'macos'} />
-                        <div className={styles['label']}>Continue with Apple</div>
+                        <div className={styles['label']}>{t('APPLE_LOGIN')}</div>
                     </Button>
                     {
                         state.form === SIGNUP_FORM ?
                             <Button className={classnames(styles['form-button'], styles['login-form-button'])} onClick={switchFormOnClick}>
-                                <div className={styles['label']}>LOG IN</div>
+                                <div className={classnames(styles['label'], styles['uppercase'])}>{t('LOG_IN')}</div>
                             </Button>
                             :
                             null
@@ -395,7 +395,7 @@ const Intro = ({ queryParams }) => {
                     {
                         state.form === LOGIN_FORM ?
                             <Button className={classnames(styles['form-button'], styles['signup-form-button'])} onClick={switchFormOnClick}>
-                                <div className={styles['label']}>SIGN UP WITH EMAIL</div>
+                                <div className={classnames(styles['label'], styles['uppercase'])}>{t('SIGN_UP_EMAIL')}</div>
                             </Button>
                             :
                             null
@@ -403,7 +403,7 @@ const Intro = ({ queryParams }) => {
                     {
                         state.form === SIGNUP_FORM ?
                             <Button className={classnames(styles['form-button'], styles['guest-login-button'])} onClick={loginAsGuest}>
-                                <div className={styles['label']}>GUEST LOGIN</div>
+                                <div className={classnames(styles['label'], styles['uppercase'])}>{t('GUEST_LOGIN')}</div>
                             </Button>
                             :
                             null
@@ -421,7 +421,7 @@ const Intro = ({ queryParams }) => {
                     <Modal className={styles['loading-modal-container']}>
                         <div className={styles['loader-container']}>
                             <Icon className={styles['icon']} name={'person'} />
-                            <div className={styles['label']}>Authenticating...</div>
+                            <div className={styles['label']}>{t('AUTHENTICATING')}</div>
                             <Button className={styles['button']} onClick={cancelLoginWithFacebook && cancelLoginWithApple}>
                                 {t('BUTTON_CANCEL')}
                             </Button>
