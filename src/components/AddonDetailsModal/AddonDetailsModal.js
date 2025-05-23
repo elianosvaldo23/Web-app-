@@ -1,6 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useTranslation } = require('react-i18next');
 const PropTypes = require('prop-types');
 const ModalDialog = require('stremio/components/ModalDialog');
 const { withCoreSuspender } = require('stremio/common/CoreSuspender');
@@ -43,6 +44,7 @@ function withRemoteAndLocalAddon(AddonDetails) {
 }
 
 const AddonDetailsModal = ({ transportUrl, onCloseRequest }) => {
+    const { t } = useTranslation();
     const { core } = useServices();
     const platform = usePlatform();
     const addonDetails = useAddonDetails(transportUrl);
@@ -145,17 +147,17 @@ const AddonDetailsModal = ({ transportUrl, onCloseRequest }) => {
             {
                 addonDetails.selected === null ?
                     <div className={styles['addon-details-message-container']}>
-                        Loading addon manifest
+                        {t('ADDON_LOADING_MANIFEST')}
                     </div>
                     :
                     addonDetails.remoteAddon === null || addonDetails.remoteAddon.content.type === 'Loading' ?
                         <div className={styles['addon-details-message-container']}>
-                            Loading addon manifest from {addonDetails.selected.transportUrl}
+                            {t('ADDON_LOADING_MANIFEST_FROM', { origin: addonDetails.selected.transportUrl})}
                         </div>
                         :
                         addonDetails.remoteAddon.content.type === 'Err' && addonDetails.localAddon === null ?
                             <div className={styles['addon-details-message-container']}>
-                                Failed to get addon manifest from {addonDetails.selected.transportUrl}
+                                {t('ADDON_LOADING_MANIFEST_FAILED', {origin: addonDetails.selected.transportUrl})}
                                 <div>{addonDetails.remoteAddon.content.content.message}</div>
                             </div>
                             :
@@ -174,17 +176,18 @@ AddonDetailsModal.propTypes = {
     onCloseRequest: PropTypes.func
 };
 
-const AddonDetailsModalFallback = ({ onCloseRequest }) => (
-    <ModalDialog
+const AddonDetailsModalFallback = ({ onCloseRequest }) => {
+    const { t } = useTranslation();
+    return <ModalDialog
         className={styles['addon-details-modal-container']}
         title={'Stremio addon'}
         onCloseRequest={onCloseRequest}
     >
         <div className={styles['addon-details-message-container']}>
-            Loading addon manifest
+            {t('ADDON_LOADING_MANIFEST')}
         </div>
-    </ModalDialog>
-);
+    </ModalDialog>;
+};
 
 AddonDetailsModalFallback.propTypes = AddonDetailsModal.propTypes;
 
