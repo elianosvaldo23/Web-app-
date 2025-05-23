@@ -10,7 +10,8 @@
         "start-prod": "webpack serve --mode production",
         "build": "webpack --mode production",
         "test": "jest",
-        "lint": "eslint src"
+        "lint": "eslint src",
+        "scan-translations": "node scan-i18n-report.js"
     },
     "dependencies": {
         "@babel/runtime": "7.26.0",
@@ -70,6 +71,7 @@
         "mini-css-extract-plugin": "2.9.2",
         "postcss-loader": "8.1.1",
         "readdirp": "4.0.2",
+        "recast": "0.23.11",
         "terser-webpack-plugin": "5.3.10",
         "thread-loader": "^4.0.4",
         "ts-loader": "^9.5.1",
