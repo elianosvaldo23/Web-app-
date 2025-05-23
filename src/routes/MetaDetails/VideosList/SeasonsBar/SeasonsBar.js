@@ -56,9 +56,9 @@ const SeasonsBar = ({ className, seasons, season, onSelect }) => {
 
     return (
         <div className={classnames(className, styles['seasons-bar-container'])}>
-            <Button className={classnames(styles['prev-season-button'], { 'disabled': prevDisabled })} title={'Previous season'} data-action={'prev'} onClick={prevNextButtonOnClick}>
+            <Button className={classnames(styles['prev-season-button'], { 'disabled': prevDisabled })} title={t('PREV_SEASON')} data-action={'prev'} onClick={prevNextButtonOnClick}>
                 <Icon className={styles['icon']} name={'chevron-back'} />
-                <div className={styles['label']}>Prev</div>
+                <div className={styles['label']}>{t('BUTTON_PREV')}</div>
             </Button>
             <MultiselectMenu
                 className={styles['seasons-popup-label-container']}
@@ -67,8 +67,8 @@ const SeasonsBar = ({ className, seasons, season, onSelect }) => {
                 selectedOption={selectedSeason}
                 onSelect={seasonOnSelect}
             />
-            <Button className={classnames(styles['next-season-button'], { 'disabled': nextDisabled })} title={'Next season'} data-action={'next'} onClick={prevNextButtonOnClick}>
-                <div className={styles['label']}>Next</div>
+            <Button className={classnames(styles['next-season-button'], { 'disabled': nextDisabled })} title={t('NEXT_SEASON')} data-action={'next'} onClick={prevNextButtonOnClick}>
+                <div className={styles['label']}>{t('BUTTON_NEXT')}</div>
                 <Icon className={styles['icon']} name={'chevron-forward'} />
             </Button>
         </div>

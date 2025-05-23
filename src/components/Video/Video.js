@@ -1,6 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useTranslation } = require('react-i18next');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const { t } = require('i18next');
@@ -13,6 +14,7 @@ const VideoPlaceholder = require('./VideoPlaceholder');
 const styles = require('./styles');
 
 const Video = ({ className, id, title, thumbnail, season, episode, released, upcoming, watched, progress, scheduled, seasonWatched, deepLinks, onMarkVideoAsWatched, onMarkSeasonAsWatched, ...props }) => {
+    const { t } = useTranslation();
     const routeFocused = useRouteFocused();
     const profile = useProfile();
     const [menuOpen, , closeMenu, toggleMenu] = useBinaryState(false);
@@ -112,7 +114,7 @@ const Video = ({ className, id, title, thumbnail, season, episode, released, upc
                                 :
                                 scheduled ?
                                     <div className={styles['released-container']} title={'To be announced'}>
-                                        TBA
+                                        {t('TBA')}
                                     </div>
                                     :
                                     null
@@ -121,7 +123,7 @@ const Video = ({ className, id, title, thumbnail, season, episode, released, upc
                             {
                                 upcoming && !watched ?
                                     <div className={styles['upcoming-container']}>
-                                        <div className={styles['flag-label']}>Upcoming</div>
+                                        <div className={styles['flag-label']}>{t('UPCOMING')}</div>
                                     </div>
                                     :
                                     null
@@ -130,7 +132,7 @@ const Video = ({ className, id, title, thumbnail, season, episode, released, upc
                                 watched ?
                                     <div className={styles['watched-container']}>
                                         <Icon className={styles['flag-icon']} name={'eye'} />
-                                        <div className={styles['flag-label']}>Watched</div>
+                                        <div className={styles['flag-label']}>{t('CTX_WATCHED')}</div>
                                     </div>
                                     :
                                     null

@@ -122,7 +122,7 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
                         <div className={styles['message-container']}>
                             <EpisodePicker className={styles['episode-picker']} onSubmit={onSeasonSearch} />
                             <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                            <div className={styles['label']}>No videos found for this meta!</div>
+                            <div className={styles['label']}>{t('ERR_NO_VIDEOS_FOR_META')}</div>
                         </div>
                         :
                         <React.Fragment>
