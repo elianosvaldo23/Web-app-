@@ -132,12 +132,12 @@ const Addons = ({ urlParams, queryParams }) => {
                     installedAddons.selected !== null ?
                         installedAddons.selectable.types.length === 0 ?
                             <div className={styles['message-container']}>
-                                No addons ware installed!
+                                {t('NO_ADDONS')}
                             </div>
                             :
                             installedAddons.catalog.length === 0 ?
                                 <div className={styles['message-container']}>
-                                    No addons ware installed for that type!
+                                    {t('NO_ADDONS_FOR_TYPE')}
                                 </div>
                                 :
                                 <div className={styles['addons-list-container']}>
