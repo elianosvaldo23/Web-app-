@@ -184,20 +184,20 @@ const Settings = () => {
                     </Button>
                     <div className={styles['spacing']} />
                     <div className={styles['version-info-label']} title={process.env.VERSION}>
-                        App Version: {process.env.VERSION}
+                        {`${t('SETTINGS_APP_VERSION')} : ${process.env.VERSION}`}
                     </div>
                     <div className={styles['version-info-label']} title={process.env.COMMIT_HASH}>
-                        Build Version: {process.env.COMMIT_HASH}
+                        {`${t('SETTINGS_BUILD_VERSION')} : ${process.env.COMMIT_HASH}`}
                     </div>
                     {
                         streamingServer.settings !== null && streamingServer.settings.type === 'Ready' ?
-                            <div className={styles['version-info-label']} title={streamingServer.settings.content.serverVersion}>Server Version: {streamingServer.settings.content.serverVersion}</div>
+                            <div className={styles['version-info-label']} title={streamingServer.settings.content.serverVersion}>{`${t('SETTINGS_SERVER_VERSION')} : ${streamingServer.settings.content.serverVersion}`}</div>
                             :
                             null
                     }
                     {
                         typeof shell?.transport?.props?.shellVersion === 'string' ?
-                            <div className={styles['version-info-label']} title={shell.transport.props.shellVersion}>Shell Version: {shell.transport.props.shellVersion}</div>
+                            <div className={styles['version-info-label']} title={shell.transport.props.shellVersion}>{`${t('SETTINGS_APP_VERSION')} : ${shell.transport.props.shellVersion}`}</div>
                             :
                             null
                     }
@@ -274,7 +274,7 @@ const Settings = () => {
                         </div>
                         <div className={classnames(styles['option-container'], styles['link-container'])}>
                             <Button className={classnames(styles['option-input-container'], styles['link-input-container'])} title={'Source code'} target={'_blank'} href={`https://github.com/stremio/stremio-web/tree/${process.env.COMMIT_HASH}`}>
-                                <div className={styles['label']}>Source code</div>
+                                <div className={styles['label']}>{t('SETTINGS_SOURCE_CODE')}</div>
                             </Button>
                         </div>
                         <div className={classnames(styles['option-container'], styles['link-container'])}>
@@ -310,7 +310,7 @@ const Settings = () => {
                         <div className={styles['option-container']}>
                             <div className={classnames(styles['option-name-container'], styles['trakt-icon'])}>
                                 <Icon className={styles['icon']} name={'trakt'} />
-                                <div className={styles['label']}>Trakt Scrobbling</div>
+                                <div className={styles['label']}>{t('SETTINGS_TRAKT')}</div>
                             </div>
                             <Button className={classnames(styles['option-input-container'], styles['button-container'])} title={'Authenticate'} disabled={profile.auth === null} tabIndex={-1} onClick={toggleTraktOnClick}>
                                 <div className={styles['label']}>
@@ -740,7 +740,7 @@ const Settings = () => {
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>
-                                    App Version
+                                    {t('SETTINGS_APP_VERSION')}
                                 </div>
                             </div>
                             <div className={classnames(styles['option-input-container'], styles['info-container'])}>
@@ -752,7 +752,7 @@ const Settings = () => {
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>
-                                    Build Version
+                                    {t('SETTINGS_BUILD_VERSION')}
                                 </div>
                             </div>
                             <div className={classnames(styles['option-input-container'], styles['info-container'])}>
@@ -766,7 +766,7 @@ const Settings = () => {
                                 <div className={styles['option-container']}>
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>
-                                            Server Version
+                                            {t('SETTINGS_SERVER_VERSION')}
                                         </div>
                                     </div>
                                     <div className={classnames(styles['option-input-container'], styles['info-container'])}>
@@ -783,7 +783,7 @@ const Settings = () => {
                                 <div className={styles['option-container']}>
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>
-                                            Shell Version
+                                            {t('SETTINGS_SHELL_VERSION')}
                                         </div>
                                     </div>
                                     <div className={classnames(styles['option-input-container'], styles['info-container'])}>
