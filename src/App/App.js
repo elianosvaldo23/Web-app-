@@ -113,7 +113,7 @@ const App = () => {
                     }
                 }
             } catch (e) {
-                console.error("Failed to open media:", e);
+                console.error('Failed to open media:', e);
             }
         };
 
