@@ -114,7 +114,7 @@ const Discover = ({ urlParams, queryParams }) => {
                             />
                         ))}
                         <div className={styles['filter-container']}>
-                            <Button className={styles['filter-button']} title={'All filters'} onClick={openInputsModal}>
+                            <Button className={styles['filter-button']} title={t('ALL_FILTERS')} onClick={openInputsModal}>
                                 <Icon className={styles['filter-icon']} name={'filters'} />
                             </Button>
                         </div>
@@ -123,7 +123,7 @@ const Discover = ({ urlParams, queryParams }) => {
                         discover.catalog !== null && !discover.catalog.installed ?
                             <div className={styles['missing-addon-warning-container']}>
                                 <div className={styles['warning-label']}>{t('ERR_ADDON_NOT_INSTALLED')}</div>
-                                <Button className={styles['install-button']} title={'Install addon'} onClick={openAddonModal}>
+                                <Button className={styles['install-button']} title={t('INSTALL_ADDON')} onClick={openAddonModal}>
                                     <div className={styles['label']}>{t('ADDON_INSTALL')}</div>
                                 </Button>
                             </div>
@@ -204,7 +204,7 @@ const Discover = ({ urlParams, queryParams }) => {
             </div>
             {
                 inputsModalOpen ?
-                    <ModalDialog title={'Catalog filters'} className={styles['selectable-inputs-modal']} onCloseRequest={closeInputsModal}>
+                    <ModalDialog title={t('CATALOG_FILTERS')} className={styles['selectable-inputs-modal']} onCloseRequest={closeInputsModal}>
                         {selectInputs.map(({ title, options, selected, renderLabelText, onSelect }, index) => (
                             <Multiselect
                                 key={index}

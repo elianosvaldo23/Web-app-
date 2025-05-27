@@ -219,9 +219,9 @@ const Settings = () => {
                                     }}
                                 />
                                 <div className={styles['email-logout-container']}>
-                                    <div className={styles['email-label-container']} title={profile.auth === null ? 'Anonymous user' : profile.auth.user.email}>
+                                    <div className={styles['email-label-container']} title={profile.auth === null ? t('ANONYMOUS_USER') : profile.auth.user.email}>
                                         <div className={styles['email-label']}>
-                                            {profile.auth === null ? 'Anonymous user' : profile.auth.user.email}
+                                            {profile.auth === null ? t('ANONYMOUS_USER') : profile.auth.user.email}
                                         </div>
                                     </div>
                                     {
@@ -273,7 +273,7 @@ const Settings = () => {
                             </Button>
                         </div>
                         <div className={classnames(styles['option-container'], styles['link-container'])}>
-                            <Button className={classnames(styles['option-input-container'], styles['link-input-container'])} title={'Source code'} target={'_blank'} href={`https://github.com/stremio/stremio-web/tree/${process.env.COMMIT_HASH}`}>
+                            <Button className={classnames(styles['option-input-container'], styles['link-input-container'])} title={t('SETTINGS_SOURCE_CODE')} target={'_blank'} href={`https://github.com/stremio/stremio-web/tree/${process.env.COMMIT_HASH}`}>
                                 <div className={styles['label']}>{t('SETTINGS_SOURCE_CODE')}</div>
                             </Button>
                         </div>
@@ -312,7 +312,7 @@ const Settings = () => {
                                 <Icon className={styles['icon']} name={'trakt'} />
                                 <div className={styles['label']}>{t('SETTINGS_TRAKT')}</div>
                             </div>
-                            <Button className={classnames(styles['option-input-container'], styles['button-container'])} title={'Authenticate'} disabled={profile.auth === null} tabIndex={-1} onClick={toggleTraktOnClick}>
+                            <Button className={classnames(styles['option-input-container'], styles['button-container'])} title={t('SETTINGS_TRAKT_AUTHENTICATE')} disabled={profile.auth === null} tabIndex={-1} onClick={toggleTraktOnClick}>
                                 <div className={styles['label']}>
                                     { profile.auth !== null && profile.auth.user !== null && profile.auth.user.trakt !== null ? t('LOG_OUT') : t('SETTINGS_TRAKT_AUTHENTICATE') }
                                 </div>

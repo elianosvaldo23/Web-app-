@@ -124,7 +124,7 @@ const Addons = ({ urlParams, queryParams }) => {
                         value={search}
                         onChange={searchInputOnChange}
                     />
-                    <Button className={styles['filter-button']} title={'All filters'} onClick={openFiltersModal}>
+                    <Button className={styles['filter-button']} title={t('ALL_FILTERS')} onClick={openFiltersModal}>
                         <Icon className={styles['filter-icon']} name={'filters'} />
                     </Button>
                 </div>
@@ -216,7 +216,7 @@ const Addons = ({ urlParams, queryParams }) => {
             </div>
             {
                 filtersModalOpen ?
-                    <ModalDialog title={'Addons filters'} className={styles['filters-modal']} onCloseRequest={closeFiltersModal}>
+                    <ModalDialog title={t('ADDONS_FILTERS')} className={styles['filters-modal']} onCloseRequest={closeFiltersModal}>
                         {selectInputs.map((selectInput, index) => (
                             <Multiselect
                                 {...selectInput}

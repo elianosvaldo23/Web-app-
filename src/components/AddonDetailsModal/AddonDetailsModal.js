@@ -143,7 +143,7 @@ const AddonDetailsModal = ({ transportUrl, onCloseRequest }) => {
         return addonDetails.remoteAddon?.content.type === 'Ready' ? addonDetails.remoteAddon.content.content.manifest.background : null;
     }, [addonDetails.remoteAddon]);
     return (
-        <ModalDialog className={styles['addon-details-modal-container']} title={'Stremio addon'} buttons={modalButtons} background={modalBackground} onCloseRequest={onCloseRequest}>
+        <ModalDialog className={styles['addon-details-modal-container']} title={t('STREMIO_COMMUNITY_ADDON')} buttons={modalButtons} background={modalBackground} onCloseRequest={onCloseRequest}>
             {
                 addonDetails.selected === null ?
                     <div className={styles['addon-details-message-container']}>
@@ -180,7 +180,7 @@ const AddonDetailsModalFallback = ({ onCloseRequest }) => {
     const { t } = useTranslation();
     return <ModalDialog
         className={styles['addon-details-modal-container']}
-        title={'Stremio addon'}
+        title={t('STREMIO_COMMUNITY_ADDON')}
         onCloseRequest={onCloseRequest}
     >
         <div className={styles['addon-details-message-container']}>

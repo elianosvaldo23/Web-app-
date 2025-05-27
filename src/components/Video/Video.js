@@ -113,7 +113,7 @@ const Video = ({ className, id, title, thumbnail, season, episode, released, upc
                                 </div>
                                 :
                                 scheduled ?
-                                    <div className={styles['released-container']} title={'To be announced'}>
+                                    <div className={styles['released-container']} title={t('TBA')}>
                                         {t('TBA')}
                                     </div>
                                     :
@@ -147,10 +147,10 @@ const Video = ({ className, id, title, thumbnail, season, episode, released, upc
     const renderMenu = React.useMemo(() => function renderMenu() {
         return (
             <div className={styles['context-menu-content']} onPointerDown={popupMenuOnPointerDown} onContextMenu={popupMenuOnContextMenu} onClick={popupMenuOnClick} onKeyDown={popupMenuOnKeyDown}>
-                <Button className={styles['context-menu-option-container']} title={'Watch'}>
+                <Button className={styles['context-menu-option-container']} title={t('CTX_WATCH')}>
                     <div className={styles['context-menu-option-label']}>{t('CTX_WATCH')}</div>
                 </Button>
-                <Button className={styles['context-menu-option-container']} title={watched ? 'Mark as non-watched' : 'Mark as watched'} onClick={toggleWatchedOnClick}>
+                <Button className={styles['context-menu-option-container']} title={watched ? t('CTX_MARK_NON_WATCHED') : t('CTX_MARK_WATCHED')} onClick={toggleWatchedOnClick}>
                     <div className={styles['context-menu-option-label']}>{watched ? t('CTX_MARK_NON_WATCHED') : t('CTX_MARK_WATCHED')}</div>
                 </Button>
                 <Button className={styles['context-menu-option-container']} title={seasonWatched ? t('CTX_UNMARK_REST') : t('CTX_MARK_REST')} onClick={toggleWatchedSeasonOnClick}>
