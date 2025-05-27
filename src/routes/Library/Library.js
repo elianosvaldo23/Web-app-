@@ -1,6 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useTranslation } = require('react-i18next');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const NotFound = require('stremio/routes/NotFound');
@@ -47,6 +48,7 @@ function withModel(Library) {
 }
 
 const Library = ({ model, urlParams, queryParams }) => {
+    const { t } = useTranslation();
     const profile = useProfile();
     const notifications = useNotifications();
     const [library, loadNextPage] = useLibrary(model, urlParams, queryParams);
@@ -86,7 +88,7 @@ const Library = ({ model, urlParams, queryParams }) => {
                                             src={require('/images/empty.png')}
                                             alt={' '}
                                         />
-                                        <div className={styles['message-label']}>{model === 'library' ? 'Library' : 'Continue Watching'} not loaded!</div>
+                                        <div className={styles['message-label']}>{model === 'library' ? t('LIBRARY_NOT_LOADED') : t('BOARD_CONTINUE_WATCHING_NOT_LOADED')}</div>
                                     </div>
                                 </DelayedRenderer>
                                 :
@@ -97,7 +99,7 @@ const Library = ({ model, urlParams, queryParams }) => {
                                             src={require('/images/empty.png')}
                                             alt={' '}
                                         />
-                                        <div className={styles['message-label']}>Empty {model === 'library' ? 'Library' : 'Continue Watching'}</div>
+                                        <div className={styles['message-label']}>{model === 'library' ? t('LIBRARY_EMPTY') : t('BOARD_CONTINUE_WATCHING_EMPTY')}</div>
                                     </div>
                                     :
                                     <div ref={scrollContainerRef} className={classnames(styles['meta-items-container'], 'animation-fade-in')} onScroll={onScroll}>
