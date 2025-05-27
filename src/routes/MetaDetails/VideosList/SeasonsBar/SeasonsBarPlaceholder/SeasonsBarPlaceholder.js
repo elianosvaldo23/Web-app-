@@ -16,7 +16,7 @@ const SeasonsBarPlaceholder = ({ className }) => {
                 <div className={styles['label']}>{t('SEASON_PREV')}</div>
             </div>
             <div className={styles['seasons-popup-label-container']}>
-                <div className={styles['seasons-popup-label']}>{`${t('SEASON')} 1`}</div>
+                <div className={styles['seasons-popup-label']}>{t('SEASON_NUMBER', { season: 1 })}</div>
                 <Icon className={styles['seasons-popup-icon']} name={'caret-down'} />
             </div>
             <div className={styles['next-season-button']}>
