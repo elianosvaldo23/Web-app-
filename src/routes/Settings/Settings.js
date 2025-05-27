@@ -184,20 +184,20 @@ const Settings = () => {
                     </Button>
                     <div className={styles['spacing']} />
                     <div className={styles['version-info-label']} title={process.env.VERSION}>
-                        {`${t('SETTINGS_APP_VERSION')} : ${process.env.VERSION}`}
+                        {`${t('SETTINGS_APP_VERSION')}: ${process.env.VERSION}`}
                     </div>
                     <div className={styles['version-info-label']} title={process.env.COMMIT_HASH}>
-                        {`${t('SETTINGS_BUILD_VERSION')} : ${process.env.COMMIT_HASH}`}
+                        {`${t('SETTINGS_BUILD_VERSION')}: ${process.env.COMMIT_HASH}`}
                     </div>
                     {
                         streamingServer.settings !== null && streamingServer.settings.type === 'Ready' ?
-                            <div className={styles['version-info-label']} title={streamingServer.settings.content.serverVersion}>{`${t('SETTINGS_SERVER_VERSION')} : ${streamingServer.settings.content.serverVersion}`}</div>
+                            <div className={styles['version-info-label']} title={streamingServer.settings.content.serverVersion}>{`${t('SETTINGS_SERVER_VERSION')}: ${streamingServer.settings.content.serverVersion}`}</div>
                             :
                             null
                     }
                     {
                         typeof shell?.transport?.props?.shellVersion === 'string' ?
-                            <div className={styles['version-info-label']} title={shell.transport.props.shellVersion}>{`${t('SETTINGS_APP_VERSION')} : ${shell.transport.props.shellVersion}`}</div>
+                            <div className={styles['version-info-label']} title={shell.transport.props.shellVersion}>{`${t('SETTINGS_APP_VERSION')}: ${shell.transport.props.shellVersion}`}</div>
                             :
                             null
                     }
