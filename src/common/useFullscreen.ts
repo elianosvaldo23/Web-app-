@@ -60,7 +60,7 @@ const useFullscreen = () => {
             document.removeEventListener('keydown', onKeyDown);
             document.removeEventListener('fullscreenchange', onFullscreenChange);
         };
-    }, [settings.escExitFullscreen]);
+    }, [settings.escExitFullscreen, toggleFullscreen]);
 
     return [fullscreen, requestFullscreen, exitFullscreen, toggleFullscreen];
 };
