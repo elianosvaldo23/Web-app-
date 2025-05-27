@@ -102,12 +102,18 @@ const App = () => {
     // Handle shell events
     React.useEffect(() => {
         const onOpenMedia = (data) => {
-            if (data.startsWith('stremio:///')) return;
-            if (data.startsWith('stremio://')) {
-                const transportUrl = data.replace('stremio://', 'https://');
-                if (URL.canParse(transportUrl)) {
-                    window.location.href = `#/addons?addon=${encodeURIComponent(transportUrl)}`;
+            try {
+                const { protocol, hostname, pathname, searchParams } = new URL(data);
+                if (protocol === CONSTANTS.PROTOCOL) {
+                    if (hostname.length) {
+                        const transportUrl = `https://${hostname}${pathname}`;
+                        window.location.href = `#/addons?addon=${encodeURIComponent(transportUrl)}`;
+                    } else {
+                        window.location.href = `#${pathname}?${searchParams.toString()}`;
+                    }
                 }
+            } catch (e) {
+                console.error("Failed to open media:", e);
             }
         };
 
