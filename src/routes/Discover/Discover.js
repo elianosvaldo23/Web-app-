@@ -1,6 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useTranslation } = require('react-i18next');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const { default: Icon } = require('@stremio/stremio-icons/react');
@@ -14,6 +15,7 @@ const styles = require('./styles');
 const SCROLL_TO_BOTTOM_THRESHOLD = 400;
 
 const Discover = ({ urlParams, queryParams }) => {
+    const { t } = useTranslation();
     const { core } = useServices();
     const [discover, loadNextPage] = useDiscover(urlParams, queryParams);
     const [selectInputs, hasNextPage] = useSelectableInputs(discover);
@@ -120,9 +122,9 @@ const Discover = ({ urlParams, queryParams }) => {
                     {
                         discover.catalog !== null && !discover.catalog.installed ?
                             <div className={styles['missing-addon-warning-container']}>
-                                <div className={styles['warning-label']}>Addon is not installed. Install now?</div>
+                                <div className={styles['warning-label']}>{t('ERR_ADDON_NOT_INSTALLED')}</div>
                                 <Button className={styles['install-button']} title={'Install addon'} onClick={openAddonModal}>
-                                    <div className={styles['label']}>Install</div>
+                                    <div className={styles['label']}>{t('ADDON_INSTALL')}</div>
                                 </Button>
                             </div>
                             :
@@ -133,7 +135,7 @@ const Discover = ({ urlParams, queryParams }) => {
                             <DelayedRenderer delay={500}>
                                 <div className={styles['message-container']}>
                                     <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                                    <div className={styles['message-label']}>No catalog selected!</div>
+                                    <div className={styles['message-label']}>{t('NO_CATALOG_SELECTED')}</div>
                                 </div>
                             </DelayedRenderer>
                             :
