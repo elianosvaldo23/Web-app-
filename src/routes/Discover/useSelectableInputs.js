@@ -46,7 +46,7 @@ const mapSelectableInputs = (discover, t) => {
         }
     };
     const extraSelects = discover.selectable.extra.map(({ name, isRequired, options }) => ({
-        title: t.stringWithPrefix(name, 'SELECT_'),
+        title: t.stringWithPrefix(name),
         isRequired: isRequired,
         options: options.map(({ value, deepLinks }) => ({
             label: typeof value === 'string' ? t.stringWithPrefix(value) : t.string('NONE'),
@@ -62,7 +62,7 @@ const mapSelectableInputs = (discover, t) => {
                 value
             })),
         renderLabelText: options.some(({ selected, value }) => selected && value === null) ?
-            () => t.stringWithPrefix(name, 'SELECT_')
+            () => t.stringWithPrefix(name.toUpperCase(), 'SELECT_')
             :
             null,
         onSelect: (event) => {
