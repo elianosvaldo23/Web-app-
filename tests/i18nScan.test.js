@@ -98,7 +98,7 @@ describe('i18n hardcoded string scan', () => {
             console.log('✅ No hardcoded strings found.');
         } else {
             console.log('🚨 Hardcoded strings found:');
-            report.forEach(row => {
+            report.forEach((row) => {
                 console.log(`File: ${row.file}, Line: ${row.line}, String: "${row.string}", Suggested Key: ${row.key}`);
             });
         }
