@@ -46,10 +46,10 @@ const mapSelectableInputs = (discover, t) => {
         }
     };
     const extraSelects = discover.selectable.extra.map(({ name, isRequired, options }) => ({
-        title: t.stringWithPrefix(name),
+        title: t(name),
         isRequired: isRequired,
         options: options.map(({ value, deepLinks }) => ({
-            label: typeof value === 'string' ? t.stringWithPrefix(value) : t.string('NONE'),
+            label: typeof value === 'string' ? t(value) : t.string('NONE'),
             value: JSON.stringify({
                 href: deepLinks.discover,
                 value

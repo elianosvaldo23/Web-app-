@@ -9,7 +9,7 @@ const useTranslate = () => {
     const string = useCallback((key) => t(key), [t]);
 
     const stringWithPrefix = useCallback((value, prefix, fallback = null) => {
-        const key = `${prefix || ''}${value}`;
+        const key = `${prefix}${value}`;
         const defaultValue = fallback ?? value.charAt(0).toUpperCase() + value.slice(1);
 
         return t(key, {
