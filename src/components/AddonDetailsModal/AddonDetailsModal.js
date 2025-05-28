@@ -51,7 +51,7 @@ const AddonDetailsModal = ({ transportUrl, onCloseRequest }) => {
     const modalButtons = React.useMemo(() => {
         const cancelButton = {
             className: styles['cancel-button'],
-            label: 'Cancel',
+            label: t('BUTTON_CANCEL'),
             props: {
                 onClick: (event) => {
                     if (typeof onCloseRequest === 'function') {
@@ -69,7 +69,7 @@ const AddonDetailsModal = ({ transportUrl, onCloseRequest }) => {
             addonDetails.remoteAddon.content.content.manifest.behaviorHints.configurable ?
             {
                 className: styles['configure-button'],
-                label: 'Configure',
+                label: t('ADDON_CONFIGURE'),
                 props: {
                     onClick: (event) => {
                         platform.openExternal(transportUrl.replace('manifest.json', 'configure'));
@@ -88,7 +88,7 @@ const AddonDetailsModal = ({ transportUrl, onCloseRequest }) => {
         const toggleButton = addonDetails.localAddon !== null ?
             {
                 className: styles['uninstall-button'],
-                label: 'Uninstall',
+                label: t('ADDON_UNINSTALL'),
                 props: {
                     onClick: (event) => {
                         core.transport.dispatch({
@@ -115,7 +115,7 @@ const AddonDetailsModal = ({ transportUrl, onCloseRequest }) => {
                 {
 
                     className: styles['install-button'],
-                    label: 'Install',
+                    label: t('ADDON_INSTALL'),
                     props: {
                         onClick: (event) => {
                             core.transport.dispatch({

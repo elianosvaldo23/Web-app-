@@ -311,7 +311,7 @@ const Intro = ({ queryParams }) => {
                         ref={emailRef}
                         className={styles['credentials-text-input']}
                         type={'email'}
-                        placeholder={'Email'}
+                        placeholder={t('EMAIL')}
                         value={state.email}
                         onChange={emailOnChange}
                         onSubmit={emailOnSubmit}
@@ -320,7 +320,7 @@ const Intro = ({ queryParams }) => {
                         ref={passwordRef}
                         className={styles['credentials-text-input']}
                         type={'password'}
-                        placeholder={'Password'}
+                        placeholder={t('PASSWORD')}
                         value={state.password}
                         onChange={passwordOnChange}
                         onSubmit={passwordOnSubmit}
@@ -332,30 +332,30 @@ const Intro = ({ queryParams }) => {
                                     ref={confirmPasswordRef}
                                     className={styles['credentials-text-input']}
                                     type={'password'}
-                                    placeholder={'Confirm Password'}
+                                    placeholder={t('PASSWORD_CONFIRM')}
                                     value={state.confirmPassword}
                                     onChange={confirmPasswordOnChange}
                                     onSubmit={confirmPasswordOnSubmit}
                                 />
                                 <Checkbox
                                     ref={termsRef}
-                                    label={'I have read and agree with the Stremio'}
-                                    link={'Terms and conditions'}
+                                    label={t('READ_AND_AGREE')}
+                                    link={t('TOS')}
                                     href={'https://www.stremio.com/tos'}
                                     checked={state.termsAccepted}
                                     onChange={toggleTermsAccepted}
                                 />
                                 <Checkbox
                                     ref={privacyPolicyRef}
-                                    label={'I have read and agree with the Stremio'}
-                                    link={'Privacy Policy'}
+                                    label={t('READ_AND_AGREE')}
+                                    link={t('PRIVACY_POLICY')}
                                     href={'https://www.stremio.com/privacy'}
                                     checked={state.privacyPolicyAccepted}
                                     onChange={togglePrivacyPolicyAccepted}
                                 />
                                 <Checkbox
                                     ref={marketingRef}
-                                    label={'I agree to receive marketing communications from Stremio'}
+                                    label={t('MARKETING_AGREE')}
                                     checked={state.marketingAccepted}
                                     onChange={toggleMarketingAccepted}
                                 />

@@ -25,13 +25,13 @@ const PasswordResetModal = ({ email, onCloseRequest }) => {
         return [
             {
                 className: styles['cancel-button'],
-                label: 'Cancel',
+                label: t('BUTTON_CANCEL'),
                 props: {
                     onClick: onCloseRequest
                 }
             },
             {
-                label: 'Send',
+                label: t('SEND'),
                 props: {
                     onClick: goToPasswordReset
                 }

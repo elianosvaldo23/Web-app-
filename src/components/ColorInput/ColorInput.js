@@ -56,7 +56,7 @@ const ColorInput = ({ className, value, dataset, onChange, ...props }) => {
         };
         return [
             {
-                label: 'Select',
+                label: t('SELECT'),
                 props: {
                     'data-autofocus': true,
                     onClick: selectButtonOnClick
