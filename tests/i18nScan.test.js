@@ -88,22 +88,20 @@ function walk(dir, report) {
         }
     });
 }
+const report = [];
 
-describe('i18n hardcoded string scan', () => {
-    it('should print hardcoded strings with suggested keys', () => {
-        const report = [];
-        walk(directoryToScan, report);
+walk(directoryToScan, report);
 
-        if (report.length === 0) {
-            console.log('✅ No hardcoded strings found.');
-        } else {
-            console.log('🚨 Hardcoded strings found:');
-            report.forEach((row) => {
-                console.log(`File: ${row.file}, Line: ${row.line}, String: "${row.string}", Suggested Key: ${row.key}`);
-            });
-        }
-
-        // Optional: expect no hardcoded strings if you want the test to fail in that case
-        // expect(report.length).toBe(0);
+if (report.length !== 0) {
+    describe.each(report)('Missing translation key', (entry) => {
+        it(`should not have "${entry.string}" in ${entry.file} at line ${entry.line}`, () => {
+            expect(entry.string).toBeFalsy();
+        });
     });
-});
+} else {
+    describe('Missing translation key', () => {
+        it('No hardcoded strings found', () => {
+            expect(true).toBe(true); // or just skip
+        });
+    });
+}
