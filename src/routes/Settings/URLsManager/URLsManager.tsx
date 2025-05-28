@@ -30,7 +30,7 @@ const URLsManager = () => {
     return (
         <div className={styles['wrapper']}>
             <div className={styles['header']}>
-                <div className={styles['label']}>URL</div>
+                <div className={styles['label']}>{t('URL')}</div>
                 <div className={styles['label']}>{t('STATUS')}</div>
             </div>
             <div className={styles['content']}>

@@ -265,7 +265,7 @@ const Addons = ({ urlParams, queryParams }) => {
                                 <span className={styles['name']}>{typeof sharedAddon.manifest.name === 'string' && sharedAddon.manifest.name.length > 0 ? sharedAddon.manifest.name : sharedAddon.manifest.id}</span>
                                 {
                                     typeof sharedAddon.manifest.version === 'string' && sharedAddon.manifest.version.length > 0 ?
-                                        <span className={styles['version']}>v. {sharedAddon.manifest.version}</span>
+                                        <span className={styles['version']}>{t('ADDON_VERSION_SHORT', { version: sharedAddon.manifest.version })}</span>
                                         :
                                         null
                                 }

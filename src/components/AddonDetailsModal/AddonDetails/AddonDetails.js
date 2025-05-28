@@ -9,7 +9,7 @@ const { default: Image } = require('stremio/components/Image');
 const styles = require('./styles');
 
 const AddonDetails = ({ className, id, name, version, logo, description, types, transportUrl, official }) => {
-    const t = useTranslation();
+    const { t } = useTranslation();
     const renderLogoFallback = React.useCallback(() => (
         <Icon className={styles['icon']} name={'addons'} />
     ), []);
@@ -26,7 +26,7 @@ const AddonDetails = ({ className, id, name, version, logo, description, types, 
                     <span className={styles['name']}>{typeof name === 'string' && name.length > 0 ? name : id}</span>
                     {
                         typeof version === 'string' && version.length > 0 ?
-                            <span className={styles['version']}>v. {version}</span>
+                            <span className={styles['version']}>{t('ADDON_VERSION_SHORT', {version})}</span>
                             :
                             null
                     }
@@ -43,7 +43,7 @@ const AddonDetails = ({ className, id, name, version, logo, description, types, 
             {
                 typeof transportUrl === 'string' && transportUrl.length > 0 ?
                     <div className={styles['section-container']}>
-                        <span className={styles['section-header']}>URL: </span>
+                        <span className={styles['section-header']}>{`${t('URL')}:`}</span>
                         <span className={classnames(styles['section-label'], styles['transport-url-label'])}>{transportUrl}</span>
                     </div>
                     :

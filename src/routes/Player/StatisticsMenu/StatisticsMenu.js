@@ -27,7 +27,7 @@ const StatisticsMenu = ({ className, peers, speed, completed, infoHash }) => {
                         {t('PLAYER_SPEED')}
                     </div>
                     <div className={styles['value']}>
-                        { speed } MB/s
+                        {`${speed} ${t('MB_S')}`}
                     </div>
                 </div>
                 <div className={styles['stat']}>
