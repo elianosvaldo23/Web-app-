@@ -4,7 +4,6 @@ const recast = require('recast');
 const babelParser = require('@babel/parser');
 
 const directoryToScan = './src';
-const report = [];
 
 function toKey(str) {
     return str
@@ -14,7 +13,7 @@ function toKey(str) {
         .slice(0, 40);
 }
 
-function scanFile(filePath) {
+function scanFile(filePath, report) {
     try {
         const code = fs.readFileSync(filePath, 'utf8');
         const ast = babelParser.parse(code, {
@@ -31,7 +30,6 @@ function scanFile(filePath) {
         });
 
         recast.types.visit(ast, {
-            // Text directly inside JSX
             visitJSXText(path) {
                 const text = path.node.value.trim();
                 if (text.length > 1 && /\w/.test(text)) {
@@ -46,11 +44,9 @@ function scanFile(filePath) {
                 this.traverse(path);
             },
 
-            // { "hello" } style
             visitJSXExpressionContainer(path) {
                 const expr = path.node.expression;
 
-                // Skip expressions that call t()
                 if (
                     expr.type === 'CallExpression' &&
                     expr.callee.type === 'Identifier' &&
@@ -59,7 +55,6 @@ function scanFile(filePath) {
                     return false;
                 }
 
-                // Find only { "text" } expressions
                 if (expr.type === 'StringLiteral') {
                     const parent = path.parentPath.node;
                     if (parent.type === 'JSXElement') {
@@ -82,26 +77,33 @@ function scanFile(filePath) {
     }
 }
 
-function walk(dir) {
+function walk(dir, report) {
     fs.readdirSync(dir).forEach((file) => {
         const fullPath = path.join(dir, file);
         if (fs.statSync(fullPath).isDirectory()) {
-            walk(fullPath);
+            walk(fullPath, report);
         } else if (/\.(js|jsx|ts|tsx)$/.test(file)) {
-            console.log('Scanning file:', fullPath);
-            scanFile(fullPath);
+            // console.log('📄 Scanning file:', fullPath);
+            scanFile(fullPath, report);
         }
     });
 }
 
-function writeReport() {
-    const header = `File,Line,Hardcoded String,Suggested Key\n`;
-    const rows = report.map((row) =>
-        `"${row.file}",${row.line},"${row.string.replace(/"/g, '""')}","${row.key}"`
-    );
-    fs.writeFileSync('i18n-report.csv', header + rows.join('\n'));
-    console.log('✅ Report written to i18n-report.csv');
-}
+describe('i18n hardcoded string scan', () => {
+    it('should print hardcoded strings with suggested keys', () => {
+        const report = [];
+        walk(directoryToScan, report);
 
-walk(directoryToScan);
-writeReport();
+        if (report.length === 0) {
+            console.log('✅ No hardcoded strings found.');
+        } else {
+            console.log('🚨 Hardcoded strings found:');
+            report.forEach(row => {
+                console.log(`File: ${row.file}, Line: ${row.line}, String: "${row.string}", Suggested Key: ${row.key}`);
+            });
+        }
+
+        // Optional: expect no hardcoded strings if you want the test to fail in that case
+        // expect(report.length).toBe(0);
+    });
+});
