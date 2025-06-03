@@ -13,8 +13,8 @@ type Props = {
     className?: string,
     title?: string | (() => string);
     options: MultiselectMenuOption[];
-    value?: string | number | null;
-    onSelect: (value: string | number | null) => void;
+    value?: string | number;
+    onSelect: (value: string | number) => void;
 };
 
 const MultiselectMenu = ({ className, title, options, value, onSelect }: Props) => {
@@ -22,9 +22,9 @@ const MultiselectMenu = ({ className, title, options, value, onSelect }: Props) 
     const multiselectMenuRef = useOutsideClick(() => closeMenu());
     const [level, setLevel] = React.useState<number>(0);
 
-    const selectedOption = options.find(opt => opt.value === value);
+    const selectedOption = options.find((opt) => opt.value === value);
 
-    const onOptionSelect = (selectedValue: string | number | null) => {
+    const onOptionSelect = (selectedValue: string | number) => {
         level ? setLevel(level + 1) : onSelect(selectedValue), closeMenu();
     };
 
@@ -38,11 +38,11 @@ const MultiselectMenu = ({ className, title, options, value, onSelect }: Props) 
                 aria-expanded={menuOpen}
             >
                 <div className={styles['label']}>
-                {
-                    typeof title === 'function'
-                        ? title()
-                        : title ?? selectedOption?.label
-                }
+                    {
+                        typeof title === 'function'
+                            ? title()
+                            : title ?? selectedOption?.label
+                    }
                 </div>
                 <Icon name={'caret-down'} className={classNames(styles['icon'], { [styles['open']]: menuOpen })} />
             </Button>

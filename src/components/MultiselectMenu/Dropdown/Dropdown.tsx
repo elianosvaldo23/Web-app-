@@ -10,11 +10,11 @@ import styles from './Dropdown.less';
 
 type Props = {
     options: MultiselectMenuOption[];
-    value?: string | number | null;
+    value?: string | number;
     menuOpen: boolean | (() => void);
     level: number;
     setLevel: (level: number) => void;
-    onSelect: (value: string | number | null) => void;
+    onSelect: (value: string | number) => void;
 };
 
 const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props) => {
@@ -22,7 +22,7 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
     const optionsRef = useRef(new Map());
     const containerRef = useRef(null);
 
-    const selectedOption = options.find(opt => opt.value === value) || null;
+    const selectedOption = options.find((opt) => opt.value === value);
 
     const handleSetOptionRef = useCallback((optionValue: string | number) => (node: HTMLButtonElement | null) => {
         if (node) {
