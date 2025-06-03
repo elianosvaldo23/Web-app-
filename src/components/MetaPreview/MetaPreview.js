@@ -17,6 +17,7 @@ const ActionButton = require('./ActionButton');
 const MetaLinks = require('./MetaLinks');
 const MetaPreviewPlaceholder = require('./MetaPreviewPlaceholder');
 const styles = require('./styles');
+const { default: useRating } = require('./useRating');
 
 const ALLOWED_LINK_REDIRECTS = [
     routesRegexp.search.regexp,
@@ -24,8 +25,9 @@ const ALLOWED_LINK_REDIRECTS = [
     routesRegexp.metadetails.regexp
 ];
 
-const MetaPreview = React.forwardRef(({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary }, ref) => {
+const MetaPreview = React.forwardRef(({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary, metaDetails }, ref) => {
     const { t } = useTranslation();
+    const { onLiked, onLoved, like } = useRating(metaDetails);
     const [shareModalOpen, openShareModal, closeShareModal] = useBinaryState(false);
     const linksGroups = React.useMemo(() => {
         return Array.isArray(links) ?
@@ -221,6 +223,30 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                         null
                 }
                 {
+                    !compact ?
+                        <ActionButton
+                            className={styles['action-button']}
+                            icon={'volume-medium'}
+                            tabIndex={compact ? -1 : 0}
+                            onClick={onLiked}
+                            tooltip={compact}
+                        />
+                        :
+                        null
+                }
+                {
+                    !compact ?
+                        <ActionButton
+                            className={styles['action-button']}
+                            icon={'volume-high'}
+                            tabIndex={compact ? -1 : 0}
+                            onClick={onLoved}
+                            tooltip={compact}
+                        />
+                        :
+                        null
+                }
+                {
                     typeof showHref === 'string' && compact ?
                         <ActionButton
                             className={classnames(styles['action-button'], styles['show-button'])}
@@ -287,7 +313,8 @@ MetaPreview.propTypes = {
     })),
     trailerStreams: PropTypes.array,
     inLibrary: PropTypes.bool,
-    toggleInLibrary: PropTypes.func
+    toggleInLibrary: PropTypes.func,
+    metaDetails: PropTypes.object
 };
 
 module.exports = MetaPreview;
