@@ -183,7 +183,7 @@ const useStreamingServerSettingsInputs = (streamingServer) => {
                     value: name,
                 }))
             ],
-            value: streamingServer.settings.content.transcodeProfile ?? null,
+            value: streamingServer.settings.content.transcodeProfile,
             onSelect: (value) => {
                 core.transport.dispatch({
                     action: 'StreamingServer',
