@@ -5,7 +5,7 @@ const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const NotFound = require('stremio/routes/NotFound');
 const { useProfile, useNotifications, routesRegexp, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
-const { DelayedRenderer, Chips, Image, MainNavBars, Multiselect, LibItem } = require('stremio/components');
+const { DelayedRenderer, Chips, Image, MainNavBars, LibItem, MultiselectMenu } = require('stremio/components');
 const { default: Placeholder } = require('./Placeholder');
 const useLibrary = require('./useLibrary');
 const useSelectableInputs = require('./useSelectableInputs');
@@ -64,17 +64,17 @@ const Library = ({ model, urlParams, queryParams }) => {
         }
     }, [profile.auth, library.selected]);
     React.useEffect(() => {
-        if (!library.selected?.type && typeSelect.selected) {
-            window.location = typeSelect.selected[0];
+        if (!library.selected?.type && typeSelect.value) {
+            window.location = typeSelect.value;
         }
-    }, [typeSelect.selected, library.selected]);
+    }, [typeSelect.value, library.selected]);
     return (
         <MainNavBars className={styles['library-container']} route={model}>
             {
                 profile.auth !== null ?
                     <div className={styles['library-content']}>
                         <div className={styles['selectable-inputs-container']}>
-                            <Multiselect {...typeSelect} className={styles['select-input-container']} />
+                            <MultiselectMenu {...typeSelect} className={styles['select-input-container']} />
                             <Chips {...sortChips} className={styles['select-input-container']} />
                         </div>
                         {
