@@ -5,34 +5,32 @@ const useRating = (metaDetails: MetaDetails) => {
     const { core } = useServices();
 
     const like = useMemo(() => {
-        return metaDetails.like !== null && metaDetails.like.type === 'Ready' ? metaDetails.like.content : null;
+        return metaDetails.like?.type === 'Ready' ? metaDetails.like.content : null;
     }, [metaDetails.like]);
-    const setRating = useCallback(
-        (status: string) => {
-            if (!metaDetails.metaItem || !metaDetails.metaItem.content) {
-                return;
-            }
-            core.transport.dispatch({
-                action: 'MetaDetails',
+
+    const setRating = useCallback((status: LoadableError | null) => {
+        const metaId = metaDetails.metaItem?.content?.content?.id;
+        if (!metaId) return;
+
+        core.transport.dispatch({
+            action: 'MetaDetails',
+            args: {
+                action: 'Rate',
                 args: {
-                    action: 'Rate',
-                    args: {
-                        id: metaDetails?.metaItem.content.content?.id,
-                        status: status,
-                    },
+                    id: metaId,
+                    status,
                 },
-            });
-        },
-        [metaDetails],
-    );
+            },
+        });
+    }, [metaDetails.metaItem?.content?.content?.id]);
 
-    const onLiked = () => {
+    const onLiked = useCallback(() => {
         setRating(like === 'liked' ? null : 'liked');
-    };
+    }, [like, setRating]);
 
-    const onLoved = () => {
+    const onLoved = useCallback(() => {
         setRating(like === 'loved' ? null : 'loved');
-    };
+    }, [like, setRating]);
 
     return {
         onLiked,
