@@ -13,17 +13,19 @@ type Props = {
     className?: string,
     title?: string | (() => string);
     options: MultiselectMenuOption[];
-    selectedOption?: MultiselectMenuOption;
-    onSelect: (value: number) => void;
+    value?: string | number | null;
+    onSelect: (value: string | number | null) => void;
 };
 
-const MultiselectMenu = ({ className, title, options, selectedOption, onSelect }: Props) => {
+const MultiselectMenu = ({ className, title, options, value, onSelect }: Props) => {
     const [menuOpen, , closeMenu, toggleMenu] = useBinaryState(false);
     const multiselectMenuRef = useOutsideClick(() => closeMenu());
     const [level, setLevel] = React.useState<number>(0);
 
-    const onOptionSelect = (value: number) => {
-        level ? setLevel(level + 1) : onSelect(value), closeMenu();
+    const selectedOption = options.find(opt => opt.value === value);
+
+    const onOptionSelect = (selectedValue: string | number | null) => {
+        level ? setLevel(level + 1) : onSelect(selectedValue), closeMenu();
     };
 
     return (
@@ -35,11 +37,13 @@ const MultiselectMenu = ({ className, title, options, selectedOption, onSelect }
                 aria-haspopup='listbox'
                 aria-expanded={menuOpen}
             >
+                <div className={styles['label']}>
                 {
                     typeof title === 'function'
                         ? title()
                         : title ?? selectedOption?.label
                 }
+                </div>
                 <Icon name={'caret-down'} className={classNames(styles['icon'], { [styles['open']]: menuOpen })} />
             </Button>
             {
@@ -50,7 +54,7 @@ const MultiselectMenu = ({ className, title, options, selectedOption, onSelect }
                         options={options}
                         onSelect={onOptionSelect}
                         menuOpen={menuOpen}
-                        selectedOption={selectedOption}
+                        value={value}
                     />
                     : null
             }

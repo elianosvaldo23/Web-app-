@@ -14,7 +14,6 @@
     }
 
     .multiselect-button {
-        color: var(--primary-foreground-color);
         padding: 0.75rem 1.5rem;
         display: flex;
         flex: 1;
@@ -22,6 +21,13 @@
         align-items: center;
         gap: 0 0.5rem;
         border-radius: @border-radius;
+
+        .label {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--primary-foreground-color);
+        }
 
         .icon {
             width: 1rem;

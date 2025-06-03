@@ -77,10 +77,7 @@ const useStreamingServerSettingsInputs = (streamingServer) => {
                     value: address,
                 }))
             ],
-            selectedOption: {
-                label: streamingServer.settings.content.remoteHttps || t('SETTINGS_DISABLED'),
-                value: streamingServer.settings.content.remoteHttps
-            },
+            value: streamingServer.settings.content.remoteHttps,
             onSelect: (value) => {
                 core.transport.dispatch({
                     action: 'StreamingServer',
@@ -106,10 +103,7 @@ const useStreamingServerSettingsInputs = (streamingServer) => {
                 label: cacheSizeToString(size),
                 value: JSON.stringify(size)
             })),
-            selectedOption: {
-                label: cacheSizeToString(streamingServer.settings.content.cacheSize),
-                value: JSON.stringify(streamingServer.settings.content.cacheSize)
-            },
+            value: JSON.stringify(streamingServer.settings.content.cacheSize),
             title: () => {
                 return cacheSizeToString(streamingServer.settings.content.cacheSize);
             },
@@ -158,12 +152,7 @@ const useStreamingServerSettingsInputs = (streamingServer) => {
                         :
                         []
                 ),
-            selectedOption: {
-                label: isCustomTorrentProfileSelected
-                    ? 'custom'
-                    : Object.keys(TORRENT_PROFILES).find((profileName) => JSON.stringify(TORRENT_PROFILES[profileName]) === JSON.stringify(selectedTorrentProfile)),
-                value: JSON.stringify(selectedTorrentProfile)
-            },
+            value: JSON.stringify(selectedTorrentProfile),
             onSelect: (value) => {
                 core.transport.dispatch({
                     action: 'StreamingServer',
@@ -194,10 +183,7 @@ const useStreamingServerSettingsInputs = (streamingServer) => {
                     value: name,
                 }))
             ],
-            selectedOption: {
-                label: streamingServer.settings.content.transcodeProfile || t('SETTINGS_DISABLED'),
-                value: streamingServer.settings.content.transcodeProfile
-            },
+            value: streamingServer.settings.content.transcodeProfile ?? null,
             onSelect: (value) => {
                 core.transport.dispatch({
                     action: 'StreamingServer',

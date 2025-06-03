@@ -15,10 +15,7 @@ const useProfileSettingsInputs = (profile) => {
             value: codes[0],
             label: name,
         })),
-        selectedOption: {
-            label: interfaceLanguages.find(({ codes }) => codes[0] === profile.settings.interfaceLanguage || codes[1] === profile.settings.interfaceLanguage)?.name,
-            value: interfaceLanguages.find(({ codes }) => codes[1] === profile.settings.interfaceLanguage)?.codes?.[0] || profile.settings.interfaceLanguage
-        },
+        value: interfaceLanguages.find(({ codes }) => codes[1] === profile.settings.interfaceLanguage)?.codes?.[0] || profile.settings.interfaceLanguage,
         onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
@@ -73,10 +70,7 @@ const useProfileSettingsInputs = (profile) => {
                 label: languageNames[code]
             }))
         ],
-        selectedOption: {
-            label: languageNames[profile.settings.subtitlesLanguage],
-            value: profile.settings.subtitlesLanguage
-        },
+        value: profile.settings.subtitlesLanguage,
         onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
@@ -95,10 +89,7 @@ const useProfileSettingsInputs = (profile) => {
             value: `${size}`,
             label: `${size}%`
         })),
-        selectedOption: {
-            label: `${profile.settings.subtitlesSize}%`,
-            value: `${profile.settings.subtitlesSize}`
-        },
+        value: `${profile.settings.subtitlesSize}`,
         title: () => {
             return `${profile.settings.subtitlesSize}%`;
         },
@@ -165,10 +156,7 @@ const useProfileSettingsInputs = (profile) => {
             value: code,
             label: languageNames[code]
         })),
-        selectedOption: {
-            label: languageNames[profile.settings.audioLanguage],
-            value: profile.settings.audioLanguage
-        },
+        value: profile.settings.audioLanguage,
         onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
@@ -218,10 +206,7 @@ const useProfileSettingsInputs = (profile) => {
             value: `${size}`,
             label: `${size / 1000} ${t('SECONDS')}`
         })),
-        selectedOption: {
-            label: `${profile.settings.seekTimeDuration / 1000} ${t('SECONDS')}`,
-            value: `${profile.settings.seekTimeDuration}`
-        },
+        value: `${profile.settings.seekTimeDuration}`,
         title: () => {
             return `${profile.settings.seekTimeDuration / 1000} ${t('SECONDS')}`;
         },
@@ -243,10 +228,7 @@ const useProfileSettingsInputs = (profile) => {
             value: `${size}`,
             label: `${size / 1000} ${t('SECONDS')}`
         })),
-        selectedOption: {
-            label: `${profile.settings.seekShortTimeDuration / 1000} ${t('SECONDS')}`,
-            value: `${profile.settings.seekShortTimeDuration}`,
-        },
+        value: `${profile.settings.seekShortTimeDuration}`,
         title: () => {
             return `${profile.settings.seekShortTimeDuration / 1000} ${t('SECONDS')}`;
         },
@@ -270,10 +252,7 @@ const useProfileSettingsInputs = (profile) => {
                 value,
                 label: t(label),
             })),
-        selectedOption: {
-            label: CONSTANTS.EXTERNAL_PLAYERS.find(({ value }) => value === profile.settings.playerType)?.label,
-            value: profile.settings.playerType
-        },
+        value: profile.settings.playerType,
         title: () => {
             const selectedOption = CONSTANTS.EXTERNAL_PLAYERS.find(({ value }) => value === profile.settings.playerType);
             return selectedOption ? t(selectedOption.label, { defaultValue: selectedOption.label }) : profile.settings.playerType;
@@ -296,12 +275,7 @@ const useProfileSettingsInputs = (profile) => {
             value: `${duration}`,
             label: duration === 0 ? 'Disabled' : `${duration / 1000} ${t('SECONDS')}`
         })),
-        selectedOption: {
-            label: profile.settings.nextVideoNotificationDuration === 0
-                ? 'Disabled'
-                : `${profile.settings.nextVideoNotificationDuration / 1000} ${t('SECONDS')}`,
-            value: `${profile.settings.nextVideoNotificationDuration}`
-        },
+        value: `${profile.settings.nextVideoNotificationDuration}`,
         title: () => {
             return profile.settings.nextVideoNotificationDuration === 0 ?
                 'Disabled'

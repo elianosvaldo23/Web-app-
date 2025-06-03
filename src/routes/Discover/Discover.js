@@ -100,13 +100,13 @@ const Discover = ({ urlParams, queryParams }) => {
             <div className={styles['discover-content']}>
                 <div className={styles['catalog-container']}>
                     <div className={styles['selectable-inputs-container']}>
-                        {selectInputs.map(({ title, options, selectedOption, onSelect }, index) => (
+                        {selectInputs.map(({ title, options, value, onSelect }, index) => (
                             <MultiselectMenu
                                 key={index}
                                 className={styles['select-input']}
                                 title={title}
                                 options={options}
-                                selectedOption={selectedOption}
+                                value={value}
                                 onSelect={onSelect}
                             />
                         ))}
@@ -202,13 +202,13 @@ const Discover = ({ urlParams, queryParams }) => {
             {
                 inputsModalOpen ?
                     <ModalDialog title={'Catalog filters'} className={styles['selectable-inputs-modal']} onCloseRequest={closeInputsModal}>
-                        {selectInputs.map(({ title, options, selectedOption, onSelect }, index) => (
+                        {selectInputs.map(({ title, options, value, onSelect }, index) => (
                             <MultiselectMenu
                                 key={index}
                                 className={styles['select-input']}
                                 title={title}
                                 options={options}
-                                selectedOption={selectedOption}
+                                value={value}
                                 onSelect={onSelect}
                             />
                         ))}

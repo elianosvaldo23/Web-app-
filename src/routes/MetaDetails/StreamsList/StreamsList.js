@@ -89,10 +89,7 @@ const StreamsList = ({ className, video, type, onEpisodeSearch, ...props }) => {
                     title: streamsByAddon[transportUrl].addon.manifest.name,
                 }))
             ],
-            selectedOption: {
-                label: selectedAddon === ALL_ADDONS_KEY ? t('ALL_ADDONS') : streamsByAddon[selectedAddon]?.addon.manifest.name,
-                value: selectedAddon
-            },
+            value: selectedAddon,
             onSelect: onAddonSelected
         };
     }, [streamsByAddon, selectedAddon]);

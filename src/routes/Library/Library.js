@@ -64,10 +64,10 @@ const Library = ({ model, urlParams, queryParams }) => {
         }
     }, [profile.auth, library.selected]);
     React.useEffect(() => {
-        if (!library.selected?.type && typeSelect.selectedOption) {
-            window.location = typeSelect.selectedOption.value;
+        if (!library.selected?.type && typeSelect.value) {
+            window.location = typeSelect.value;
         }
-    }, [typeSelect.selectedOption, library.selected]);
+    }, [typeSelect.value, library.selected]);
     return (
         <MainNavBars className={styles['library-container']} route={model}>
             {

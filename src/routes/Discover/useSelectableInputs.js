@@ -11,11 +11,8 @@ const mapSelectableInputs = (discover, t) => {
                 value: deepLinks.discover,
                 label: t.stringWithPrefix(type, 'TYPE_')
             })),
-        selectedOption: selectedType
-            ? {
-                label: t.stringWithPrefix(selectedType.type, 'TYPE_'),
-                value: selectedType.deepLinks.discover,
-            }
+        value: selectedType
+            ? selectedType.deepLinks.discover
             : undefined,
         title: discover.selected !== null
             ? () => t.stringWithPrefix(discover.selected.request.path.type, 'TYPE_')
@@ -32,11 +29,8 @@ const mapSelectableInputs = (discover, t) => {
                 label: t.catalogTitle({ addon, id, name }),
                 title: `${name} (${addon.manifest.name})`
             })),
-        selectedOption: discover.selected?.request.path.id
-            ? {
-                label: t.catalogTitle({ addon: selectedCatalog.addon, id: selectedCatalog.id, name: selectedCatalog.name }),
-                value: selectedCatalog.deepLinks.discover
-            }
+        value: discover.selected?.request.path.id
+            ? selectedCatalog.deepLinks.discover
             : undefined,
         title: discover.selected !== null
             ? () => {
@@ -61,13 +55,10 @@ const mapSelectableInputs = (discover, t) => {
                     value
                 })
             })),
-            selectedOption: {
-                label: typeof selectedExtra.value === 'string' ? t.stringWithPrefix(selectedExtra.value) : t.string('NONE'),
-                value: JSON.stringify({
-                    href: selectedExtra.deepLinks.discover,
-                    value: selectedExtra.value,
-                })
-            },
+            value: JSON.stringify({
+                href: selectedExtra.deepLinks.discover,
+                value: selectedExtra.value,
+            }),
             title: options.some(({ selected, value }) => selected && value === null) ?
                 () => t.stringWithPrefix(name, 'SELECT_')
                 : t.stringWithPrefix(selectedExtra.value),

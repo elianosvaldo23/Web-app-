@@ -13,12 +13,7 @@ const mapSelectableInputs = (installedAddons, remoteAddons, t) => {
                 label: t.stringWithPrefix(name, 'ADDON_'),
                 title: t.stringWithPrefix(name, 'ADDON_'),
             })),
-        selectedOption: selectedCatalog
-            ? {
-                label: t.stringWithPrefix(selectedCatalog.name, 'ADDON_'),
-                value: selectedCatalog.deepLinks.addons,
-            }
-            : undefined,
+        value: selectedCatalog ? selectedCatalog.deepLinks.addons : undefined,
         title: remoteAddons.selected !== null ?
             () => {
                 const selectableCatalog = remoteAddons.selectable.catalogs
@@ -44,12 +39,7 @@ const mapSelectableInputs = (installedAddons, remoteAddons, t) => {
                 value: deepLinks.addons,
                 label: t.stringWithPrefix(type, 'TYPE_')
             })),
-        selectedOption: selectedType
-            ? {
-                label: selectedType.type !== null ? t.stringWithPrefix(selectedType.type, 'TYPE_') : t.string('TYPE_ALL'),
-                value: selectedType.deepLinks.addons
-            }
-            : undefined,
+        value: selectedType ? selectedType.deepLinks.addons : undefined,
         title: () => {
             return installedAddons.selected !== null ?
                 installedAddons.selected.request.type === null ?

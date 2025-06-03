@@ -10,10 +10,7 @@ const mapSelectableInputs = (library, t) => {
                 value: deepLinks.library,
                 label: type === null ? t.string('TYPE_ALL') : t.stringWithPrefix(type, 'TYPE_')
             })),
-        selectedOption: {
-            label: selectedType?.type === null ? t.string('TYPE_ALL') : t.stringWithPrefix(selectedType?.type, 'TYPE_'),
-            value: selectedType?.deepLinks.library
-        },
+        value: selectedType?.deepLinks.library,
         onSelect: (value) => {
             window.location = value;
         }
