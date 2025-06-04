@@ -2,6 +2,12 @@ import { useMemo, useCallback } from 'react';
 import { useServices } from 'stremio/services';
 
 const useRating = (metaDetails: MetaDetails) => {
+    if (!metaDetails) {
+        return {
+            onLiked: () => {},
+            onLoved: () => {},
+        };
+    }
     const { core } = useServices();
 
     const like = useMemo(() => {
