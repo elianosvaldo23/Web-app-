@@ -41,7 +41,7 @@ ActionButton.propTypes = {
     className: PropTypes.string,
     icon: PropTypes.string,
     label: PropTypes.string,
-    tooltip: PropTypes.bool,
+    tooltip: PropTypes.bool
 };
 
 module.exports = ActionButton;
