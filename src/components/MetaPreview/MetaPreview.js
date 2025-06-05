@@ -268,10 +268,9 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                             })}
                             icon={'thumbs-up'}
                             label={t('LIKE')}
-                            showLabel={liked}
+                            tooltip={true}
                             tabIndex={compact ? -1 : 0}
                             onClick={onLiked}
-                            tooltip={compact}
                         />
                         :
                         null
@@ -284,10 +283,9 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                             })}
                             icon={'heart'}
                             label={t('LOVE')}
-                            showLabel={loved}
+                            tooltip={true}
                             tabIndex={compact ? -1 : 0}
                             onClick={onLoved}
-                            tooltip={compact}
                         />
                         :
                         null

@@ -20,7 +20,7 @@ const useRating = (metaId?: string, like?: Like) => {
                 },
             },
         });
-    }, [core]);
+    }, []);
 
     const liked = useMemo(() => {
         return like?.content === 'liked';
@@ -32,11 +32,11 @@ const useRating = (metaId?: string, like?: Like) => {
 
     const onLiked = useCallback(() => {
         setRating(like?.content === 'liked' ? null : 'liked');
-    }, [like, setRating]);
+    }, [like]);
 
     const onLoved = useCallback(() => {
         setRating(like?.content === 'loved' ? null : 'loved');
-    }, [like, setRating]);
+    }, [like]);
 
     return {
         onLiked,

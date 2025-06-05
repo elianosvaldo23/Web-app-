@@ -58,31 +58,6 @@
             color: var(--primary-background-color);
         }
     }
-
-    &.rating-button {
-        &.active {
-            background-color: var(--primary-accent-color);
-            
-            .icon {
-                color: var(--primary-foreground-color);
-            }
-            
-            .label-container {
-                display: flex;
-                
-                .label {
-                    color: var(--primary-foreground-color);
-                    opacity: 1;
-                }
-            }
-        }
-        
-        &:not(.active) {
-            .label-container {
-                display: none;
-            }
-        }
-    }
 }
 
 @media @phone-landscape {
