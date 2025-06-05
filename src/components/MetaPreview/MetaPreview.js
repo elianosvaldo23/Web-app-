@@ -17,7 +17,7 @@ const ActionButton = require('./ActionButton');
 const MetaLinks = require('./MetaLinks');
 const MetaPreviewPlaceholder = require('./MetaPreviewPlaceholder');
 const styles = require('./styles');
-const { default: useRating } = require('./useRating');
+const { Ratings } = require('./Ratings');
 
 const ALLOWED_LINK_REDIRECTS = [
     routesRegexp.search.regexp,
@@ -27,7 +27,6 @@ const ALLOWED_LINK_REDIRECTS = [
 
 const MetaPreview = React.forwardRef(({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary, metaId, like }, ref) => {
     const { t } = useTranslation();
-    const { onLiked, onLoved, liked, loved } = useRating(metaId, like);
     const [shareModalOpen, openShareModal, closeShareModal] = useBinaryState(false);
     const linksGroups = React.useMemo(() => {
         return Array.isArray(links) ?
@@ -262,30 +261,10 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                 }
                 {
                     !compact ?
-                        <ActionButton
-                            className={classnames(styles['action-button'], styles['rating-button'], {
-                                [styles['active']]: liked
-                            })}
-                            icon={'thumbs-up'}
-                            label={t('LIKE')}
-                            tooltip={true}
-                            tabIndex={compact ? -1 : 0}
-                            onClick={onLiked}
-                        />
-                        :
-                        null
-                }
-                {
-                    !compact ?
-                        <ActionButton
-                            className={classnames(styles['action-button'], styles['rating-button'], {
-                                [styles['active']]: loved
-                            })}
-                            icon={'heart'}
-                            label={t('LOVE')}
-                            tooltip={true}
-                            tabIndex={compact ? -1 : 0}
-                            onClick={onLoved}
+                        <Ratings
+                            metaId={metaId}
+                            like={like}
+                            className={styles['ratings']}
                         />
                         :
                         null
