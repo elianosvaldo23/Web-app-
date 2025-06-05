@@ -260,7 +260,7 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                         null
                 }
                 {
-                    !compact ?
+                    !compact && like.type === 'Ready' ?
                         <Ratings
                             metaId={metaId}
                             like={like}

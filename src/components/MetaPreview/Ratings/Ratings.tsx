@@ -23,10 +23,10 @@ const Ratings = ({ metaId, like, className }: Props) => {
     return (
         <div className={classNames(styles['ratings-container'], className)}>
             <div className={styles['icon-container']} onClick={onLiked}>
-                <Icon name={'thumbs-up'} className={classNames(styles['icon'], { [styles['active']]: liked })} />
+                <Icon name={liked ? 'thumbs-up' : 'thumbs-up-outline'} className={styles['icon']} />
             </div>
             <div className={styles['icon-container']} onClick={onLoved}>
-                <Icon name={'heart'} className={classNames(styles['icon'], { [styles['active']]: loved })} />
+                <Icon name={loved ? 'heart' : 'heart-outline'} className={styles['icon']} />
             </div>
         </div>
     );
