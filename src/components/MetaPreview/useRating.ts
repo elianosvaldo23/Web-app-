@@ -1,23 +1,15 @@
 import { useMemo, useCallback } from 'react';
 import { useServices } from 'stremio/services';
 
-const useRating = (metaDetails: MetaDetails) => {
-    if (!metaDetails) {
-        return {
-            onLiked: () => {},
-            onLoved: () => {},
-        };
-    }
+type Like = {
+    content: 'liked' | 'loved' | null;
+    type: 'Ready' | 'Loading' | 'Error';
+};
+
+const useRating = (metaId?: string, like?: Like) => {
     const { core } = useServices();
 
-    const like = useMemo(() => {
-        return metaDetails.like?.type === 'Ready' ? metaDetails.like.content : null;
-    }, [metaDetails.like]);
-
-    const setRating = useCallback((status: LoadableError | null) => {
-        const metaId = metaDetails.metaItem?.content?.content?.id;
-        if (!metaId) return;
-
+    const setRating = useCallback((status: 'liked' | 'loved' | null) => {
         core.transport.dispatch({
             action: 'MetaDetails',
             args: {
@@ -28,20 +20,29 @@ const useRating = (metaDetails: MetaDetails) => {
                 },
             },
         });
-    }, [metaDetails.metaItem?.content?.content?.id]);
+    }, [core]);
+
+    const liked = useMemo(() => {
+        return like?.content === 'liked';
+    }, [like]);
+
+    const loved = useMemo(() => {
+        return like?.content === 'loved';
+    }, [like]);
 
     const onLiked = useCallback(() => {
-        setRating(like === 'liked' ? null : 'liked');
+        setRating(like?.content === 'liked' ? null : 'liked');
     }, [like, setRating]);
 
     const onLoved = useCallback(() => {
-        setRating(like === 'loved' ? null : 'loved');
+        setRating(like?.content === 'loved' ? null : 'loved');
     }, [like, setRating]);
 
     return {
         onLiked,
         onLoved,
-        like,
+        liked,
+        loved,
     };
 };
 

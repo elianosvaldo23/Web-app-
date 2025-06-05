@@ -25,9 +25,9 @@ const ALLOWED_LINK_REDIRECTS = [
     routesRegexp.metadetails.regexp
 ];
 
-const MetaPreview = React.forwardRef(({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary, metaDetails }, ref) => {
+const MetaPreview = React.forwardRef(({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary, metaId, like }, ref) => {
     const { t } = useTranslation();
-    const { onLiked, onLoved } = useRating(metaDetails);
+    const { onLiked, onLoved, liked, loved } = useRating(metaId, like);
     const [shareModalOpen, openShareModal, closeShareModal] = useBinaryState(false);
     const linksGroups = React.useMemo(() => {
         return Array.isArray(links) ?
@@ -263,8 +263,12 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                 {
                     !compact ?
                         <ActionButton
-                            className={styles['action-button']}
-                            icon={'volume-medium'}
+                            className={classnames(styles['action-button'], styles['rating-button'], {
+                                [styles['active']]: liked
+                            })}
+                            icon={'thumbs-up'}
+                            label={t('LIKE')}
+                            showLabel={liked}
                             tabIndex={compact ? -1 : 0}
                             onClick={onLiked}
                             tooltip={compact}
@@ -275,8 +279,12 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                 {
                     !compact ?
                         <ActionButton
-                            className={styles['action-button']}
-                            icon={'volume-high'}
+                            className={classnames(styles['action-button'], styles['rating-button'], {
+                                [styles['active']]: loved
+                            })}
+                            icon={'heart'}
+                            label={t('LOVE')}
+                            showLabel={loved}
                             tabIndex={compact ? -1 : 0}
                             onClick={onLoved}
                             tooltip={compact}
@@ -314,7 +322,8 @@ MetaPreview.propTypes = {
     trailerStreams: PropTypes.array,
     inLibrary: PropTypes.bool,
     toggleInLibrary: PropTypes.func,
-    metaDetails: PropTypes.object
+    metaId: PropTypes.string,
+    like: PropTypes.object,
 };
 
 module.exports = MetaPreview;

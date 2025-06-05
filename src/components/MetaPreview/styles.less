@@ -207,6 +207,26 @@
                     outline: none;
                 }
             }
+
+            &.rating-button {
+                &.active {
+                    width: auto;
+                    padding: 0 2rem;
+                    border-radius: 4rem;
+                    background-color: var(--primary-accent-color);
+
+                    &:hover, &:focus {
+                        background-color: var(--primary-accent-color);
+                        opacity: 0.8;
+                    }
+                }
+
+                &:not(.active) {
+                    &:hover, &:focus {
+                        background-color: var(--overlay-color);
+                    }
+                }
+            }
         }
     }
 }
