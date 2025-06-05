@@ -8,9 +8,9 @@ const { Button } = require('stremio/components');
 const styles = require('./styles');
 const { Tooltip } = require('stremio/common/Tooltips');
 
-const ActionButton = ({ className, icon, label, tooltip, showLabel = true, ...props }) => {
+const ActionButton = ({ className, icon, label, tooltip, ...props }) => {
     return (
-        <Button title={tooltip ? '' : label} {...props} className={classnames(className, styles['action-button-container'], { 'wide': typeof label === 'string' && !tooltip && showLabel })}>
+        <Button title={tooltip ? '' : label} {...props} className={classnames(className, styles['action-button-container'], { 'wide': typeof label === 'string' && !tooltip })}>
             {
                 tooltip === true ?
                     <Tooltip label={label} position={'top'} />
@@ -26,7 +26,7 @@ const ActionButton = ({ className, icon, label, tooltip, showLabel = true, ...pr
                     null
             }
             {
-                !tooltip && typeof label === 'string' && label.length > 0 && showLabel ?
+                !tooltip && typeof label === 'string' && label.length > 0 ?
                     <div className={styles['label-container']}>
                         <div className={styles['label']}>{label}</div>
                     </div>
@@ -42,7 +42,6 @@ ActionButton.propTypes = {
     icon: PropTypes.string,
     label: PropTypes.string,
     tooltip: PropTypes.bool,
-    showLabel: PropTypes.bool
 };
 
 module.exports = ActionButton;
