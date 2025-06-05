@@ -1,7 +1,12 @@
 // Copyright (C) 2017-2025 Smart code 203358507
 
+@import (reference) '~stremio/common/screen-sizes.less';
+
 @height: 4rem;
 @width: 4rem;
+@height-mobile: 3rem;
+@width-mobile: 3rem;
+
 
 .ratings-container {
     display: flex;
@@ -31,6 +36,22 @@
 
             &:hover {
                 opacity: 1;
+            }
+        }
+    }
+}
+
+@media @phone-landscape {
+    .ratings-container {
+        height: @height-mobile;
+
+        .icon-container {
+            height: @height-mobile;
+            width: @width-mobile;
+
+            .icon {
+                width: 1.75rem;
+                height: 1.75rem;
             }
         }
     }
