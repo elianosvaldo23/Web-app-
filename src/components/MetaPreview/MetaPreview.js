@@ -234,6 +234,16 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                         null
                 }
                 {
+                    !compact ?
+                        <Ratings
+                            metaId={metaId}
+                            like={like}
+                            className={styles['ratings']}
+                        />
+                        :
+                        null
+                }
+                {
                     linksGroups.has(CONSTANTS.SHARE_LINK_CATEGORY) && !compact ?
                         <React.Fragment>
                             <ActionButton
@@ -256,16 +266,6 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                                     null
                             }
                         </React.Fragment>
-                        :
-                        null
-                }
-                {
-                    !compact && like.type === 'Ready' ?
-                        <Ratings
-                            metaId={metaId}
-                            like={like}
-                            className={styles['ratings']}
-                        />
                         :
                         null
                 }
