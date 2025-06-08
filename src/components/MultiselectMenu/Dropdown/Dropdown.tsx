@@ -17,6 +17,52 @@ type Props = {
     onSelect: (value: string | number) => void;
 };
 
+
+
+
+const REVERSE_LANG_CODE_MAP: {[key:string]:string} = {
+    'ar': 'ara',
+    'bg': 'bul',
+    'bn': 'ben',
+    'ca': 'cat',
+    'cs': 'ces',
+    'da': 'dan',
+    'de': 'deu',
+    'el': 'ell',
+    'en': 'eng',
+    'eo': 'epo',
+    'es': 'spa',
+    'eu': 'eus',
+    'fa': 'fas',
+    'fr': 'fre',
+    'he': 'heb',
+    'hi': 'hin',
+    'hr': 'hrv',
+    'hu': 'hun',
+    'id': 'ind',
+    'it': 'ita',
+    'ja': 'jpn',
+    'ko': 'kor',
+    'mk': 'mkd',
+    'my': 'mya',
+    'nb': 'nob',
+    'nl': 'nld',
+    'nn': 'nno',
+    'pl': 'pol',
+    'pt': 'por',
+    'ru': 'rus',
+    'sv': 'swe',
+    'sl': 'slv',
+    'sr': 'srp',
+    'te': 'tel',
+    'tr': 'tur',
+    'uk': 'ukr',
+    'vi': 'vie',
+    'zh': 'zho'
+};
+
+// Usage: O(1) lookup
+
 const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props) => {
     const { t } = useTranslation();
     const optionsRef = useRef(new Map());
@@ -66,21 +112,28 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                     .filter((option: MultiselectMenuOption) => !option.hidden)
                     .sort((a, b) => {
                         
-                        const userLocale = navigator.language || 'en';
-                        const userLangCode = userLocale.split('-')[0];
+                        const userLocale2 = navigator.language || 'en-US';
+                        const userLocale:string = REVERSE_LANG_CODE_MAP[userLocale2.split('-')[0]] || 'eng'; // this is 3 leter code
+                        // console.log(`USERBEFORE : ${userLocale2}, USERAFTER : ${userLocale}`)
+
+                        // const userLangCode = userLocale.split('-')[0];
+
+                        // console.log(`VALUE : ${a.value}, LABEL : ${a.label}`);
+
+                        
                         
                         const getPriority = (option: MultiselectMenuOption) => {
-
-                            const value = String(option.value);
-
+                            
+                            const value2 = String(option.value);
+                            const value = value2.length == 3 ? value2 : (REVERSE_LANG_CODE_MAP[value2.split('-')[0]] || 'eng');
+                            
+                            // console.log(`OPTION VALUE: ${value}`)
                             // Check if the value matches user's language, if yes put at top of list
-                            const matchesUser = value === userLocale || value.startsWith(userLangCode + '-');
-                            if (matchesUser) return 1;
+                            if (value === userLocale) return 1;
 
                             
                             // Check if it's English, put at the second position
-                            const isEnglish = value.startsWith('en-') || value === 'en';
-                            if (isEnglish) return 2;
+                            if (value == 'eng') return 2;
                             
                             return 3; // Everything else
                         };
@@ -98,8 +151,8 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                     })
                 .map((option: MultiselectMenuOption) => (
                     <div 
-                    key={String(option.value)}
-                    className={String(option.value) === 'en-US' ? styles['separator-after'] : ''}>
+                    key={`${String(option.label)}-${String(option.value)}`}
+                    className={String(option.label) === 'English' ? styles['separator-after'] : ''}>
                     <Option
                         key={option.value}
                         ref={handleSetOptionRef(option.value)}
