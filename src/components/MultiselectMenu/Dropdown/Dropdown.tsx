@@ -61,6 +61,14 @@ const REVERSE_LANG_CODE_MAP: {[key:string]:string} = {
     'zh': 'zho'
 };
 
+const fourToThreeLangCodeMap = (x:string):string =>{
+    const result = REVERSE_LANG_CODE_MAP[x.split('-')[0]];
+    if(!result){
+        throw new Error(`Unkwown 4-Letter-Lang code: ${x}`);
+    }
+    return result;
+}
+
 // Usage: O(1) lookup
 
 const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props) => {
@@ -112,24 +120,17 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                     .filter((option: MultiselectMenuOption) => !option.hidden)
                     .sort((a, b) => {
                         
-                        const userLocale2 = navigator.language || 'en-US';
-                        const userLocale:string = REVERSE_LANG_CODE_MAP[userLocale2.split('-')[0]] || 'eng'; // this is 3 leter code
-                        // console.log(`USERBEFORE : ${userLocale2}, USERAFTER : ${userLocale}`)
-
-                        // const userLangCode = userLocale.split('-')[0];
-
-                        // console.log(`VALUE : ${a.value}, LABEL : ${a.label}`);
-
-                        
+                        const fourLetterUserLocale = navigator.language || 'en-US';
+                        const threeLetterUserLocale:string = fourToThreeLangCodeMap(fourLetterUserLocale) || 'eng';                         
                         
                         const getPriority = (option: MultiselectMenuOption) => {
                             
                             const value2 = String(option.value);
-                            const value = value2.length == 3 ? value2 : (REVERSE_LANG_CODE_MAP[value2.split('-')[0]] || 'eng');
-                            
-                            // console.log(`OPTION VALUE: ${value}`)
+
+                            const value = value2.length == 3 ? value2 : (fourToThreeLangCodeMap(fourLetterUserLocale) || 'eng');
+
                             // Check if the value matches user's language, if yes put at top of list
-                            if (value === userLocale) return 1;
+                            if (value === threeLetterUserLocale) return 1;
 
                             
                             // Check if it's English, put at the second position
