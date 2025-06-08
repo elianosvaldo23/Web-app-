@@ -61,9 +61,45 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                 </Button>
                 : null
             }
-            {options
-                .filter((option: MultiselectMenuOption) => !option.hidden)
+
+                {options
+                    .filter((option: MultiselectMenuOption) => !option.hidden)
+                    .sort((a, b) => {
+                        
+                        const userLocale = navigator.language || 'en';
+                        const userLangCode = userLocale.split('-')[0];
+                        
+                        const getPriority = (option: MultiselectMenuOption) => {
+
+                            const value = String(option.value);
+
+                            // Check if the value matches user's language, if yes put at top of list
+                            const matchesUser = value === userLocale || value.startsWith(userLangCode + '-');
+                            if (matchesUser) return 1;
+
+                            
+                            // Check if it's English, put at the second position
+                            const isEnglish = value.startsWith('en-') || value === 'en';
+                            if (isEnglish) return 2;
+                            
+                            return 3; // Everything else
+                        };
+                        
+                        const aPriority = getPriority(a);
+                        const bPriority = getPriority(b);
+                        
+                        //Lowest number is ranked highest
+                        if (aPriority !== bPriority) {
+                            return aPriority - bPriority;
+                        }
+                       
+                        // Same priority = alphabetical by label eg "english", "french"
+                        return a.label.localeCompare(b.label);
+                    })
                 .map((option: MultiselectMenuOption) => (
+                    <div 
+                    key={String(option.value)}
+                    className={String(option.value) === 'en-US' ? styles['separator-after'] : ''}>
                     <Option
                         key={option.value}
                         ref={handleSetOptionRef(option.value)}
@@ -71,6 +107,7 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                         onSelect={onSelect}
                         selectedValue={value}
                     />
+                    </div>
                 ))
             }
         </div>
