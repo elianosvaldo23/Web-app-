@@ -8,7 +8,7 @@ type Like = {
     type: 'Ready' | 'Loading' | 'Error';
 };
 
-const useRating = (metaId?: string, like?: Like) => {
+const useRating = (like?: Like) => {
     const { core } = useServices();
 
     const setRating = useCallback((status: 'liked' | 'loved' | null) => {
@@ -16,10 +16,7 @@ const useRating = (metaId?: string, like?: Like) => {
             action: 'MetaDetails',
             args: {
                 action: 'Rate',
-                args: {
-                    id: metaId,
-                    status,
-                },
+                args: status,
             },
         });
     }, []);

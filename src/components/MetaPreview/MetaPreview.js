@@ -236,7 +236,6 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                 {
                     !compact ?
                         <Ratings
-                            metaId={metaId}
                             like={like}
                             className={styles['ratings']}
                         />

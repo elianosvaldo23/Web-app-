@@ -17,8 +17,8 @@ type Props = {
     className?: string;
 };
 
-const Ratings = ({ metaId, like, className }: Props) => {
-    const { onLiked, onLoved, liked, loved } = useRating(metaId, like);
+const Ratings = ({ like, className }: Props) => {
+    const { onLiked, onLoved, liked, loved } = useRating(like);
     const disabled = useMemo(() => like?.type !== 'Ready', [like]);
 
     return (
