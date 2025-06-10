@@ -17,7 +17,7 @@ const SeasonsBar = ({ className, seasons, season, onSelect }) => {
         }));
     }, [seasons]);
     const selectedSeason = React.useMemo(() => {
-        return { label: String(season), value: String(season) };
+        return String(season);
     }, [season]);
     const prevNextButtonOnClick = React.useCallback((event) => {
         if (typeof onSelect === 'function') {
@@ -64,7 +64,7 @@ const SeasonsBar = ({ className, seasons, season, onSelect }) => {
                 className={styles['seasons-popup-label-container']}
                 options={options}
                 title={season > 0 ? t('SEASON_NUMBER', { season }) : t('SPECIAL')}
-                selectedOption={selectedSeason}
+                value={selectedSeason}
                 onSelect={seasonOnSelect}
             />
             <Button className={classnames(styles['next-season-button'], { 'disabled': nextDisabled })} title={t('NEXT_SEASON')} data-action={'next'} onClick={prevNextButtonOnClick}>

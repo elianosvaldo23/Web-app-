@@ -7,7 +7,7 @@ const classnames = require('classnames');
 const { default: Icon } = require('@stremio/stremio-icons/react');
 const { useServices } = require('stremio/services');
 const { CONSTANTS, useBinaryState, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
-const { AddonDetailsModal, Button, DelayedRenderer, Image, MainNavBars, MetaItem, MetaPreview, Multiselect, ModalDialog } = require('stremio/components');
+const { AddonDetailsModal, Button, DelayedRenderer, Image, MainNavBars, MetaItem, MetaPreview, ModalDialog, MultiselectMenu } = require('stremio/components');
 const useDiscover = require('./useDiscover');
 const useSelectableInputs = require('./useSelectableInputs');
 const styles = require('./styles');
@@ -102,14 +102,13 @@ const Discover = ({ urlParams, queryParams }) => {
             <div className={styles['discover-content']}>
                 <div className={styles['catalog-container']}>
                     <div className={styles['selectable-inputs-container']}>
-                        {selectInputs.map(({ title, options, selected, renderLabelText, onSelect }, index) => (
-                            <Multiselect
+                        {selectInputs.map(({ title, options, value, onSelect }, index) => (
+                            <MultiselectMenu
                                 key={index}
                                 className={styles['select-input']}
                                 title={title}
                                 options={options}
-                                selected={selected}
-                                renderLabelText={renderLabelText}
+                                value={value}
                                 onSelect={onSelect}
                             />
                         ))}
@@ -205,14 +204,13 @@ const Discover = ({ urlParams, queryParams }) => {
             {
                 inputsModalOpen ?
                     <ModalDialog title={t('CATALOG_FILTERS')} className={styles['selectable-inputs-modal']} onCloseRequest={closeInputsModal}>
-                        {selectInputs.map(({ title, options, selected, renderLabelText, onSelect }, index) => (
-                            <Multiselect
+                        {selectInputs.map(({ title, options, value, onSelect }, index) => (
+                            <MultiselectMenu
                                 key={index}
                                 className={styles['select-input']}
                                 title={title}
                                 options={options}
-                                selected={selected}
-                                renderLabelText={renderLabelText}
+                                value={value}
                                 onSelect={onSelect}
                             />
                         ))}

@@ -8,13 +8,12 @@ import Icon from '@stremio/stremio-icons/react';
 
 type Props = {
     option: MultiselectMenuOption;
-    selectedOption?: MultiselectMenuOption | null;
-    onSelect: (value: number) => void;
+    selectedValue?: string | number;
+    onSelect: (value: string | number) => void;
 };
 
-const Option = forwardRef<HTMLButtonElement, Props>(({ option, selectedOption, onSelect }, ref) => {
-    // consider using option.id === selectedOption?.id instead
-    const selected = useMemo(() => option?.value === selectedOption?.value, [option, selectedOption]);
+const Option = forwardRef<HTMLButtonElement, Props>(({ option, selectedValue, onSelect }, ref) => {
+    const selected = useMemo(() => option?.value === selectedValue, [option, selectedValue]);
 
     const handleClick = useCallback(() => {
         onSelect(option.value);

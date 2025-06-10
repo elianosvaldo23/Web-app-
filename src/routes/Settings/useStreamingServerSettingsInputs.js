@@ -77,15 +77,15 @@ const useStreamingServerSettingsInputs = (streamingServer) => {
                     value: address,
                 }))
             ],
-            selected: [streamingServer.settings.content.remoteHttps],
-            onSelect: (event) => {
+            value: streamingServer.settings.content.remoteHttps,
+            onSelect: (value) => {
                 core.transport.dispatch({
                     action: 'StreamingServer',
                     args: {
                         action: 'UpdateSettings',
                         args: {
                             ...streamingServer.settings.content,
-                            remoteHttps: event.value,
+                            remoteHttps: value,
                         }
                     }
                 });
@@ -103,18 +103,18 @@ const useStreamingServerSettingsInputs = (streamingServer) => {
                 label: cacheSizeToString(size),
                 value: JSON.stringify(size)
             })),
-            selected: [JSON.stringify(streamingServer.settings.content.cacheSize)],
-            renderLabelText: () => {
+            value: JSON.stringify(streamingServer.settings.content.cacheSize),
+            title: () => {
                 return cacheSizeToString(streamingServer.settings.content.cacheSize);
             },
-            onSelect: (event) => {
+            onSelect: (value) => {
                 core.transport.dispatch({
                     action: 'StreamingServer',
                     args: {
                         action: 'UpdateSettings',
                         args: {
                             ...streamingServer.settings.content,
-                            cacheSize: JSON.parse(event.value),
+                            cacheSize: JSON.parse(value),
                         }
                     }
                 });
@@ -152,15 +152,15 @@ const useStreamingServerSettingsInputs = (streamingServer) => {
                         :
                         []
                 ),
-            selected: [JSON.stringify(selectedTorrentProfile)],
-            onSelect: (event) => {
+            value: JSON.stringify(selectedTorrentProfile),
+            onSelect: (value) => {
                 core.transport.dispatch({
                     action: 'StreamingServer',
                     args: {
                         action: 'UpdateSettings',
                         args: {
                             ...streamingServer.settings.content,
-                            ...JSON.parse(event.value),
+                            ...JSON.parse(value),
                         }
                     }
                 });
@@ -183,15 +183,15 @@ const useStreamingServerSettingsInputs = (streamingServer) => {
                     value: name,
                 }))
             ],
-            selected: [streamingServer.settings.content.transcodeProfile],
-            onSelect: (event) => {
+            value: streamingServer.settings.content.transcodeProfile,
+            onSelect: (value) => {
                 core.transport.dispatch({
                     action: 'StreamingServer',
                     args: {
                         action: 'UpdateSettings',
                         args: {
                             ...streamingServer.settings.content,
-                            transcodeProfile: event.value,
+                            transcodeProfile: value,
                         }
                     }
                 });
