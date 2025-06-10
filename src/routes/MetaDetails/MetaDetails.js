@@ -77,6 +77,13 @@ const MetaDetails = ({ urlParams, queryParams }) => {
     const seasonOnSelect = React.useCallback((event) => {
         setSeason(event.value);
     }, [setSeason]);
+    const handleEpisodeSearch = React.useCallback((season, episode) => {
+        const searchVideoHash = encodeURIComponent(`${urlParams.id}:${season}:${episode}`);
+        const url = window.location.hash;
+        const searchVideoPath = url.replace(encodeURIComponent(urlParams.videoId), searchVideoHash);
+        window.location = searchVideoPath;
+    }, [urlParams, window.location]);
+
     const renderBackgroundImageFallback = React.useCallback(() => null, []);
     const renderBackground = React.useMemo(() => !!(
         metaPath &&
@@ -131,7 +138,7 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                         metaDetails.metaItem === null ?
                             <div className={styles['meta-message-container']}>
                                 <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                                <div className={styles['message-label']}>No addons ware requested for this meta!</div>
+                                <div className={styles['message-label']}>No addons were requested for this meta!</div>
                             </div>
                             :
                             metaDetails.metaItem.content.type === 'Err' ?
@@ -171,6 +178,8 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                             className={styles['streams-list']}
                             streams={metaDetails.streams}
                             video={video}
+                            type={streamPath.type}
+                            onEpisodeSearch={handleEpisodeSearch}
                         />
                         :
                         metaPath !== null ?

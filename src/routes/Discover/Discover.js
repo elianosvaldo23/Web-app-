@@ -6,12 +6,12 @@ const classnames = require('classnames');
 const { default: Icon } = require('@stremio/stremio-icons/react');
 const { useServices } = require('stremio/services');
 const { CONSTANTS, useBinaryState, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
-const { AddonDetailsModal, Button, DelayedRenderer, Image, MainNavBars, MetaItem, MetaPreview, Multiselect, ModalDialog } = require('stremio/components');
+const { AddonDetailsModal, Button, DelayedRenderer, Image, MainNavBars, MetaItem, MetaPreview, ModalDialog, MultiselectMenu } = require('stremio/components');
 const useDiscover = require('./useDiscover');
 const useSelectableInputs = require('./useSelectableInputs');
 const styles = require('./styles');
 
-const SCROLL_TO_BOTTOM_TRESHOLD = 400;
+const SCROLL_TO_BOTTOM_THRESHOLD = 400;
 
 const Discover = ({ urlParams, queryParams }) => {
     const { core } = useServices();
@@ -20,12 +20,24 @@ const Discover = ({ urlParams, queryParams }) => {
     const [inputsModalOpen, openInputsModal, closeInputsModal] = useBinaryState(false);
     const [addonModalOpen, openAddonModal, closeAddonModal] = useBinaryState(false);
     const [selectedMetaItemIndex, setSelectedMetaItemIndex] = React.useState(0);
+
     const metasContainerRef = React.useRef();
+    const metaPreviewRef = React.useRef();
+
     React.useEffect(() => {
         if (discover.catalog?.content.type === 'Loading') {
             metasContainerRef.current.scrollTop = 0;
         }
     }, [discover.catalog]);
+    React.useEffect(() => {
+        if (hasNextPage && metasContainerRef.current) {
+            const containerHeight = metasContainerRef.current.scrollHeight;
+            const viewportHeight = metasContainerRef.current.clientHeight;
+            if (containerHeight <= viewportHeight + SCROLL_TO_BOTTOM_THRESHOLD) {
+                loadNextPage();
+            }
+        }
+    }, [hasNextPage, loadNextPage]);
     const selectedMetaItem = React.useMemo(() => {
         return discover.catalog !== null &&
             discover.catalog.content.type === 'Ready' &&
@@ -66,7 +78,8 @@ const Discover = ({ urlParams, queryParams }) => {
         }
     }, []);
     const metaItemOnClick = React.useCallback((event) => {
-        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString()) {
+        const visible = window.getComputedStyle(metaPreviewRef.current).display !== 'none';
+        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString() && visible) {
             event.preventDefault();
             event.currentTarget.focus();
         }
@@ -76,7 +89,7 @@ const Discover = ({ urlParams, queryParams }) => {
             loadNextPage();
         }
     }, [hasNextPage, loadNextPage]);
-    const onScroll = useOnScrollToBottom(onScrollToBottom, SCROLL_TO_BOTTOM_TRESHOLD);
+    const onScroll = useOnScrollToBottom(onScrollToBottom, SCROLL_TO_BOTTOM_THRESHOLD);
     React.useEffect(() => {
         closeInputsModal();
         closeAddonModal();
@@ -87,20 +100,21 @@ const Discover = ({ urlParams, queryParams }) => {
             <div className={styles['discover-content']}>
                 <div className={styles['catalog-container']}>
                     <div className={styles['selectable-inputs-container']}>
-                        {selectInputs.map(({ title, options, selected, renderLabelText, onSelect }, index) => (
-                            <Multiselect
+                        {selectInputs.map(({ title, options, value, onSelect }, index) => (
+                            <MultiselectMenu
                                 key={index}
                                 className={styles['select-input']}
                                 title={title}
                                 options={options}
-                                selected={selected}
-                                renderLabelText={renderLabelText}
+                                value={value}
                                 onSelect={onSelect}
                             />
                         ))}
-                        <Button className={styles['filter-container']} title={'All filters'} onClick={openInputsModal}>
-                            <Icon className={styles['filter-icon']} name={'filters'} />
-                        </Button>
+                        <div className={styles['filter-container']}>
+                            <Button className={styles['filter-button']} title={'All filters'} onClick={openInputsModal}>
+                                <Icon className={styles['filter-icon']} name={'filters'} />
+                            </Button>
+                        </div>
                     </div>
                     {
                         discover.catalog !== null && !discover.catalog.installed ?
@@ -164,6 +178,7 @@ const Discover = ({ urlParams, queryParams }) => {
                         <MetaPreview
                             className={styles['meta-preview-container']}
                             compact={true}
+                            ref={metaPreviewRef}
                             name={selectedMetaItem.name}
                             logo={selectedMetaItem.logo}
                             background={selectedMetaItem.poster}
@@ -187,14 +202,13 @@ const Discover = ({ urlParams, queryParams }) => {
             {
                 inputsModalOpen ?
                     <ModalDialog title={'Catalog filters'} className={styles['selectable-inputs-modal']} onCloseRequest={closeInputsModal}>
-                        {selectInputs.map(({ title, options, selected, renderLabelText, onSelect }, index) => (
-                            <Multiselect
+                        {selectInputs.map(({ title, options, value, onSelect }, index) => (
+                            <MultiselectMenu
                                 key={index}
                                 className={styles['select-input']}
                                 title={title}
                                 options={options}
-                                selected={selected}
-                                renderLabelText={renderLabelText}
+                                value={value}
                                 onSelect={onSelect}
                             />
                         ))}

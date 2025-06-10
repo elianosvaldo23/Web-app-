@@ -24,7 +24,7 @@ const ALLOWED_LINK_REDIRECTS = [
     routesRegexp.metadetails.regexp
 ];
 
-const MetaPreview = ({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary }) => {
+const MetaPreview = React.forwardRef(({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary }, ref) => {
     const { t } = useTranslation();
     const [shareModalOpen, openShareModal, closeShareModal] = useBinaryState(false);
     const linksGroups = React.useMemo(() => {
@@ -98,7 +98,7 @@ const MetaPreview = ({ className, compact, name, logo, background, runtime, rele
         <div className={styles['logo-placeholder']}>{name}</div>
     ), [name]);
     return (
-        <div className={classnames(className, styles['meta-preview-container'], { [styles['compact']]: compact })}>
+        <div className={classnames(className, styles['meta-preview-container'], { [styles['compact']]: compact })} ref={ref}>
             {
                 typeof background === 'string' && background.length > 0 ?
                     <div className={styles['background-image-layer']}>
@@ -261,7 +261,7 @@ const MetaPreview = ({ className, compact, name, logo, background, runtime, rele
             </div>
         </div>
     );
-};
+});
 
 MetaPreview.Placeholder = MetaPreviewPlaceholder;
 

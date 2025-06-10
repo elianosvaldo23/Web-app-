@@ -6,7 +6,7 @@ const classnames = require('classnames');
 const { useTranslation } = require('react-i18next');
 const { default: Icon } = require('@stremio/stremio-icons/react');
 const { usePlatform, useBinaryState, withCoreSuspender } = require('stremio/common');
-const { AddonDetailsModal, Button, Image, MainNavBars, Multiselect, ModalDialog, SearchBar, SharePrompt, TextInput } = require('stremio/components');
+const { AddonDetailsModal, Button, Image, MainNavBars, ModalDialog, SearchBar, SharePrompt, TextInput, MultiselectMenu } = require('stremio/components');
 const { useServices } = require('stremio/services');
 const Addon = require('./Addon');
 const useInstalledAddons = require('./useInstalledAddons');
@@ -107,7 +107,7 @@ const Addons = ({ urlParams, queryParams }) => {
             <div className={styles['addons-content']}>
                 <div className={styles['selectable-inputs-container']}>
                     {selectInputs.map((selectInput, index) => (
-                        <Multiselect
+                        <MultiselectMenu
                             {...selectInput}
                             key={index}
                             className={styles['select-input-container']}
@@ -218,7 +218,7 @@ const Addons = ({ urlParams, queryParams }) => {
                 filtersModalOpen ?
                     <ModalDialog title={'Addons filters'} className={styles['filters-modal']} onCloseRequest={closeFiltersModal}>
                         {selectInputs.map((selectInput, index) => (
-                            <Multiselect
+                            <MultiselectMenu
                                 {...selectInput}
                                 key={index}
                                 className={styles['select-input-container']}

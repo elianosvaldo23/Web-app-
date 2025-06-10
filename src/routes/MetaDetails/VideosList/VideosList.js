@@ -7,6 +7,7 @@ const { t } = require('i18next');
 const { useServices } = require('stremio/services');
 const { Image, SearchBar, Toggle, Video } = require('stremio/components');
 const SeasonsBar = require('./SeasonsBar');
+const { default: EpisodePicker } = require('../EpisodePicker');
 const styles = require('./styles');
 
 const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, toggleNotifications }) => {
@@ -92,6 +93,15 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
         });
     };
 
+    const onSeasonSearch = (value) => {
+        if (value) {
+            seasonOnSelect({
+                type: 'select',
+                value,
+            });
+        }
+    };
+
     return (
         <div className={classnames(className, styles['videos-list-container'])}>
             {
@@ -110,6 +120,7 @@ const VideosList = ({ className, metaItem, libraryItem, season, seasonOnSelect, 
                     :
                     metaItem.content.type === 'Err' || videosForSeason.length === 0 ?
                         <div className={styles['message-container']}>
+                            <EpisodePicker className={styles['episode-picker']} onSubmit={onSeasonSearch} />
                             <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
                             <div className={styles['label']}>No videos found for this meta!</div>
                         </div>

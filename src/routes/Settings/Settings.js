@@ -8,7 +8,7 @@ const { default: Icon } = require('@stremio/stremio-icons/react');
 const { useRouteFocused } = require('stremio-router');
 const { useServices } = require('stremio/services');
 const { useProfile, usePlatform, useStreamingServer, withCoreSuspender, useToast } = require('stremio/common');
-const { Button, ColorInput, MainNavBars, Multiselect, Toggle } = require('stremio/components');
+const { Button, ColorInput, MainNavBars, MultiselectMenu, Toggle } = require('stremio/components');
 const useProfileSettingsInputs = require('./useProfileSettingsInputs');
 const useStreamingServerSettingsInputs = require('./useStreamingServerSettingsInputs');
 const useDataExport = require('./useDataExport');
@@ -49,6 +49,7 @@ const Settings = () => {
         bingeWatchingToggle,
         playInBackgroundToggle,
         hardwareDecodingToggle,
+        pauseOnMinimizeToggle,
     } = useProfileSettingsInputs(profile);
     const {
         streamingServerRemoteUrlInput,
@@ -314,7 +315,7 @@ const Settings = () => {
                             </div>
                             <Button className={classnames(styles['option-input-container'], styles['button-container'])} title={'Authenticate'} disabled={profile.auth === null} tabIndex={-1} onClick={toggleTraktOnClick}>
                                 <div className={styles['label']}>
-                                    { profile.auth !== null && profile.auth.user !== null && profile.auth.user.trakt !== null ? t('LOG_OUT') : t('SETTINGS_TRAKT_AUTHENTICATE') }
+                                    { isTraktAuthenticated ? t('LOG_OUT') : t('SETTINGS_TRAKT_AUTHENTICATE') }
                                 </div>
                             </Button>
                         </div>
@@ -324,7 +325,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_UI_LANGUAGE') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 tabIndex={-1}
                                 {...interfaceLanguageSelect}
@@ -386,7 +387,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SUBTITLES_LANGUAGE') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...subtitlesLanguageSelect}
                             />
@@ -395,7 +396,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SUBTITLES_SIZE') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...subtitlesSizeSelect}
                             />
@@ -437,7 +438,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_DEFAULT_AUDIO_TRACK') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...audioLanguageSelect}
                             />
@@ -462,7 +463,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SEEK_KEY') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...seekTimeDurationSelect}
                             />
@@ -471,7 +472,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SEEK_KEY_SHIFT') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...seekShortTimeDurationSelect}
                             />
@@ -506,7 +507,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_NEXT_VIDEO_POPUP_DURATION') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 disabled={!profile.settings.bingeWatching}
                                 {...nextVideoPopupDurationSelect}
@@ -522,7 +523,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_PLAY_IN_EXTERNAL_PLAYER') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...playInExternalPlayerSelect}
                             />
@@ -537,6 +538,18 @@ const Settings = () => {
                                         className={classnames(styles['option-input-container'], styles['toggle-container'])}
                                         tabIndex={-1}
                                         {...hardwareDecodingToggle}
+                                    />
+                                </div>
+                        }
+                        {
+                            shell.active &&
+                                <div className={styles['option-container']}>
+                                    <div className={styles['option-name-container']}>
+                                        <div className={styles['label']}>{ t('SETTINGS_PAUSE_MINIMIZED') }</div>
+                                    </div>
+                                    <Toggle
+                                        className={classnames(styles['option-input-container'], styles['toggle-container'])}
+                                        {...pauseOnMinimizeToggle}
                                     />
                                 </div>
                         }
@@ -566,7 +579,7 @@ const Settings = () => {
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>{ t('SETTINGS_HTTPS_ENDPOINT') }</div>
                                     </div>
-                                    <Multiselect
+                                    <MultiselectMenu
                                         className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                         {...remoteEndpointSelect}
                                     />
@@ -580,7 +593,7 @@ const Settings = () => {
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>{ t('SETTINGS_SERVER_CACHE_SIZE') }</div>
                                     </div>
-                                    <Multiselect
+                                    <MultiselectMenu
                                         className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                         {...cacheSizeSelect}
                                     />
@@ -594,7 +607,7 @@ const Settings = () => {
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>{ t('SETTINGS_SERVER_TORRENT_PROFILE') }</div>
                                     </div>
-                                    <Multiselect
+                                    <MultiselectMenu
                                         className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                         {...torrentProfileSelect}
                                     />
@@ -608,7 +621,7 @@ const Settings = () => {
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>{ t('SETTINGS_TRANSCODE_PROFILE') }</div>
                                     </div>
-                                    <Multiselect
+                                    <MultiselectMenu
                                         className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                         {...transcodingProfileSelect}
                                     />

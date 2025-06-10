@@ -1,7 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 import { useCallback, useEffect, useState } from 'react';
-import useShell, { type WindowVisibilityState } from './useShell';
+import useShell, { type WindowVisibility } from './useShell';
 import useSettings from './useSettings';
 
 const useFullscreen = () => {
@@ -22,7 +22,9 @@ const useFullscreen = () => {
         if (shell.active) {
             shell.send('win-set-visibility', { fullscreen: false });
         } else {
-            document.exitFullscreen();
+            if (document.fullscreenElement === document.documentElement) {
+                document.exitFullscreen();
+            }
         }
     }, []);
 
@@ -31,7 +33,7 @@ const useFullscreen = () => {
     }, [fullscreen]);
 
     useEffect(() => {
-        const onWindowVisibilityChanged = (state: WindowVisibilityState) => {
+        const onWindowVisibilityChanged = (state: WindowVisibility) => {
             setFullscreen(state.isFullscreen === true);
         };
 
@@ -42,6 +44,10 @@ const useFullscreen = () => {
         const onKeyDown = (event: KeyboardEvent) => {
             if (event.code === 'Escape' && settings.escExitFullscreen) {
                 exitFullscreen();
+            }
+
+            if (event.code === 'KeyF') {
+                toggleFullscreen();
             }
 
             if (event.code === 'F11' && shell.active) {
@@ -58,7 +64,7 @@ const useFullscreen = () => {
             document.removeEventListener('keydown', onKeyDown);
             document.removeEventListener('fullscreenchange', onFullscreenChange);
         };
-    }, [settings.escExitFullscreen]);
+    }, [settings.escExitFullscreen, toggleFullscreen]);
 
     return [fullscreen, requestFullscreen, exitFullscreen, toggleFullscreen];
 };

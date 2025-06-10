@@ -1,7 +1,7 @@
 {
     "name": "stremio",
     "displayName": "Stremio",
-    "version": "5.0.0-beta.20",
+    "version": "5.0.0-beta.23",
     "author": "Smart Code OOD",
     "private": true,
     "license": "gpl-2.0",
@@ -18,7 +18,7 @@
         "@stremio/stremio-colors": "5.2.0",
         "@stremio/stremio-core-web": "https://stremio.github.io/stremio-core/stremio-core-web/feat/settings-gamepad-support/dev/stremio-stremio-core-web-0.49.2.tgz",
         "@stremio/stremio-icons": "5.4.1",
-        "@stremio/stremio-video": "0.0.53",
+        "@stremio/stremio-video": "0.0.60",
         "a-color-picker": "1.2.1",
         "bowser": "2.11.0",
         "buffer": "6.0.3",

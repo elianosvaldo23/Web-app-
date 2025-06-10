@@ -21,7 +21,6 @@ const RouterWithProtectedRoutes = withCoreSuspender(withProtectedRoutes(Router))
 const App = () => {
     const { i18n } = useTranslation();
     const shell = useShell();
-    const [windowHidden, setWindowHidden] = React.useState(false);
     const [gamepadSupportEnabled, setGamepadSupportEnabled] = React.useState(false);
     const onPathNotMatch = React.useCallback(() => {
         return NotFound;
@@ -103,25 +102,25 @@ const App = () => {
 
     // Handle shell events
     React.useEffect(() => {
-        const onWindowVisibilityChanged = (state) => {
-            setWindowHidden(state.visible === false && state.visibility === 0);
-        };
-
         const onOpenMedia = (data) => {
-            if (data.startsWith('stremio:///')) return;
-            if (data.startsWith('stremio://')) {
-                const transportUrl = data.replace('stremio://', 'https://');
-                if (URL.canParse(transportUrl)) {
-                    window.location.href = `#/addons?addon=${encodeURIComponent(transportUrl)}`;
+            try {
+                const { protocol, hostname, pathname, searchParams } = new URL(data);
+                if (protocol === CONSTANTS.PROTOCOL) {
+                    if (hostname.length) {
+                        const transportUrl = `https://${hostname}${pathname}`;
+                        window.location.href = `#/addons?addon=${encodeURIComponent(transportUrl)}`;
+                    } else {
+                        window.location.href = `#${pathname}?${searchParams.toString()}`;
+                    }
                 }
+            } catch (e) {
+                console.error('Failed to open media:', e);
             }
         };
 
-        shell.on('win-visibility-changed', onWindowVisibilityChanged);
         shell.on('open-media', onOpenMedia);
 
         return () => {
-            shell.off('win-visibility-changed', onWindowVisibilityChanged);
             shell.off('open-media', onOpenMedia);
         };
     }, []);
@@ -138,7 +137,7 @@ const App = () => {
                         setGamepadSupportEnabled(args.settings.gamepadSupport);
                     }
 
-                    if (args?.settings?.quitOnClose && windowHidden) {
+                    if (args?.settings?.quitOnClose && shell.windowClosed) {
                         shell.send('quit');
                     }
 
@@ -155,7 +154,7 @@ const App = () => {
                 setGamepadSupportEnabled(state.profile.settings.gamepadSupport);
             }
 
-            if (state?.profile?.settings?.quitOnClose && windowHidden) {
+            if (state?.profile?.settings?.quitOnClose && shell.windowClosed) {
                 shell.send('quit');
             }
         };
@@ -200,7 +199,7 @@ const App = () => {
                 services.core.transport.off('CoreEvent', onCoreEvent);
             }
         };
-    }, [initialized, windowHidden]);
+    }, [initialized, shell.windowClosed]);
     return (
         <React.StrictMode>
             <ServicesProvider services={services}>
