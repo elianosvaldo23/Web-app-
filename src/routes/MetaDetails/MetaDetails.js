@@ -167,7 +167,7 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                                             inLibrary={metaDetails.metaItem.content.content.inLibrary}
                                             toggleInLibrary={metaDetails.metaItem.content.content.inLibrary ? removeFromLibrary : addToLibrary}
                                             metaId={metaDetails.metaItem.content.content.id}
-                                            like={metaDetails.like}
+                                            rating={metaDetails.rating}
                                         />
                                     </React.Fragment>
                 }

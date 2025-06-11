@@ -68,3 +68,8 @@ type AudioTrack = {
     lang: string,
     origin: string,
 };
+
+type Rating = {
+    content: 'liked' | 'loved' | null,
+    type: 'Ready' | 'Loading' | 'Error',
+};

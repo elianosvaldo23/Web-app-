@@ -3,12 +3,7 @@
 import { useMemo, useCallback } from 'react';
 import { useServices } from 'stremio/services';
 
-type Like = {
-    content: 'liked' | 'loved' | null;
-    type: 'Ready' | 'Loading' | 'Error';
-};
-
-const useRating = (like?: Like) => {
+const useRating = (rating?: Rating) => {
     const { core } = useServices();
 
     const setRating = useCallback((status: 'liked' | 'loved' | null) => {
@@ -22,20 +17,20 @@ const useRating = (like?: Like) => {
     }, []);
 
     const liked = useMemo(() => {
-        return like?.content === 'liked';
-    }, [like]);
+        return rating?.content === 'liked';
+    }, [rating]);
 
     const loved = useMemo(() => {
-        return like?.content === 'loved';
-    }, [like]);
+        return rating?.content === 'loved';
+    }, [rating]);
 
     const onLiked = useCallback(() => {
-        setRating(like?.content === 'liked' ? null : 'liked');
-    }, [like]);
+        setRating(rating?.content === 'liked' ? null : 'liked');
+    }, [rating]);
 
     const onLoved = useCallback(() => {
-        setRating(like?.content === 'loved' ? null : 'loved');
-    }, [like]);
+        setRating(rating?.content === 'loved' ? null : 'loved');
+    }, [rating]);
 
     return {
         onLiked,

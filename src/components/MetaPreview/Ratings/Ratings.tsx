@@ -6,20 +6,15 @@ import styles from './Ratings.less';
 import Icon from '@stremio/stremio-icons/react';
 import classNames from 'classnames';
 
-type Like = {
-    content: 'liked' | 'loved';
-    type: 'Ready' | 'Loading' | 'Error';
-};
-
 type Props = {
     metaId?: string;
-    like?: Like;
+    rating?: Rating;
     className?: string;
 };
 
-const Ratings = ({ like, className }: Props) => {
-    const { onLiked, onLoved, liked, loved } = useRating(like);
-    const disabled = useMemo(() => like?.type !== 'Ready', [like]);
+const Ratings = ({ rating, className }: Props) => {
+    const { onLiked, onLoved, liked, loved } = useRating(rating);
+    const disabled = useMemo(() => rating?.type !== 'Ready', [rating]);
 
     return (
         <div className={classNames(styles['ratings-container'], className)}>
