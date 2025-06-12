@@ -234,7 +234,7 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                         null
                 }
                 {
-                    !compact ?
+                    !compact && rating !== null ?
                         <Ratings
                             rating={rating}
                             className={styles['ratings']}
