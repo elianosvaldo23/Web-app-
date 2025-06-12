@@ -8,13 +8,13 @@ import classNames from 'classnames';
 
 type Props = {
     metaId?: string;
-    rating?: Rating;
+    ratingInfo?: Loadable<RatingInfo>;
     className?: string;
 };
 
-const Ratings = ({ rating, className }: Props) => {
-    const { onLiked, onLoved, liked, loved } = useRating(rating);
-    const disabled = useMemo(() => rating?.type !== 'Ready', [rating]);
+const Ratings = ({ ratingInfo, className }: Props) => {
+    const { onLiked, onLoved, liked, loved } = useRating(ratingInfo);
+    const disabled = useMemo(() => ratingInfo?.type !== 'Ready', [ratingInfo]);
 
     return (
         <div className={classNames(styles['ratings-container'], className)}>

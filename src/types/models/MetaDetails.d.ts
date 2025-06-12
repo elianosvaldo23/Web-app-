@@ -24,6 +24,5 @@ type MetaDetails = {
         content: Loadable<Stream[]>
     }[],
     title: string | null,
-    like: Loadable<string | null> | null,
-    sentLike: Loadable<string | null> | null
+    ratingInfo: Loadable<RatingInfo> | null,
 };

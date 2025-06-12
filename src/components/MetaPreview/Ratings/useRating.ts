@@ -3,10 +3,10 @@
 import { useMemo, useCallback } from 'react';
 import { useServices } from 'stremio/services';
 
-const useRating = (rating?: Rating) => {
+const useRating = (ratingInfo?: Loadable<RatingInfo>) => {
     const { core } = useServices();
 
-    const setRating = useCallback((status: 'liked' | 'loved' | null) => {
+    const setRating = useCallback((status: RatingStatus) => {
         core.transport.dispatch({
             action: 'MetaDetails',
             args: {
@@ -16,21 +16,26 @@ const useRating = (rating?: Rating) => {
         });
     }, []);
 
+    const status = useMemo(() => {
+        const content = ratingInfo?.type === 'Ready' ? ratingInfo.content as RatingInfo : null;
+        return content?.status;
+    }, [ratingInfo]);
+
     const liked = useMemo(() => {
-        return rating?.content === 'liked';
-    }, [rating]);
+        return status === 'liked';
+    }, [status]);
 
     const loved = useMemo(() => {
-        return rating?.content === 'loved';
-    }, [rating]);
+        return status === 'loved';
+    }, [status]);
 
     const onLiked = useCallback(() => {
-        setRating(rating?.content === 'liked' ? null : 'liked');
-    }, [rating]);
+        setRating(status === 'liked' ? null : 'liked');
+    }, [status]);
 
     const onLoved = useCallback(() => {
-        setRating(rating?.content === 'loved' ? null : 'loved');
-    }, [rating]);
+        setRating(status === 'loved' ? null : 'loved');
+    }, [status]);
 
     return {
         onLiked,
