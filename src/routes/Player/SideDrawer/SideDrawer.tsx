@@ -1,11 +1,11 @@
 // Copyright (C) 2017-2024 Smart code 203358507
 
-import React, { useMemo, useCallback, useState, forwardRef, memo, useRef } from 'react';
+import React, { useMemo, useCallback, useState, forwardRef, memo, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import Icon from '@stremio/stremio-icons/react';
 import { useServices } from 'stremio/services';
 import { CONSTANTS } from 'stremio/common';
-import { MetaPreview, Video, Button } from 'stremio/components';
+import { MetaPreview, Video } from 'stremio/components';
 import SeasonsBar from 'stremio/routes/MetaDetails/VideosList/SeasonsBar';
 import styles from './SideDrawer.less';
 
@@ -78,11 +78,12 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
 
     const currentlyPlayingVideoRef = useRef<HTMLDivElement>(null);
 
-    const jumpToCurrentlyPlaying = () => {
+    useEffect(() => {
         const { current } = currentlyPlayingVideoRef;
-
-        if (current) current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
+        if (current) {
+            setTimeout(() => { current.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300);
+        }
+    }, []);
 
     return (
         <div ref={ref} className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown}>
@@ -111,7 +112,6 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
                             onSelect={seasonOnSelect}
                         />
                         <div className={styles['videos']}>
-                            <Button className={styles['jump-to-currently-playing-btn']} disabled={seriesInfo.season !== season} onClick={jumpToCurrentlyPlaying}><Icon className={styles['icon']} name={'discover-outline'} /></Button>
                             {videos.map((video, index) => (
                                 <div key={index} ref={video.id === props.currentlyPlayingVideoID ? currentlyPlayingVideoRef : null}>
                                     <Video
