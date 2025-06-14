@@ -19,8 +19,6 @@ type Props = {
 const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, className, closeSideDrawer, ...props }: Props, ref) => {
     const { core } = useServices();
     const [season, setSeason] = useState<number>(seriesInfo?.season);
-    const [showFullDescription, setShowFullDescription] = useState(false);
-    const toggleDescription = () => setShowFullDescription((prev) => !prev);
     const metaItem = useMemo(() => {
         return seriesInfo ?
             {
@@ -44,13 +42,6 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
             })
             .sort((a, b) => (a || Number.MAX_SAFE_INTEGER) - (b || Number.MAX_SAFE_INTEGER));
     }, [props.metaItem.videos]);
-    const description = useMemo(() => {
-        if (!metaItem.description) return '';
-        if (showFullDescription || metaItem.description.length <= 175) return metaItem.description;
-        const sliced = metaItem.description.slice(0, 175);
-        const lastSpace = sliced.lastIndexOf(' ');
-        return (lastSpace > 0 ? sliced.slice(0, lastSpace) : sliced) + '...';
-    }, [metaItem.description, showFullDescription])
 
     const seasonOnSelect = useCallback((event: { value: string }) => {
         setSeason(parseInt(event.value));
@@ -98,18 +89,10 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
                     runtime={metaItem.runtime}
                     releaseInfo={metaItem.releaseInfo}
                     released={metaItem.released}
-                    description={description}
+                    description={metaItem.description}
                     links={metaItem.links}
                 />
             </div>
-            {metaItem.description && metaItem.description.length > 175 && (
-                <button
-                    className={styles['show-more-btn']}
-                    onClick={toggleDescription}
-                >   
-                    {showFullDescription ? 'Show less' : 'Show more'}
-                </button>
-            )}
             {
                 seriesInfo ?
                     <div className={styles['series-content']}>
