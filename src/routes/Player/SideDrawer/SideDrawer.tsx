@@ -1,6 +1,6 @@
 // Copyright (C) 2017-2024 Smart code 203358507
 
-import React, { useMemo, useCallback, useState, forwardRef, memo, useRef, useEffect } from 'react';
+import React, { useMemo, useCallback, useState, forwardRef, memo, useRef } from 'react';
 import classNames from 'classnames';
 import Icon from '@stremio/stremio-icons/react';
 import { useServices } from 'stremio/services';
@@ -113,26 +113,25 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
                         />
                         <div className={styles['videos']}>
                             {videos.map((video, index) => (
-                                <div key={index} ref={video.id === props.currentlyPlayingVideoID ? currentlyPlayingVideoRef : null}>
-                                    <Video
-                                        className={styles['video']}
-                                        id={video.id}
-                                        title={video.title}
-                                        thumbnail={video.thumbnail}
-                                        season={video.season}
-                                        episode={video.episode}
-                                        released={video.released}
-                                        upcoming={video.upcoming}
-                                        watched={video.watched}
-                                        seasonWatched={seasonWatched}
-                                        progress={video.progress}
-                                        deepLinks={video.deepLinks}
-                                        scheduled={video.scheduled}
-                                        onMarkVideoAsWatched={onMarkVideoAsWatched}
-                                        onMarkSeasonAsWatched={onMarkSeasonAsWatched}
-
-                                    />
-                                </div>
+                                <Video
+                                    key={index}
+                                    className={styles['video']}
+                                    id={video.id}
+                                    title={video.title}
+                                    thumbnail={video.thumbnail}
+                                    season={video.season}
+                                    episode={video.episode}
+                                    released={video.released}
+                                    upcoming={video.upcoming}
+                                    watched={video.watched}
+                                    seasonWatched={seasonWatched}
+                                    progress={video.progress}
+                                    deepLinks={video.deepLinks}
+                                    scheduled={video.scheduled}
+                                    onMarkVideoAsWatched={onMarkVideoAsWatched}
+                                    onMarkSeasonAsWatched={onMarkSeasonAsWatched}
+                                    ref={video.id === props.currentlyPlayingVideoID ? currentlyPlayingVideoRef : null}
+                                />
                             ))}
                         </div>
                     </div>
