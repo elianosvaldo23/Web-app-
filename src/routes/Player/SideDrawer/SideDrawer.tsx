@@ -13,7 +13,7 @@ type Props = {
     className?: string;
     seriesInfo: SeriesInfo;
     metaItem: MetaItem;
-    currentlyPlayingVideoID: string;
+    selectedVideoID: string;
     closeSideDrawer: () => void;
 };
 
@@ -76,10 +76,10 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
         event.stopPropagation();
     };
 
-    const currentlyPlayingVideoRef = useRef<HTMLDivElement>(null);
+    const selectedVideoRef = useRef<HTMLDivElement>(null);
 
     const jumpToPlayingNow = () => {
-        const { current } = currentlyPlayingVideoRef;
+        const { current } = selectedVideoRef;
         if (current) {
             current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -130,7 +130,7 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
                                     scheduled={video.scheduled}
                                     onMarkVideoAsWatched={onMarkVideoAsWatched}
                                     onMarkSeasonAsWatched={onMarkSeasonAsWatched}
-                                    ref={video.id === props.currentlyPlayingVideoID ? currentlyPlayingVideoRef : null}
+                                    ref={video.id === props.selectedVideoID ? selectedVideoRef : null}
                                 />
                             ))}
                         </div>
