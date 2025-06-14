@@ -80,9 +80,13 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
 
     const jumpToPlayingNow = () => {
         const { current } = selectedVideoRef;
-        if (current) {
-            current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        if (!current) return;
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        });
     };
 
     return (
