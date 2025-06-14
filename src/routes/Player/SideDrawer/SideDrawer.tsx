@@ -78,15 +78,15 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
 
     const currentlyPlayingVideoRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+    const jumpToPlayingNow = () => {
         const { current } = currentlyPlayingVideoRef;
         if (current) {
-            setTimeout(() => { current.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300);
+            current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-    }, []);
+    };
 
     return (
-        <div ref={ref} className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown}>
+        <div ref={ref} className={classNames(styles['side-drawer'], className)} onTransitionEnd={jumpToPlayingNow} onMouseDown={onMouseDown}>
             <div className={styles['close-button']} onClick={closeSideDrawer}>
                 <Icon className={styles['icon']} name={'chevron-forward'} />
             </div>
