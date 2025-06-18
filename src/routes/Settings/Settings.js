@@ -711,6 +711,16 @@ const Settings = () => {
                         </div>
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
+                                <div className={styles['label']}>{ t('SETTINGS_SHORTCUT_SUBTITLES_DELAY') }</div>
+                            </div>
+                            <div className={classnames(styles['option-input-container'], styles['shortcut-container'])}>
+                                <kbd>G</kbd>
+                                <div className={styles['label']}>{ t('SETTINGS_SHORTCUT_AND') }</div>
+                                <kbd>H</kbd>
+                            </div>
+                        </div>
+                        <div className={styles['option-container']}>
+                            <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SHORTCUT_NAVIGATE_MENUS') }</div>
                             </div>
                             <div className={classnames(styles['option-input-container'], styles['shortcut-container'])}>
