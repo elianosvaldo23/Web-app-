@@ -715,7 +715,7 @@ const Settings = () => {
                             </div>
                             <div className={classnames(styles['option-input-container'], styles['shortcut-container'])}>
                                 <kbd>G</kbd>
-                                <div className={styles['label']}>and</div>
+                                <div className={styles['label']}>{ t('SETTINGS_SHORTCUT_AND') }</div>
                                 <kbd>H</kbd>
                             </div>
                         </div>
