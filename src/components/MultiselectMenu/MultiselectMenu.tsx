@@ -11,10 +11,11 @@ import useOutsideClick from 'stremio/common/useOutsideClick';
 
 type Props = {
     className?: string,
-    title?: string | (() => string);
+    title?: string | (() => string | null);
     options: MultiselectMenuOption[];
-    value?: string | number;
-    onSelect: (value: string | number) => void;
+    value?: any;
+    disabled?: boolean,
+    onSelect: (value: any) => void;
 };
 
 const MultiselectMenu = ({ className, title, options, value, onSelect }: Props) => {
