@@ -133,7 +133,7 @@ const StreamsList = ({ className, video, type, onEpisodeSearch, ...props }) => {
                                 : null
                         }
                         <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                        <div className={styles['label']}>No addons were requested for streams!</div>
+                        <div className={styles['label']}>{t('ERR_NO_ADDONS_FOR_STREAMS')}</div>
                     </div>
                     :
                     props.streams.every((streams) => streams.content.type === 'Err') ?
