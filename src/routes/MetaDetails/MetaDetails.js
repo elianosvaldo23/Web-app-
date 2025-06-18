@@ -15,11 +15,16 @@ const useMetaExtensionTabs = require('./useMetaExtensionTabs');
 const styles = require('./styles');
 
 const MetaDetails = () => {
-    const urlParams = useParams();
+    const { type, id, videoId } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { core } = useServices();
+    const urlParams = React.useMemo(() => ({
+        type,
+        id,
+        videoId
+    }), [type, id, videoId]);
     const metaDetails = useMetaDetails(urlParams);
     const [season, setSeason] = useSeason(urlParams);
     const [tabs, metaExtension, clearMetaExtension] = useMetaExtensionTabs(metaDetails.metaExtensions);
