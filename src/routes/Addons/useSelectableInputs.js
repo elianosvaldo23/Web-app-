@@ -10,8 +10,8 @@ const mapSelectableInputs = (installedAddons, remoteAddons, t) => {
             .concat(installedAddons.selectable.catalogs)
             .map(({ name, deepLinks }) => ({
                 value: deepLinks.addons,
-                label: t.stringWithPrefix(name, 'ADDON_'),
-                title: t.stringWithPrefix(name, 'ADDON_'),
+                label: t.stringWithPrefix(name.toUpperCase(), 'ADDON_'),
+                title: t.stringWithPrefix(name.toUpperCase(), 'ADDON_'),
             })),
         value: selectedCatalog ? selectedCatalog.deepLinks.addons : undefined,
         title: remoteAddons.selected !== null ?

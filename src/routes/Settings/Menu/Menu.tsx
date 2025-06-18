@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { useServices } from 'stremio/services';
 import { Button } from 'stremio/components';
 import { SECTIONS } from '../constants';
@@ -13,6 +13,7 @@ type Props = {
 };
 
 const Menu = ({ selected, streamingServer, onSelect }: Props) => {
+    const { t } = useTranslation();
     const { shell } = useServices();
 
     const settings = useMemo(() => (
@@ -37,21 +38,21 @@ const Menu = ({ selected, streamingServer, onSelect }: Props) => {
 
             <div className={styles['spacing']} />
             <div className={styles['version-info-label']} title={process.env.VERSION}>
-                App Version: {process.env.VERSION}
+                {t('SETTINGS_APP_VERSION')}: {process.env.VERSION}
             </div>
             <div className={styles['version-info-label']} title={process.env.COMMIT_HASH}>
-                Build Version: {process.env.COMMIT_HASH}
+                {t('SETTINGS_BUILD_VERSION')}: {process.env.COMMIT_HASH}
             </div>
             {
                 settings?.serverVersion &&
                     <div className={styles['version-info-label']} title={settings.serverVersion}>
-                        Server Version: {settings.serverVersion}
+                        {t('SETTINGS_SERVER_VERSION')}: {settings.serverVersion}
                     </div>
             }
             {
                 typeof shell?.transport?.props?.shellVersion === 'string' &&
                     <div className={styles['version-info-label']} title={shell.transport.props.shellVersion}>
-                        Shell Version: {shell.transport.props.shellVersion}
+                        {t('SETTINGS_SHELL_VERSION')}: {shell.transport.props.shellVersion}
                     </div>
             }
         </div>

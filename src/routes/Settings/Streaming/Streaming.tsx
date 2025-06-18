@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback } from 'react';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import Icon from '@stremio/stremio-icons/react';
 import { Button, MultiselectMenu } from 'stremio/components';
 import { useToast } from 'stremio/common';
@@ -14,6 +14,7 @@ type Props = {
 };
 
 const Streaming = forwardRef<HTMLDivElement, Props>(({ profile, streamingServer }: Props, ref) => {
+    const { t } = useTranslation();
     const toast = useToast();
 
     const {

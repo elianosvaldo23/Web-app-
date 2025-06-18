@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { Option, Section } from '../components';
+import { useTranslation } from 'react-i18next';
 import { useServices } from 'stremio/services';
+import { Option, Section } from '../components';
 import styles from './Info.less';
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 
 const Info = ({ streamingServer }: Props) => {
     const { shell } = useServices();
+    const { t } = useTranslation();
 
     const settings = useMemo(() => (
         streamingServer?.settings?.type === 'Ready' ?
@@ -17,19 +19,19 @@ const Info = ({ streamingServer }: Props) => {
 
     return (
         <Section className={styles['info']}>
-            <Option label={'App Vesion'}>
+            <Option label={t('SETTINGS_APP_VERSION')}>
                 <div className={styles['label']}>
                     {process.env.VERSION}
                 </div>
             </Option>
-            <Option label={'Build Version'}>
+            <Option label={t('SETTINGS_BUILD_VERSION')}>
                 <div className={styles['label']}>
                     {process.env.COMMIT_HASH}
                 </div>
             </Option>
             {
                 settings?.serverVersion &&
-                    <Option label={'Server Version'}>
+                    <Option label={t('SETTINGS_SERVER_VERSION')}>
                         <div className={styles['label']}>
                             {settings.serverVersion}
                         </div>
@@ -37,7 +39,7 @@ const Info = ({ streamingServer }: Props) => {
             }
             {
                 typeof shell?.transport?.props?.shellVersion === 'string' &&
-                    <Option label={'Shell Version'}>
+                    <Option label={t('SETTINGS_SHELL_VERSION')}>
                         <div className={styles['label']}>
                             {shell.transport.props.shellVersion}
                         </div>

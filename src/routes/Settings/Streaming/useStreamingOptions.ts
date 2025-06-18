@@ -165,7 +165,7 @@ const useStreamingOptions = (streamingServer: StreamingServer) => {
         return {
             options: Object.keys(TORRENT_PROFILES)
                 .map((profileName) => ({
-                    label: profileName,
+                    label: t('TORRENT_PROFILE_' + profileName.replace(' ', '_').toUpperCase()),
                     value: JSON.stringify(TORRENT_PROFILES[profileName])
                 }))
                 .concat(

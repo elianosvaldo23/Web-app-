@@ -112,7 +112,7 @@ const General = forwardRef<HTMLDivElement, Props>(({ profile }: Props, ref) => {
                 href={'https://stremio.zendesk.com/hc/en-us'}
             />
             <Link
-                label={'Source Code'}
+                label={'SETTINGS_SOURCE_CODE'}
                 href={`https://github.com/stremio/stremio-web/tree/${process.env.COMMIT_HASH}`}
             />
             <Link
@@ -137,8 +137,8 @@ const General = forwardRef<HTMLDivElement, Props>(({ profile }: Props, ref) => {
                         href={`https://www.strem.io/reset-password/${profile.auth.user.email}`}
                     />
             }
-            <Option className={styles['trakt-container']} icon={'trakt'} label={'Trakt Scrobbling'}>
-                <Button className={'button'} title={'Authenticate'} disabled={profile.auth === null} tabIndex={-1} onClick={onToggleTrakt}>
+            <Option className={styles['trakt-container']} icon={'trakt'} label={t('SETTINGS_TRAKT')}>
+                <Button className={'button'} title={isTraktAuthenticated ? t('LOG_OUT') : t('SETTINGS_TRAKT_AUTHENTICATE')} disabled={profile.auth === null} tabIndex={-1} onClick={onToggleTrakt}>
                     {isTraktAuthenticated ? t('LOG_OUT') : t('SETTINGS_TRAKT_AUTHENTICATE')}
                 </Button>
             </Option>

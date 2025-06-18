@@ -1,9 +1,11 @@
 import React, { forwardRef } from 'react';
-import { t } from 'i18next';
 import { Section, Option } from '../components';
 import styles from './Shortcuts.less';
+import { useTranslation } from 'react-i18next';
 
 const Shortcuts = forwardRef<HTMLDivElement>((_, ref) => {
+    const { t } = useTranslation();
+
     return (
         <Section ref={ref} label={'SETTINGS_NAV_SHORTCUTS'}>
             <Option label={'SETTINGS_SHORTCUT_PLAY_PAUSE'}>
