@@ -56,7 +56,7 @@ const ColorInput = ({ className, value, dataset, onChange, ...props }) => {
         };
         return [
             {
-                label: 'Select',
+                label: t('SELECT'),
                 props: {
                     'data-autofocus': true,
                     onClick: selectButtonOnClick
@@ -82,7 +82,7 @@ const ColorInput = ({ className, value, dataset, onChange, ...props }) => {
             }
             {
                 modalOpen ?
-                    <ModalDialog title={'Choose a color:'} buttons={modalButtons} onCloseRequest={closeModal} onClick={modalDialogOnClick}>
+                    <ModalDialog title={t('CHOOSE_COLOR')} buttons={modalButtons} onCloseRequest={closeModal} onClick={modalDialogOnClick}>
                         <ColorPicker className={styles['color-picker-container']} value={tempValue} onInput={colorPickerOnInput} />
                     </ModalDialog>
                     :

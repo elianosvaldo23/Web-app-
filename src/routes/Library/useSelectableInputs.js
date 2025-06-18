@@ -5,20 +5,16 @@ const { useNavigate } = require('react-router');
 const { useTranslate } = require('stremio/common');
 
 const mapSelectableInputs = (library, t, navigate) => {
-    const selectedType = library.selectable.types
-        .filter(({ selected }) => selected).map(({ deepLinks }) => deepLinks.library);
+    const selectedType = library.selectable.types.find(({ selected }) => selected) || library.selectable.types.find(({ type }) => type === null);
     const typeSelect = {
-        title: t.string('SELECT_TYPE'),
         options: library.selectable.types
             .map(({ type, deepLinks }) => ({
                 value: deepLinks.library,
                 label: type === null ? t.string('TYPE_ALL') : t.stringWithPrefix(type, 'TYPE_')
             })),
-        selected: selectedType.length
-            ? selectedType
-            : [library.selectable.types[0]].map(({ deepLinks }) => deepLinks.library),
-        onSelect: (event) => {
-            navigate(event.value.replace('#', ''));
+        value: selectedType?.deepLinks.library,
+        onSelect: (value) => {
+            navigate(value.replace('#', ''));
         }
     };
     const sortChips = {

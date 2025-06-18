@@ -404,6 +404,13 @@ const Player = () => {
         if (!defaultSubtitlesSelected.current) {
             const findTrackByLang = (tracks, lang) => tracks.find((track) => track.lang === lang || langs.where('1', track.lang)?.[2] === lang);
 
+            if (settings.subtitlesLanguage === null) {
+                onSubtitlesTrackSelected(null);
+                onExtraSubtitlesTrackSelected(null);
+                defaultSubtitlesSelected.current = true;
+                return;
+            }
+
             const subtitlesTrack = findTrackByLang(video.state.subtitlesTracks, settings.subtitlesLanguage);
             const extraSubtitlesTrack = findTrackByLang(video.state.extraSubtitlesTracks, settings.subtitlesLanguage);
 

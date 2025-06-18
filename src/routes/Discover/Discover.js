@@ -1,13 +1,14 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useTranslation } = require('react-i18next');
 const { useParams } = require('react-router');
 const { useSearchParams } = require('react-router-dom');
 const classnames = require('classnames');
 const { default: Icon } = require('@stremio/stremio-icons/react');
 const { useServices } = require('stremio/services');
 const { CONSTANTS, useBinaryState, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
-const { AddonDetailsModal, Button, DelayedRenderer, Image, MainNavBars, MetaItem, MetaPreview, Multiselect, ModalDialog } = require('stremio/components');
+const { AddonDetailsModal, Button, DelayedRenderer, Image, MainNavBars, MetaItem, MetaPreview, ModalDialog, MultiselectMenu } = require('stremio/components');
 const useDiscover = require('./useDiscover');
 const useSelectableInputs = require('./useSelectableInputs');
 const styles = require('./styles');
@@ -17,13 +18,17 @@ const SCROLL_TO_BOTTOM_THRESHOLD = 400;
 const Discover = () => {
     const urlParams = useParams();
     const [queryParams] = useSearchParams();
+    const { t } = useTranslation();
     const { core } = useServices();
     const [discover, loadNextPage] = useDiscover(urlParams, queryParams);
     const [selectInputs, hasNextPage] = useSelectableInputs(discover);
     const [inputsModalOpen, openInputsModal, closeInputsModal] = useBinaryState(false);
     const [addonModalOpen, openAddonModal, closeAddonModal] = useBinaryState(false);
     const [selectedMetaItemIndex, setSelectedMetaItemIndex] = React.useState(0);
+
     const metasContainerRef = React.useRef();
+    const metaPreviewRef = React.useRef();
+
     React.useEffect(() => {
         if (discover.catalog?.content.type === 'Loading') {
             metasContainerRef.current.scrollTop = 0;
@@ -78,7 +83,8 @@ const Discover = () => {
         }
     }, []);
     const metaItemOnClick = React.useCallback((event) => {
-        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString()) {
+        const visible = window.getComputedStyle(metaPreviewRef.current).display !== 'none';
+        if (event.currentTarget.dataset.index !== selectedMetaItemIndex.toString() && visible) {
             event.preventDefault();
             event.currentTarget.focus();
         }
@@ -99,19 +105,18 @@ const Discover = () => {
             <div className={styles['discover-content']}>
                 <div className={styles['catalog-container']}>
                     <div className={styles['selectable-inputs-container']}>
-                        {selectInputs.map(({ title, options, selected, renderLabelText, onSelect }, index) => (
-                            <Multiselect
+                        {selectInputs.map(({ title, options, value, onSelect }, index) => (
+                            <MultiselectMenu
                                 key={index}
                                 className={styles['select-input']}
                                 title={title}
                                 options={options}
-                                selected={selected}
-                                renderLabelText={renderLabelText}
+                                value={value}
                                 onSelect={onSelect}
                             />
                         ))}
                         <div className={styles['filter-container']}>
-                            <Button className={styles['filter-button']} title={'All filters'} onClick={openInputsModal}>
+                            <Button className={styles['filter-button']} title={t('ALL_FILTERS')} onClick={openInputsModal}>
                                 <Icon className={styles['filter-icon']} name={'filters'} />
                             </Button>
                         </div>
@@ -119,9 +124,9 @@ const Discover = () => {
                     {
                         discover.catalog !== null && !discover.catalog.installed ?
                             <div className={styles['missing-addon-warning-container']}>
-                                <div className={styles['warning-label']}>Addon is not installed. Install now?</div>
-                                <Button className={styles['install-button']} title={'Install addon'} onClick={openAddonModal}>
-                                    <div className={styles['label']}>Install</div>
+                                <div className={styles['warning-label']}>{t('ERR_ADDON_NOT_INSTALLED')}</div>
+                                <Button className={styles['install-button']} title={t('INSTALL_ADDON')} onClick={openAddonModal}>
+                                    <div className={styles['label']}>{t('ADDON_INSTALL')}</div>
                                 </Button>
                             </div>
                             :
@@ -132,7 +137,7 @@ const Discover = () => {
                             <DelayedRenderer delay={500}>
                                 <div className={styles['message-container']}>
                                     <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                                    <div className={styles['message-label']}>No catalog selected!</div>
+                                    <div className={styles['message-label']}>{t('NO_CATALOG_SELECTED')}</div>
                                 </div>
                             </DelayedRenderer>
                             :
@@ -178,6 +183,7 @@ const Discover = () => {
                         <MetaPreview
                             className={styles['meta-preview-container']}
                             compact={true}
+                            ref={metaPreviewRef}
                             name={selectedMetaItem.name}
                             logo={selectedMetaItem.logo}
                             background={selectedMetaItem.poster}
@@ -200,15 +206,14 @@ const Discover = () => {
             </div>
             {
                 inputsModalOpen ?
-                    <ModalDialog title={'Catalog filters'} className={styles['selectable-inputs-modal']} onCloseRequest={closeInputsModal}>
-                        {selectInputs.map(({ title, options, selected, renderLabelText, onSelect }, index) => (
-                            <Multiselect
+                    <ModalDialog title={t('CATALOG_FILTERS')} className={styles['selectable-inputs-modal']} onCloseRequest={closeInputsModal}>
+                        {selectInputs.map(({ title, options, value, onSelect }, index) => (
+                            <MultiselectMenu
                                 key={index}
                                 className={styles['select-input']}
                                 title={title}
                                 options={options}
-                                selected={selected}
-                                renderLabelText={renderLabelText}
+                                value={value}
                                 onSelect={onSelect}
                             />
                         ))}

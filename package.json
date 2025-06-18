@@ -10,7 +10,8 @@
         "start-prod": "webpack serve --mode production",
         "build": "webpack --mode production",
         "test": "jest",
-        "lint": "eslint src"
+        "lint": "eslint src",
+        "scan-translations": "npx jest ./tests/i18nScan.test.js"
     },
     "dependencies": {
         "@babel/runtime": "7.26.0",
@@ -42,7 +43,7 @@
         "react-router": "6.30.0",
         "react-router-dom": "6.30.0",
         "spatial-navigation-polyfill": "github:Stremio/spatial-navigation#64871b1422466f5f45d24ebc8bbd315b2ebab6a6",
-        "stremio-translations": "github:Stremio/stremio-translations#a6be0425573917c2e82b66d28968c1a4d444cb96",
+        "stremio-translations": "github:Stremio/stremio-translations#8efdffbcf6eeadf01ab658e54adcc6a236b7b10f",
         "url": "0.11.4",
         "use-long-press": "^3.2.0"
     },
@@ -72,6 +73,7 @@
         "mini-css-extract-plugin": "2.9.2",
         "postcss-loader": "8.1.1",
         "readdirp": "4.0.2",
+        "recast": "0.23.11",
         "terser-webpack-plugin": "5.3.10",
         "thread-loader": "^4.0.4",
         "ts-loader": "^9.5.1",

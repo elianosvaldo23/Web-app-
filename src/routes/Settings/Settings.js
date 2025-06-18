@@ -8,7 +8,7 @@ const { default: Icon } = require('@stremio/stremio-icons/react');
 const { default: useRouteFocused } = require('stremio/common/useRouteFocused');
 const { useServices } = require('stremio/services');
 const { useProfile, usePlatform, useStreamingServer, withCoreSuspender, useToast } = require('stremio/common');
-const { Button, ColorInput, MainNavBars, Multiselect, Toggle } = require('stremio/components');
+const { Button, ColorInput, MainNavBars, MultiselectMenu, Toggle } = require('stremio/components');
 const useProfileSettingsInputs = require('./useProfileSettingsInputs');
 const useStreamingServerSettingsInputs = require('./useStreamingServerSettingsInputs');
 const useDataExport = require('./useDataExport');
@@ -184,20 +184,20 @@ const Settings = () => {
                     </Button>
                     <div className={styles['spacing']} />
                     <div className={styles['version-info-label']} title={process.env.VERSION}>
-                        App Version: {process.env.VERSION}
+                        {`${t('SETTINGS_APP_VERSION')}: ${process.env.VERSION}`}
                     </div>
                     <div className={styles['version-info-label']} title={process.env.COMMIT_HASH}>
-                        Build Version: {process.env.COMMIT_HASH}
+                        {`${t('SETTINGS_BUILD_VERSION')}: ${process.env.COMMIT_HASH}`}
                     </div>
                     {
                         streamingServer.settings !== null && streamingServer.settings.type === 'Ready' ?
-                            <div className={styles['version-info-label']} title={streamingServer.settings.content.serverVersion}>Server Version: {streamingServer.settings.content.serverVersion}</div>
+                            <div className={styles['version-info-label']} title={streamingServer.settings.content.serverVersion}>{`${t('SETTINGS_SERVER_VERSION')}: ${streamingServer.settings.content.serverVersion}`}</div>
                             :
                             null
                     }
                     {
                         typeof shell?.transport?.props?.shellVersion === 'string' ?
-                            <div className={styles['version-info-label']} title={shell.transport.props.shellVersion}>Shell Version: {shell.transport.props.shellVersion}</div>
+                            <div className={styles['version-info-label']} title={shell.transport.props.shellVersion}>{`${t('SETTINGS_APP_VERSION')}: ${shell.transport.props.shellVersion}`}</div>
                             :
                             null
                     }
@@ -219,9 +219,9 @@ const Settings = () => {
                                     }}
                                 />
                                 <div className={styles['email-logout-container']}>
-                                    <div className={styles['email-label-container']} title={profile.auth === null ? 'Anonymous user' : profile.auth.user.email}>
+                                    <div className={styles['email-label-container']} title={profile.auth === null ? t('ANONYMOUS_USER') : profile.auth.user.email}>
                                         <div className={styles['email-label']}>
-                                            {profile.auth === null ? 'Anonymous user' : profile.auth.user.email}
+                                            {profile.auth === null ? t('ANONYMOUS_USER') : profile.auth.user.email}
                                         </div>
                                     </div>
                                     {
@@ -273,8 +273,8 @@ const Settings = () => {
                             </Button>
                         </div>
                         <div className={classnames(styles['option-container'], styles['link-container'])}>
-                            <Button className={classnames(styles['option-input-container'], styles['link-input-container'])} title={'Source code'} target={'_blank'} href={`https://github.com/stremio/stremio-web/tree/${process.env.COMMIT_HASH}`}>
-                                <div className={styles['label']}>Source code</div>
+                            <Button className={classnames(styles['option-input-container'], styles['link-input-container'])} title={t('SETTINGS_SOURCE_CODE')} target={'_blank'} href={`https://github.com/stremio/stremio-web/tree/${process.env.COMMIT_HASH}`}>
+                                <div className={styles['label']}>{t('SETTINGS_SOURCE_CODE')}</div>
                             </Button>
                         </div>
                         <div className={classnames(styles['option-container'], styles['link-container'])}>
@@ -310,11 +310,11 @@ const Settings = () => {
                         <div className={styles['option-container']}>
                             <div className={classnames(styles['option-name-container'], styles['trakt-icon'])}>
                                 <Icon className={styles['icon']} name={'trakt'} />
-                                <div className={styles['label']}>Trakt Scrobbling</div>
+                                <div className={styles['label']}>{t('SETTINGS_TRAKT')}</div>
                             </div>
-                            <Button className={classnames(styles['option-input-container'], styles['button-container'])} title={'Authenticate'} disabled={profile.auth === null} tabIndex={-1} onClick={toggleTraktOnClick}>
+                            <Button className={classnames(styles['option-input-container'], styles['button-container'])} title={t('SETTINGS_TRAKT_AUTHENTICATE')} disabled={profile.auth === null} tabIndex={-1} onClick={toggleTraktOnClick}>
                                 <div className={styles['label']}>
-                                    { profile.auth !== null && profile.auth.user !== null && profile.auth.user.trakt !== null ? t('LOG_OUT') : t('SETTINGS_TRAKT_AUTHENTICATE') }
+                                    { isTraktAuthenticated ? t('LOG_OUT') : t('SETTINGS_TRAKT_AUTHENTICATE') }
                                 </div>
                             </Button>
                         </div>
@@ -324,7 +324,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_UI_LANGUAGE') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 tabIndex={-1}
                                 {...interfaceLanguageSelect}
@@ -376,7 +376,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SUBTITLES_LANGUAGE') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...subtitlesLanguageSelect}
                             />
@@ -385,7 +385,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SUBTITLES_SIZE') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...subtitlesSizeSelect}
                             />
@@ -427,7 +427,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_DEFAULT_AUDIO_TRACK') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...audioLanguageSelect}
                             />
@@ -452,7 +452,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SEEK_KEY') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...seekTimeDurationSelect}
                             />
@@ -461,7 +461,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_SEEK_KEY_SHIFT') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...seekShortTimeDurationSelect}
                             />
@@ -496,7 +496,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_NEXT_VIDEO_POPUP_DURATION') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 disabled={!profile.settings.bingeWatching}
                                 {...nextVideoPopupDurationSelect}
@@ -512,7 +512,7 @@ const Settings = () => {
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>{ t('SETTINGS_PLAY_IN_EXTERNAL_PLAYER') }</div>
                             </div>
-                            <Multiselect
+                            <MultiselectMenu
                                 className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                 {...playInExternalPlayerSelect}
                             />
@@ -568,7 +568,7 @@ const Settings = () => {
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>{ t('SETTINGS_HTTPS_ENDPOINT') }</div>
                                     </div>
-                                    <Multiselect
+                                    <MultiselectMenu
                                         className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                         {...remoteEndpointSelect}
                                     />
@@ -582,7 +582,7 @@ const Settings = () => {
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>{ t('SETTINGS_SERVER_CACHE_SIZE') }</div>
                                     </div>
-                                    <Multiselect
+                                    <MultiselectMenu
                                         className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                         {...cacheSizeSelect}
                                     />
@@ -596,7 +596,7 @@ const Settings = () => {
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>{ t('SETTINGS_SERVER_TORRENT_PROFILE') }</div>
                                     </div>
-                                    <Multiselect
+                                    <MultiselectMenu
                                         className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                         {...torrentProfileSelect}
                                     />
@@ -610,7 +610,7 @@ const Settings = () => {
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>{ t('SETTINGS_TRANSCODE_PROFILE') }</div>
                                     </div>
-                                    <Multiselect
+                                    <MultiselectMenu
                                         className={classnames(styles['option-input-container'], styles['multiselect-container'])}
                                         {...transcodingProfileSelect}
                                     />
@@ -740,7 +740,7 @@ const Settings = () => {
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>
-                                    App Version
+                                    {t('SETTINGS_APP_VERSION')}
                                 </div>
                             </div>
                             <div className={classnames(styles['option-input-container'], styles['info-container'])}>
@@ -752,7 +752,7 @@ const Settings = () => {
                         <div className={styles['option-container']}>
                             <div className={styles['option-name-container']}>
                                 <div className={styles['label']}>
-                                    Build Version
+                                    {t('SETTINGS_BUILD_VERSION')}
                                 </div>
                             </div>
                             <div className={classnames(styles['option-input-container'], styles['info-container'])}>
@@ -766,7 +766,7 @@ const Settings = () => {
                                 <div className={styles['option-container']}>
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>
-                                            Server Version
+                                            {t('SETTINGS_SERVER_VERSION')}
                                         </div>
                                     </div>
                                     <div className={classnames(styles['option-input-container'], styles['info-container'])}>
@@ -783,7 +783,7 @@ const Settings = () => {
                                 <div className={styles['option-container']}>
                                     <div className={styles['option-name-container']}>
                                         <div className={styles['label']}>
-                                            Shell Version
+                                            {t('SETTINGS_SHELL_VERSION')}
                                         </div>
                                     </div>
                                     <div className={classnames(styles['option-input-container'], styles['info-container'])}>

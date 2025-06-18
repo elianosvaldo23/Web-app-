@@ -5,20 +5,17 @@ const { useNavigate } = require('react-router');
 const { useTranslate } = require('stremio/common');
 
 const mapSelectableInputs = (installedAddons, remoteAddons, t, navigate) => {
+    const selectedCatalog = remoteAddons.selectable.catalogs.concat(installedAddons.selectable.catalogs).find(({ selected }) => selected);
     const catalogSelect = {
-        title: t.string('SELECT_CATALOG'),
         options: remoteAddons.selectable.catalogs
             .concat(installedAddons.selectable.catalogs)
             .map(({ name, deepLinks }) => ({
                 value: deepLinks.addons,
-                label: t.stringWithPrefix(name, 'ADDON_'),
-                title: t.stringWithPrefix(name, 'ADDON_'),
+                label: t.stringWithPrefix(name.toUpperCase(), 'ADDON_'),
+                title: t.stringWithPrefix(name.toUpperCase(), 'ADDON_'),
             })),
-        selected: remoteAddons.selectable.catalogs
-            .concat(installedAddons.selectable.catalogs)
-            .filter(({ selected }) => selected)
-            .map(({ deepLinks }) => deepLinks.addons),
-        renderLabelText: remoteAddons.selected !== null ?
+        value: selectedCatalog ? selectedCatalog.deepLinks.addons : undefined,
+        title: remoteAddons.selected !== null ?
             () => {
                 const selectableCatalog = remoteAddons.selectable.catalogs
                     .find(({ id }) => id === remoteAddons.selected.request.path.id);
@@ -26,12 +23,14 @@ const mapSelectableInputs = (installedAddons, remoteAddons, t, navigate) => {
             }
             :
             null,
-        onSelect: (event) => {
-            navigate(event.value.replace('#', ''));
+        onSelect: (value) => {
+            navigate(value.replace('#', ''));
         }
     };
+    const selectedType = installedAddons.selected !== null
+        ? installedAddons.selectable.types.find(({ selected }) => selected)
+        : remoteAddons.selectable.types.find(({ selected }) => selected);
     const typeSelect = {
-        title: t.string('SELECT_TYPE'),
         options: installedAddons.selected !== null ?
             installedAddons.selectable.types.map(({ type, deepLinks }) => ({
                 value: deepLinks.addons,
@@ -42,15 +41,8 @@ const mapSelectableInputs = (installedAddons, remoteAddons, t, navigate) => {
                 value: deepLinks.addons,
                 label: t.stringWithPrefix(type, 'TYPE_')
             })),
-        selected: installedAddons.selected !== null ?
-            installedAddons.selectable.types
-                .filter(({ selected }) => selected)
-                .map(({ deepLinks }) => deepLinks.addons)
-            :
-            remoteAddons.selectable.types
-                .filter(({ selected }) => selected)
-                .map(({ deepLinks }) => deepLinks.addons),
-        renderLabelText: () => {
+        value: selectedType ? selectedType.deepLinks.addons : undefined,
+        title: () => {
             return installedAddons.selected !== null ?
                 installedAddons.selected.request.type === null ?
                     t.string('TYPE_ALL')
@@ -62,8 +54,8 @@ const mapSelectableInputs = (installedAddons, remoteAddons, t, navigate) => {
                     :
                     typeSelect.title;
         },
-        onSelect: (event) => {
-            navigate(event.value.replace('#', ''));
+        onSelect: (value) => {
+            navigate(value.replace('#', ''));
         }
     };
     return [catalogSelect, typeSelect];

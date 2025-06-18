@@ -15,17 +15,15 @@ const useProfileSettingsInputs = (profile) => {
             value: codes[0],
             label: name,
         })),
-        selected: [
-            interfaceLanguages.find(({ codes }) => codes[1] === profile.settings.interfaceLanguage)?.codes?.[0] || profile.settings.interfaceLanguage
-        ],
-        onSelect: (event) => {
+        value: interfaceLanguages.find(({ codes }) => codes[1] === profile.settings.interfaceLanguage)?.codes?.[0] || profile.settings.interfaceLanguage,
+        onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        interfaceLanguage: event.value
+                        interfaceLanguage: value
                     }
                 }
             });
@@ -65,19 +63,22 @@ const useProfileSettingsInputs = (profile) => {
     }), [profile.settings]);
 
     const subtitlesLanguageSelect = React.useMemo(() => ({
-        options: Object.keys(languageNames).map((code) => ({
-            value: code,
-            label: languageNames[code]
-        })),
-        selected: [profile.settings.subtitlesLanguage],
-        onSelect: (event) => {
+        options: [
+            { value: null, label: t('NONE') },
+            ...Object.keys(languageNames).map((code) => ({
+                value: code,
+                label: languageNames[code]
+            }))
+        ],
+        value: profile.settings.subtitlesLanguage,
+        onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        subtitlesLanguage: event.value
+                        subtitlesLanguage: value
                     }
                 }
             });
@@ -88,18 +89,18 @@ const useProfileSettingsInputs = (profile) => {
             value: `${size}`,
             label: `${size}%`
         })),
-        selected: [`${profile.settings.subtitlesSize}`],
-        renderLabelText: () => {
+        value: `${profile.settings.subtitlesSize}`,
+        title: () => {
             return `${profile.settings.subtitlesSize}%`;
         },
-        onSelect: (event) => {
+        onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        subtitlesSize: parseInt(event.value, 10)
+                        subtitlesSize: parseInt(value, 10)
                     }
                 }
             });
@@ -107,14 +108,14 @@ const useProfileSettingsInputs = (profile) => {
     }), [profile.settings]);
     const subtitlesTextColorInput = React.useMemo(() => ({
         value: profile.settings.subtitlesTextColor,
-        onChange: (event) => {
+        onChange: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        subtitlesTextColor: event.value
+                        subtitlesTextColor: value
                     }
                 }
             });
@@ -122,14 +123,14 @@ const useProfileSettingsInputs = (profile) => {
     }), [profile.settings]);
     const subtitlesBackgroundColorInput = React.useMemo(() => ({
         value: profile.settings.subtitlesBackgroundColor,
-        onChange: (event) => {
+        onChange: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        subtitlesBackgroundColor: event.value
+                        subtitlesBackgroundColor: value
                     }
                 }
             });
@@ -137,14 +138,14 @@ const useProfileSettingsInputs = (profile) => {
     }), [profile.settings]);
     const subtitlesOutlineColorInput = React.useMemo(() => ({
         value: profile.settings.subtitlesOutlineColor,
-        onChange: (event) => {
+        onChange: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        subtitlesOutlineColor: event.value
+                        subtitlesOutlineColor: value
                     }
                 }
             });
@@ -155,15 +156,15 @@ const useProfileSettingsInputs = (profile) => {
             value: code,
             label: languageNames[code]
         })),
-        selected: [profile.settings.audioLanguage],
-        onSelect: (event) => {
+        value: profile.settings.audioLanguage,
+        onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        audioLanguage: event.value
+                        audioLanguage: value
                     }
                 }
             });
@@ -205,18 +206,18 @@ const useProfileSettingsInputs = (profile) => {
             value: `${size}`,
             label: `${size / 1000} ${t('SECONDS')}`
         })),
-        selected: [`${profile.settings.seekTimeDuration}`],
-        renderLabelText: () => {
+        value: `${profile.settings.seekTimeDuration}`,
+        title: () => {
             return `${profile.settings.seekTimeDuration / 1000} ${t('SECONDS')}`;
         },
-        onSelect: (event) => {
+        onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        seekTimeDuration: parseInt(event.value, 10)
+                        seekTimeDuration: parseInt(value, 10)
                     }
                 }
             });
@@ -227,18 +228,18 @@ const useProfileSettingsInputs = (profile) => {
             value: `${size}`,
             label: `${size / 1000} ${t('SECONDS')}`
         })),
-        selected: [`${profile.settings.seekShortTimeDuration}`],
-        renderLabelText: () => {
+        value: `${profile.settings.seekShortTimeDuration}`,
+        title: () => {
             return `${profile.settings.seekShortTimeDuration / 1000} ${t('SECONDS')}`;
         },
-        onSelect: (event) => {
+        onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        seekShortTimeDuration: parseInt(event.value, 10)
+                        seekShortTimeDuration: parseInt(value, 10)
                     }
                 }
             });
@@ -251,19 +252,19 @@ const useProfileSettingsInputs = (profile) => {
                 value,
                 label: t(label),
             })),
-        selected: [profile.settings.playerType],
-        renderLabelText: () => {
+        value: profile.settings.playerType,
+        title: () => {
             const selectedOption = CONSTANTS.EXTERNAL_PLAYERS.find(({ value }) => value === profile.settings.playerType);
             return selectedOption ? t(selectedOption.label, { defaultValue: selectedOption.label }) : profile.settings.playerType;
         },
-        onSelect: (event) => {
+        onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        playerType: event.value
+                        playerType: value
                     }
                 }
             });
@@ -274,21 +275,21 @@ const useProfileSettingsInputs = (profile) => {
             value: `${duration}`,
             label: duration === 0 ? 'Disabled' : `${duration / 1000} ${t('SECONDS')}`
         })),
-        selected: [`${profile.settings.nextVideoNotificationDuration}`],
-        renderLabelText: () => {
+        value: `${profile.settings.nextVideoNotificationDuration}`,
+        title: () => {
             return profile.settings.nextVideoNotificationDuration === 0 ?
                 'Disabled'
                 :
                 `${profile.settings.nextVideoNotificationDuration / 1000} ${t('SECONDS')}`;
         },
-        onSelect: (event) => {
+        onSelect: (value) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        nextVideoNotificationDuration: parseInt(event.value, 10)
+                        nextVideoNotificationDuration: parseInt(value, 10)
                     }
                 }
             });

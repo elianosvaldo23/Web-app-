@@ -1,13 +1,14 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useTranslation } = require('react-i18next');
 const { useLocation, useParams, useNavigate } = require('react-router');
 const { useSearchParams } = require('react-router-dom');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const NotFound = require('stremio/routes/NotFound');
 const { useProfile, useNotifications, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
-const { DelayedRenderer, Chips, Image, MainNavBars, Multiselect, LibItem } = require('stremio/components');
+const { DelayedRenderer, Chips, Image, MainNavBars, LibItem, MultiselectMenu } = require('stremio/components');
 const { default: Placeholder } = require('./Placeholder');
 const useLibrary = require('./useLibrary');
 const useSelectableInputs = require('./useSelectableInputs');
@@ -43,6 +44,7 @@ const Library = ({ model }) => {
     const urlParams = useParams();
     const [queryParams] = useSearchParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const profile = useProfile();
     const notifications = useNotifications();
     const [library, loadNextPage] = useLibrary(model, urlParams, queryParams);
@@ -63,14 +65,14 @@ const Library = ({ model }) => {
         if (!library.selected?.type && typeSelect.selected) {
             navigate(typeSelect.selected[0].replace('#', ''));
         }
-    }, [typeSelect.selected, library.selected]);
+    }, [typeSelect.value, library.selected]);
     return (
         <MainNavBars className={styles['library-container']} route={model}>
             {
                 profile.auth !== null ?
                     <div className={styles['library-content']}>
                         <div className={styles['selectable-inputs-container']}>
-                            <Multiselect {...typeSelect} className={styles['select-input-container']} />
+                            <MultiselectMenu {...typeSelect} className={styles['select-input-container']} />
                             <Chips {...sortChips} className={styles['select-input-container']} />
                         </div>
                         {
@@ -82,7 +84,7 @@ const Library = ({ model }) => {
                                             src={require('/images/empty.png')}
                                             alt={' '}
                                         />
-                                        <div className={styles['message-label']}>{model === 'library' ? 'Library' : 'Continue Watching'} not loaded!</div>
+                                        <div className={styles['message-label']}>{model === 'library' ? t('LIBRARY_NOT_LOADED') : t('BOARD_CONTINUE_WATCHING_NOT_LOADED')}</div>
                                     </div>
                                 </DelayedRenderer>
                                 :
@@ -93,7 +95,7 @@ const Library = ({ model }) => {
                                             src={require('/images/empty.png')}
                                             alt={' '}
                                         />
-                                        <div className={styles['message-label']}>Empty {model === 'library' ? 'Library' : 'Continue Watching'}</div>
+                                        <div className={styles['message-label']}>{model === 'library' ? t('LIBRARY_EMPTY') : t('BOARD_CONTINUE_WATCHING_EMPTY')}</div>
                                     </div>
                                     :
                                     <div ref={scrollContainerRef} className={classnames(styles['meta-items-container'], 'animation-fade-in')} onScroll={onScroll}>
