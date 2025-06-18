@@ -66,6 +66,13 @@ const Shortcuts = forwardRef<HTMLDivElement>((_, ref) => {
                     <kbd>F</kbd>
                 </div>
             </Option>
+            <Option label={'SETTINGS_SHORTCUT_SUBTITLES_DELAY'}>
+                <div className={styles['shortcut-container']}>
+                    <kbd>G</kbd>
+                    <div className={styles['label']}>{ t('SETTINGS_SHORTCUT_AND') }</div>
+                    <kbd>H</kbd>
+                </div>
+            </Option>
             <Option label={'SETTINGS_SHORTCUT_NAVIGATE_MENUS'}>
                 <div className={styles['shortcut-container']}>
                     <kbd>1</kbd>
