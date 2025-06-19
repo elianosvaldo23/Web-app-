@@ -110,10 +110,10 @@ const Player = () => {
     const handleNextVideoNavigation = React.useCallback((deepLinks) => {
         if (deepLinks.player) {
             isNavigating.current = true;
-            navigate(deepLinks.player.replace('#', '', { replace: true }));
+            navigate(deepLinks.player.replace('#', ''), { replace: true });
         } else if (deepLinks.metaDetailsStreams) {
             isNavigating.current = true;
-            navigate(deepLinks.metaDetailsStreams.replace('#', '', { replace: true }));
+            navigate(deepLinks.metaDetailsStreams.replace('#', ''), { replace: true });
         }
     }, []);
 
