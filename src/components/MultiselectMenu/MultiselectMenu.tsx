@@ -18,7 +18,7 @@ type Props = {
     onSelect: (value: any) => void;
 };
 
-const MultiselectMenu = ({ className, title, options, value, onSelect }: Props) => {
+const MultiselectMenu = ({ className, title, options, value, disabled, onSelect }: Props) => {
     const [menuOpen, , closeMenu, toggleMenu] = useBinaryState(false);
     const multiselectMenuRef = useOutsideClick(() => closeMenu());
     const [level, setLevel] = React.useState<number>(0);
@@ -33,6 +33,7 @@ const MultiselectMenu = ({ className, title, options, value, onSelect }: Props) 
         <div className={classNames(styles['multiselect-menu'], { [styles['active']]: menuOpen }, className)} ref={multiselectMenuRef}>
             <Button
                 className={classNames(styles['multiselect-button'], { [styles['open']]: menuOpen })}
+                disabled={disabled}
                 onClick={toggleMenu}
                 tabIndex={0}
                 aria-haspopup='listbox'
