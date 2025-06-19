@@ -112,7 +112,7 @@ const General = forwardRef<HTMLDivElement, Props>(({ profile }: Props, ref) => {
                 href={'https://stremio.zendesk.com/hc/en-us'}
             />
             <Link
-                label={'SETTINGS_SOURCE_CODE'}
+                label={t('SETTINGS_SOURCE_CODE')}
                 href={`https://github.com/stremio/stremio-web/tree/${process.env.COMMIT_HASH}`}
             />
             <Link
