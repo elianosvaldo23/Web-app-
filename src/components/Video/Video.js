@@ -15,6 +15,7 @@ const styles = require('./styles');
 const Video = React.forwardRef(({ className, id, title, thumbnail, season, episode, released, upcoming, watched, progress, scheduled, seasonWatched, deepLinks, onMarkVideoAsWatched, onMarkSeasonAsWatched, ...props }, ref) => {
     const routeFocused = useRouteFocused();
     const profile = useProfile();
+    const { t } = useTranslation();
     const [menuOpen, , closeMenu, toggleMenu] = useBinaryState(false);
     const popupLabelOnMouseUp = React.useCallback((event) => {
         if (!event.nativeEvent.togglePopupPrevented) {
