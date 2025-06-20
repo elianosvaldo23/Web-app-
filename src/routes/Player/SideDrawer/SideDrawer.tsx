@@ -1,6 +1,6 @@
 // Copyright (C) 2017-2024 Smart code 203358507
 
-import React, { useMemo, useCallback, useState, forwardRef, memo, useRef } from 'react';
+import React, { useMemo, useCallback, useState, forwardRef, memo, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import Icon from '@stremio/stremio-icons/react';
 import { useServices } from 'stremio/services';
@@ -14,6 +14,7 @@ type Props = {
     seriesInfo: SeriesInfo;
     metaItem: MetaItem;
     selectedVideoID: string;
+    transitionEnded: boolean;
     closeSideDrawer: () => void;
 };
 
@@ -78,19 +79,13 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
 
     const selectedVideoRef = useRef<HTMLDivElement>(null);
 
-    const jumpToPlayingNow = () => {
-        const { current } = selectedVideoRef;
-        if (!current) return;
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
-        });
-    };
+    useEffect(() => {
+        props.transitionEnded &&
+            selectedVideoRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, [props.transitionEnded]);
 
     return (
-        <div ref={ref} className={classNames(styles['side-drawer'], className)} onTransitionEnd={jumpToPlayingNow} onMouseDown={onMouseDown}>
+        <div ref={ref} className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown}>
             <div className={styles['close-button']} onClick={closeSideDrawer}>
                 <Icon className={styles['icon']} name={'chevron-forward'} />
             </div>
