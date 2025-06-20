@@ -20,6 +20,7 @@ const useModelState = require('./useModelState');
 const useNotifications = require('./useNotifications');
 const useOnScrollToBottom = require('./useOnScrollToBottom');
 const useProfile = require('./useProfile');
+const { default: useRouteFocused } = require('./useRouteFocused');
 const { default: useSettings } = require('./useSettings');
 const { default: useShell } = require('./useShell');
 const useStreamingServer = require('./useStreamingServer');
@@ -53,6 +54,7 @@ module.exports = {
     useNotifications,
     useOnScrollToBottom,
     useProfile,
+    useRouteFocused,
     useSettings,
     useShell,
     useStreamingServer,
