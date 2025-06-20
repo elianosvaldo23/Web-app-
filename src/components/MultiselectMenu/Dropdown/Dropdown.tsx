@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import Option from './Option';
 import Icon from '@stremio/stremio-icons/react';
 import styles from './Dropdown.less';
+import interfaceLanguages from '../../../common/interfaceLanguages.json';
 
 type Props = {
     options: MultiselectMenuOption[];
@@ -17,60 +18,18 @@ type Props = {
     onSelect: (value: any) => void;
 };
 
-
-
-
-const REVERSE_LANG_CODE_MAP: {[key:string]:string} = {
-    'ar': 'ara',
-    'bg': 'bul',
-    'bn': 'ben',
-    'ca': 'cat',
-    'cs': 'ces',
-    'da': 'dan',
-    'de': 'deu',
-    'el': 'ell',
-    'en': 'eng',
-    'eo': 'epo',
-    'es': 'spa',
-    'eu': 'eus',
-    'fa': 'fas',
-    'fr': 'fre',
-    'he': 'heb',
-    'hi': 'hin',
-    'hr': 'hrv',
-    'hu': 'hun',
-    'id': 'ind',
-    'it': 'ita',
-    'ja': 'jpn',
-    'ko': 'kor',
-    'mk': 'mkd',
-    'my': 'mya',
-    'nb': 'nob',
-    'nl': 'nld',
-    'nn': 'nno',
-    'pl': 'pol',
-    'pt': 'por',
-    'ru': 'rus',
-    'sv': 'swe',
-    'sl': 'slv',
-    'sr': 'srp',
-    'te': 'tel',
-    'tr': 'tur',
-    'uk': 'ukr',
-    'vi': 'vie',
-    'zh': 'zho'
-};
-
-const fourToThreeLangCodeMap = (x:string):string =>{
-    const result = REVERSE_LANG_CODE_MAP[x.split('-')[0]];
-    if(!result){
-        throw new Error(`Unkwown 4-Letter-Lang code: ${x}`);
+function getThreeLetterLangCode(localeCode: string): string {
+    if (!interfaceLanguages || interfaceLanguages.length === 0) {
+        console.warn('Interface languages are not defined or empty. Falling back to "eng".');
+        return 'eng';
     }
-    return result;
+    const language = interfaceLanguages.find(lang => lang.codes.includes(localeCode));
+    if (!language) {
+        console.warn(`Unknown language code: ${localeCode}. Falling back to 'eng'.`);
+        return 'eng';
+    }
+    return language.codes[1];
 }
-
-// Usage: O(1) lookup
-
 const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props) => {
     const { t } = useTranslation();
     const optionsRef = useRef(new Map());
@@ -102,6 +61,23 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
         }
     }, [menuOpen, selectedOption]);
 
+    const navigatorLanguageFourLetterCode = navigator.language || 'en-US';
+    const navigatorLanguageThreeLetterCode:string = getThreeLetterLangCode(navigatorLanguageFourLetterCode) || 'eng';
+
+    const getPriority = (option: MultiselectMenuOption) => {
+        if (!option || !option.value) {
+            console.warn('Invalid option or option value:', option);    
+            return 3;
+        }
+        const optionValue = String(option.value);
+        const LangThreeLetterCode = optionValue.length === 3 ? optionValue : getThreeLetterLangCode(optionValue) || 'eng';
+
+        if (LangThreeLetterCode === navigatorLanguageThreeLetterCode) return 1;
+        if (LangThreeLetterCode === 'eng') return 2;
+        if (LangThreeLetterCode === 'None') return 3;
+        return 4;
+    };
+
     return (
         <div
             className={classNames(styles['dropdown'], { [styles['open']]: menuOpen })}
@@ -120,25 +96,7 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                     .filter((option: MultiselectMenuOption) => !option.hidden)
                     .sort((a, b) => {
                         
-                        const fourLetterUserLocale = navigator.language || 'en-US';
-                        const threeLetterUserLocale:string = fourToThreeLangCodeMap(fourLetterUserLocale) || 'eng';                         
-                        
-                        const getPriority = (option: MultiselectMenuOption) => {
-                            
-                            const value2 = String(option.value);
-
-                            const value = value2.length == 3 ? value2 : (fourToThreeLangCodeMap(fourLetterUserLocale) || 'eng');
-
-                            // Check if the value matches user's language, if yes put at top of list
-                            if (value === threeLetterUserLocale) return 1;
-
-                            
-                            // Check if it's English, put at the second position
-                            if (value == 'eng') return 2;
-                            
-                            return 3; // Everything else
-                        };
-                        
+                        // Sort by priority first
                         const aPriority = getPriority(a);
                         const bPriority = getPriority(b);
                         
@@ -152,8 +110,7 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                     })
                 .map((option: MultiselectMenuOption) => (
                     <div 
-                    key={`${String(option.label)}-${String(option.value)}`}
-                    className={String(option.label) === 'English' ? styles['separator-after'] : ''}>
+                    key={`${String(option.label)}-${String(option.value)}`}>
                     <Option
                         key={option.value}
                         ref={handleSetOptionRef(option.value)}
