@@ -13,14 +13,15 @@ type Props = {
     className?: string;
     seriesInfo: SeriesInfo;
     metaItem: MetaItem;
-    selectedVideoID: string;
-    transitionEnded: boolean;
     closeSideDrawer: () => void;
+    selected: string;
+    transitionEnded: boolean;
 };
 
-const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, className, closeSideDrawer, ...props }: Props, ref) => {
+const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, className, closeSideDrawer, selected, transitionEnded, ...props }: Props, ref) => {
     const { core } = useServices();
     const [season, setSeason] = useState<number>(seriesInfo?.season);
+    const selectedVideoRef = useRef<HTMLDivElement>(null);
     const metaItem = useMemo(() => {
         return seriesInfo ?
             {
@@ -77,12 +78,13 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
         event.stopPropagation();
     };
 
-    const selectedVideoRef = useRef<HTMLDivElement>(null);
+    const getSelectedRef = useCallback((video: Video) => {
+        return video.id === selected ? selectedVideoRef : null;
+    }, [selected]);
 
     useEffect(() => {
-        props.transitionEnded &&
-            selectedVideoRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, [props.transitionEnded]);
+        transitionEnded && selectedVideoRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, [transitionEnded]);
 
     return (
         <div ref={ref} className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown}>
@@ -129,7 +131,7 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
                                     scheduled={video.scheduled}
                                     onMarkVideoAsWatched={onMarkVideoAsWatched}
                                     onMarkSeasonAsWatched={onMarkSeasonAsWatched}
-                                    ref={video.id === props.selectedVideoID ? selectedVideoRef : null}
+                                    ref={getSelectedRef(video)}
                                 />
                             ))}
                         </div>

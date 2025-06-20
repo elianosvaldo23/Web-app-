@@ -5,15 +5,15 @@ type Props = {
     children: JSX.Element,
     when: boolean,
     name: string,
-    onTransitionEnd?: () => void
 };
 
-const Transition = ({ children, when, name, onTransitionEnd }: Props) => {
+const Transition = ({ children, when, name }: Props) => {
     const [element, setElement] = useState<HTMLElement | null>(null);
     const [mounted, setMounted] = useState(false);
 
     const [state, setState] = useState('enter');
     const [active, setActive] = useState(false);
+    const [transitionEnded, setTransitionEnded] = useState(false);
 
     const callbackRef = useCallback((element: HTMLElement | null) => {
         setElement(element);
@@ -30,20 +30,15 @@ const Transition = ({ children, when, name, onTransitionEnd }: Props) => {
         );
     }, [name, state, active, children]);
 
-    const handleTransitionEnd = useCallback(() => {
-        switch (state) {
-            case 'enter':
-                onTransitionEnd?.();
-                break;
-            case 'exit':
-                setMounted(false);
-                break;
-        }
+    const onTransitionEnd = useCallback(() => {
+        setTransitionEnded(true);
+        state === 'exit' && setMounted(false);
     }, [state]);
 
     useEffect(() => {
         setState(when ? 'enter' : 'exit');
         when && setMounted(true);
+        setTransitionEnded(false);
     }, [when]);
 
     useEffect(() => {
@@ -53,14 +48,15 @@ const Transition = ({ children, when, name, onTransitionEnd }: Props) => {
     }, [element]);
 
     useEffect(() => {
-        element?.addEventListener('transitionend', handleTransitionEnd);
-        return () => element?.removeEventListener('transitionend', handleTransitionEnd);
+        element?.addEventListener('transitionend', onTransitionEnd);
+        return () => element?.removeEventListener('transitionend', onTransitionEnd);
     }, [element, onTransitionEnd]);
 
     return (
         mounted && cloneElement(children, {
             ref: callbackRef,
             className,
+            transitionEnded
         })
     );
 };
