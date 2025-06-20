@@ -44,6 +44,7 @@ const Player = ({ urlParams, queryParams }) => {
     const routeFocused = useRouteFocused();
     const toast = useToast();
 
+    const [sideDrawerTransitionEnded, setSideDrawerTransitionEnded] = React.useState(false);
     const [seeking, setSeeking] = React.useState(false);
 
     const [casting, setCasting] = React.useState(() => {
@@ -499,6 +500,10 @@ const Player = ({ urlParams, queryParams }) => {
         }
     }, [settings.pauseOnMinimize, shell.windowClosed, shell.windowHidden]);
 
+    React.useEffect(() => {
+        if (!sideDrawerOpen) setSideDrawerTransitionEnded(false);
+    }, [sideDrawerOpen]);
+
     React.useLayoutEffect(() => {
         const onKeyDown = (event) => {
             switch (event.code) {
@@ -781,13 +786,14 @@ const Player = ({ urlParams, queryParams }) => {
                     :
                     null
             }
-            <Transition when={sideDrawerOpen} name={'slide-left'}>
+            <Transition when={sideDrawerOpen} name={'slide-left'} onTransitionEnd={() => setSideDrawerTransitionEnded(true)}>
                 <SideDrawer
                     className={classnames(styles['layer'], styles['side-drawer-layer'])}
                     metaItem={player.metaItem?.content}
                     seriesInfo={player.seriesInfo}
                     closeSideDrawer={closeSideDrawer}
                     selectedVideoID={player.selected?.streamRequest.path.id}
+                    transitionEnded={sideDrawerTransitionEnded}
                 />
             </Transition>
             {
