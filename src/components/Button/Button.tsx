@@ -7,6 +7,7 @@ import styles from './Button.less';
 
 type Props = {
     className?: string,
+    style?: object,
     href?: string,
     target?: string
     title?: string,

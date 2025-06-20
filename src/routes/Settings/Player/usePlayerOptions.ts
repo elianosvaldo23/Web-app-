@@ -1,77 +1,25 @@
-// Copyright (C) 2017-2023 Smart code 203358507
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useServices } from 'stremio/services';
+import { CONSTANTS, languageNames, usePlatform } from 'stremio/common';
 
-const React = require('react');
-const { useTranslation } = require('react-i18next');
-const { useServices } = require('stremio/services');
-const { CONSTANTS, usePlatform, interfaceLanguages, languageNames } = require('stremio/common');
+const LANGUAGES_NAMES: Record<string, string> = languageNames;
 
-const useProfileSettingsInputs = (profile) => {
+const usePlayerOptions = (profile: Profile) => {
     const { t } = useTranslation();
     const { core } = useServices();
     const platform = usePlatform();
-    // TODO combine those useMemo in one
-    const interfaceLanguageSelect = React.useMemo(() => ({
-        options: interfaceLanguages.map(({ name, codes }) => ({
-            value: codes[0],
-            label: name,
-        })),
-        value: interfaceLanguages.find(({ codes }) => codes[1] === profile.settings.interfaceLanguage)?.codes?.[0] || profile.settings.interfaceLanguage,
-        onSelect: (value) => {
-            core.transport.dispatch({
-                action: 'Ctx',
-                args: {
-                    action: 'UpdateSettings',
-                    args: {
-                        ...profile.settings,
-                        interfaceLanguage: value
-                    }
-                }
-            });
-        }
-    }), [profile.settings]);
 
-    const hideSpoilersToggle = React.useMemo(() => ({
-        checked: profile.settings.hideSpoilers,
-        onClick: () => {
-            core.transport.dispatch({
-                action: 'Ctx',
-                args: {
-                    action: 'UpdateSettings',
-                    args: {
-                        ...profile.settings,
-                        hideSpoilers: !profile.settings.hideSpoilers
-                    }
-                }
-            });
-        }
-    }), [profile.settings]);
-
-    const quitOnCloseToggle = React.useMemo(() => ({
-        checked: profile.settings.quitOnClose,
-        onClick: () => {
-            core.transport.dispatch({
-                action: 'Ctx',
-                args: {
-                    action: 'UpdateSettings',
-                    args: {
-                        ...profile.settings,
-                        quitOnClose: !profile.settings.quitOnClose
-                    }
-                }
-            });
-        }
-    }), [profile.settings]);
-
-    const subtitlesLanguageSelect = React.useMemo(() => ({
+    const subtitlesLanguageSelect = useMemo(() => ({
         options: [
             { value: null, label: t('NONE') },
-            ...Object.keys(languageNames).map((code) => ({
+            ...Object.keys(LANGUAGES_NAMES).map((code) => ({
                 value: code,
-                label: languageNames[code]
+                label: LANGUAGES_NAMES[code]
             }))
         ],
         value: profile.settings.subtitlesLanguage,
-        onSelect: (value) => {
+        onSelect: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -84,7 +32,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const subtitlesSizeSelect = React.useMemo(() => ({
+
+    const subtitlesSizeSelect = useMemo(() => ({
         options: CONSTANTS.SUBTITLES_SIZES.map((size) => ({
             value: `${size}`,
             label: `${size}%`
@@ -93,7 +42,7 @@ const useProfileSettingsInputs = (profile) => {
         title: () => {
             return `${profile.settings.subtitlesSize}%`;
         },
-        onSelect: (value) => {
+        onSelect: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -106,9 +55,10 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const subtitlesTextColorInput = React.useMemo(() => ({
+
+    const subtitlesTextColorInput = useMemo(() => ({
         value: profile.settings.subtitlesTextColor,
-        onChange: (value) => {
+        onChange: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -121,9 +71,10 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const subtitlesBackgroundColorInput = React.useMemo(() => ({
+
+    const subtitlesBackgroundColorInput = useMemo(() => ({
         value: profile.settings.subtitlesBackgroundColor,
-        onChange: (value) => {
+        onChange: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -136,9 +87,10 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const subtitlesOutlineColorInput = React.useMemo(() => ({
+
+    const subtitlesOutlineColorInput = useMemo(() => ({
         value: profile.settings.subtitlesOutlineColor,
-        onChange: (value) => {
+        onChange: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -151,13 +103,14 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const audioLanguageSelect = React.useMemo(() => ({
-        options: Object.keys(languageNames).map((code) => ({
+
+    const audioLanguageSelect = useMemo(() => ({
+        options: Object.keys(LANGUAGES_NAMES).map((code) => ({
             value: code,
-            label: languageNames[code]
+            label: LANGUAGES_NAMES [code]
         })),
         value: profile.settings.audioLanguage,
-        onSelect: (value) => {
+        onSelect: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -170,7 +123,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const surroundSoundToggle = React.useMemo(() => ({
+
+    const surroundSoundToggle = useMemo(() => ({
         checked: profile.settings.surroundSound,
         onClick: () => {
             core.transport.dispatch({
@@ -185,23 +139,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const escExitFullscreenToggle = React.useMemo(() => ({
-        checked: profile.settings.escExitFullscreen,
-        onClick: () => {
-            core.transport.dispatch({
-                action: 'Ctx',
-                args: {
-                    action: 'UpdateSettings',
-                    args: {
-                        ...profile.settings,
-                        escExitFullscreen: !profile.settings.escExitFullscreen
-                    }
-                }
-            });
-        }
-    }), [profile.settings]);
 
-    const seekTimeDurationSelect = React.useMemo(() => ({
+    const seekTimeDurationSelect = useMemo(() => ({
         options: CONSTANTS.SEEK_TIME_DURATIONS.map((size) => ({
             value: `${size}`,
             label: `${size / 1000} ${t('SECONDS')}`
@@ -210,7 +149,7 @@ const useProfileSettingsInputs = (profile) => {
         title: () => {
             return `${profile.settings.seekTimeDuration / 1000} ${t('SECONDS')}`;
         },
-        onSelect: (value) => {
+        onSelect: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -223,7 +162,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const seekShortTimeDurationSelect = React.useMemo(() => ({
+
+    const seekShortTimeDurationSelect = useMemo(() => ({
         options: CONSTANTS.SEEK_TIME_DURATIONS.map((size) => ({
             value: `${size}`,
             label: `${size / 1000} ${t('SECONDS')}`
@@ -232,7 +172,7 @@ const useProfileSettingsInputs = (profile) => {
         title: () => {
             return `${profile.settings.seekShortTimeDuration / 1000} ${t('SECONDS')}`;
         },
-        onSelect: (value) => {
+        onSelect: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -245,7 +185,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const playInExternalPlayerSelect = React.useMemo(() => ({
+
+    const playInExternalPlayerSelect = useMemo(() => ({
         options: CONSTANTS.EXTERNAL_PLAYERS
             .filter(({ platforms }) => platforms.includes(platform.name))
             .map(({ label, value }) => ({
@@ -257,7 +198,7 @@ const useProfileSettingsInputs = (profile) => {
             const selectedOption = CONSTANTS.EXTERNAL_PLAYERS.find(({ value }) => value === profile.settings.playerType);
             return selectedOption ? t(selectedOption.label, { defaultValue: selectedOption.label }) : profile.settings.playerType;
         },
-        onSelect: (value) => {
+        onSelect: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -270,7 +211,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const nextVideoPopupDurationSelect = React.useMemo(() => ({
+
+    const nextVideoPopupDurationSelect = useMemo(() => ({
         options: CONSTANTS.NEXT_VIDEO_POPUP_DURATIONS.map((duration) => ({
             value: `${duration}`,
             label: duration === 0 ? 'Disabled' : `${duration / 1000} ${t('SECONDS')}`
@@ -282,7 +224,7 @@ const useProfileSettingsInputs = (profile) => {
                 :
                 `${profile.settings.nextVideoNotificationDuration / 1000} ${t('SECONDS')}`;
         },
-        onSelect: (value) => {
+        onSelect: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
                 args: {
@@ -295,7 +237,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const bingeWatchingToggle = React.useMemo(() => ({
+
+    const bingeWatchingToggle = useMemo(() => ({
         checked: profile.settings.bingeWatching,
         onClick: () => {
             core.transport.dispatch({
@@ -310,7 +253,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const playInBackgroundToggle = React.useMemo(() => ({
+
+    const playInBackgroundToggle = useMemo(() => ({
         checked: profile.settings.playInBackground,
         onClick: () => {
             core.transport.dispatch({
@@ -325,7 +269,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const hardwareDecodingToggle = React.useMemo(() => ({
+
+    const hardwareDecodingToggle = useMemo(() => ({
         checked: profile.settings.hardwareDecoding,
         onClick: () => {
             core.transport.dispatch({
@@ -340,7 +285,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
-    const pauseOnMinimizeToggle = React.useMemo(() => ({
+
+    const pauseOnMinimizeToggle = useMemo(() => ({
         checked: profile.settings.pauseOnMinimize,
         onClick: () => {
             core.transport.dispatch({
@@ -355,9 +301,8 @@ const useProfileSettingsInputs = (profile) => {
             });
         }
     }), [profile.settings]);
+
     return {
-        interfaceLanguageSelect,
-        hideSpoilersToggle,
         subtitlesLanguageSelect,
         subtitlesSizeSelect,
         subtitlesTextColorInput,
@@ -365,8 +310,6 @@ const useProfileSettingsInputs = (profile) => {
         subtitlesOutlineColorInput,
         audioLanguageSelect,
         surroundSoundToggle,
-        escExitFullscreenToggle,
-        quitOnCloseToggle,
         seekTimeDurationSelect,
         seekShortTimeDurationSelect,
         playInExternalPlayerSelect,
@@ -378,4 +321,4 @@ const useProfileSettingsInputs = (profile) => {
     };
 };
 
-module.exports = useProfileSettingsInputs;
+export default usePlayerOptions;
