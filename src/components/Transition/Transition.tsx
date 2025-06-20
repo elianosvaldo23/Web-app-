@@ -5,9 +5,10 @@ type Props = {
     children: JSX.Element,
     when: boolean,
     name: string,
+    onTransitionEnd?: () => void
 };
 
-const Transition = ({ children, when, name }: Props) => {
+const Transition = ({ children, when, name, onTransitionEnd }: Props) => {
     const [element, setElement] = useState<HTMLElement | null>(null);
     const [mounted, setMounted] = useState(false);
 
@@ -29,8 +30,15 @@ const Transition = ({ children, when, name }: Props) => {
         );
     }, [name, state, active, children]);
 
-    const onTransitionEnd = useCallback(() => {
-        state === 'exit' && setMounted(false);
+    const handleTransitionEnd = useCallback(() => {
+        switch (state) {
+            case 'enter':
+                onTransitionEnd?.();
+                break;
+            case 'exit':
+                setMounted(false);
+                break;
+        }
     }, [state]);
 
     useEffect(() => {
@@ -45,8 +53,8 @@ const Transition = ({ children, when, name }: Props) => {
     }, [element]);
 
     useEffect(() => {
-        element?.addEventListener('transitionend', onTransitionEnd);
-        return () => element?.removeEventListener('transitionend', onTransitionEnd);
+        element?.addEventListener('transitionend', handleTransitionEnd);
+        return () => element?.removeEventListener('transitionend', handleTransitionEnd);
     }, [element, onTransitionEnd]);
 
     return (
