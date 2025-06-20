@@ -27,6 +27,7 @@ const useStatistics = require('./useStatistics');
 const useVideo = require('./useVideo');
 const styles = require('./styles');
 const Video = require('./Video');
+const { default: Indicator } = require('./Indicator/Indicator');
 
 const Player = ({ urlParams, queryParams }) => {
     const { t } = useTranslation();
@@ -221,6 +222,16 @@ const Player = ({ urlParams, queryParams }) => {
         video.setProp('extraSubtitlesDelay', delay);
     }, []);
 
+    const onIncreaseSubtitlesDelay = React.useCallback(() => {
+        const delay = video.state.extraSubtitlesDelay + 250;
+        onExtraSubtitlesDelayChanged(delay);
+    }, [video.state.extraSubtitlesDelay, onExtraSubtitlesDelayChanged]);
+
+    const onDecreaseSubtitlesDelay = React.useCallback(() => {
+        const delay = video.state.extraSubtitlesDelay - 250;
+        onExtraSubtitlesDelayChanged(delay);
+    }, [video.state.extraSubtitlesDelay, onExtraSubtitlesDelayChanged]);
+
     const onSubtitlesSizeChanged = React.useCallback((size) => {
         updateSettings({ subtitlesSize: size });
     }, [updateSettings]);
@@ -413,6 +424,13 @@ const Player = ({ urlParams, queryParams }) => {
         if (!defaultSubtitlesSelected.current) {
             const findTrackByLang = (tracks, lang) => tracks.find((track) => track.lang === lang || langs.where('1', track.lang)?.[2] === lang);
 
+            if (settings.subtitlesLanguage === null) {
+                onSubtitlesTrackSelected(null);
+                onExtraSubtitlesTrackSelected(null);
+                defaultSubtitlesSelected.current = true;
+                return;
+            }
+
             const subtitlesTrack = findTrackByLang(video.state.subtitlesTracks, settings.subtitlesLanguage);
             const extraSubtitlesTrack = findTrackByLang(video.state.extraSubtitlesTracks, settings.subtitlesLanguage);
 
@@ -596,6 +614,14 @@ const Player = ({ urlParams, queryParams }) => {
 
                     break;
                 }
+                case 'KeyG': {
+                    onDecreaseSubtitlesDelay();
+                    break;
+                }
+                case 'KeyH': {
+                    onIncreaseSubtitlesDelay();
+                    break;
+                }
                 case 'Escape': {
                     closeMenus();
                     !settings.escExitFullscreen && window.history.back();
@@ -629,7 +655,29 @@ const Player = ({ urlParams, queryParams }) => {
             window.removeEventListener('keyup', onKeyUp);
             window.removeEventListener('wheel', onWheel);
         };
-    }, [player.metaItem, player.selected, streamingServer.statistics, settings.seekTimeDuration, settings.seekShortTimeDuration, settings.escExitFullscreen, routeFocused, menusOpen, nextVideoPopupOpen, video.state.paused, video.state.time, video.state.volume, video.state.audioTracks, video.state.subtitlesTracks, video.state.extraSubtitlesTracks, video.state.playbackSpeed, toggleSubtitlesMenu, toggleStatisticsMenu, toggleSideDrawer]);
+    }, [
+        player.metaItem,
+        player.selected,
+        streamingServer.statistics,
+        settings.seekTimeDuration,
+        settings.seekShortTimeDuration,
+        settings.escExitFullscreen,
+        routeFocused,
+        menusOpen,
+        nextVideoPopupOpen,
+        video.state.paused,
+        video.state.time,
+        video.state.volume,
+        video.state.audioTracks,
+        video.state.subtitlesTracks,
+        video.state.extraSubtitlesTracks,
+        video.state.playbackSpeed,
+        toggleSubtitlesMenu,
+        toggleStatisticsMenu,
+        toggleSideDrawer,
+        onDecreaseSubtitlesDelay,
+        onIncreaseSubtitlesDelay,
+    ]);
 
     React.useEffect(() => {
         video.events.on('error', onError);
@@ -768,6 +816,10 @@ const Player = ({ urlParams, queryParams }) => {
                 onMouseMove={onBarMouseMove}
                 onMouseOver={onBarMouseMove}
                 onTouchEnd={onContainerMouseLeave}
+            />
+            <Indicator
+                className={classnames(styles['layer'], styles['indicator-layer'])}
+                videoState={video.state}
             />
             {
                 nextVideoPopupOpen ?
