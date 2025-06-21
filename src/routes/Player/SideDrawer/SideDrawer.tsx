@@ -1,6 +1,6 @@
 // Copyright (C) 2017-2024 Smart code 203358507
 
-import React, { useMemo, useCallback, useState, forwardRef, memo } from 'react';
+import React, { useMemo, useCallback, useState, forwardRef, memo, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import Icon from '@stremio/stremio-icons/react';
 import { useServices } from 'stremio/services';
@@ -14,11 +14,14 @@ type Props = {
     seriesInfo: SeriesInfo;
     metaItem: MetaItem;
     closeSideDrawer: () => void;
+    selected: string;
+    transitionEnded: boolean;
 };
 
-const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, className, closeSideDrawer, ...props }: Props, ref) => {
+const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, className, closeSideDrawer, selected, transitionEnded, ...props }: Props, ref) => {
     const { core } = useServices();
     const [season, setSeason] = useState<number>(seriesInfo?.season);
+    const selectedVideoRef = useRef<HTMLDivElement>(null);
     const metaItem = useMemo(() => {
         return seriesInfo ?
             {
@@ -75,6 +78,14 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
         event.stopPropagation();
     };
 
+    const getSelectedRef = useCallback((video: Video) => {
+        return video.id === selected ? selectedVideoRef : null;
+    }, [selected]);
+
+    useEffect(() => {
+        transitionEnded && selectedVideoRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, [transitionEnded]);
+
     return (
         <div ref={ref} className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown}>
             <div className={styles['close-button']} onClick={closeSideDrawer}>
@@ -120,6 +131,7 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
                                     scheduled={video.scheduled}
                                     onMarkVideoAsWatched={onMarkVideoAsWatched}
                                     onMarkSeasonAsWatched={onMarkSeasonAsWatched}
+                                    ref={getSelectedRef(video)}
                                 />
                             ))}
                         </div>
