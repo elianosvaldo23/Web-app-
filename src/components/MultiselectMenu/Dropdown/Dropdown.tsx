@@ -11,11 +11,11 @@ import interfaceLanguages from '../../../common/interfaceLanguages.json';
 
 type Props = {
     options: MultiselectMenuOption[];
-    value?: string | number;
+    value?: any;
     menuOpen: boolean | (() => void);
     level: number;
     setLevel: (level: number) => void;
-    onSelect: (value: string | number) => void;
+    onSelect: (value: any) => void;
 };
 
 function normalizeLanguageCode(langCode: string): string {
@@ -46,7 +46,7 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
 
     const selectedOption = options.find((opt) => opt.value === value);
 
-    const handleSetOptionRef = useCallback((optionValue: string | number) => (node: HTMLButtonElement | null) => {
+    const handleSetOptionRef = useCallback((optionValue: any) => (node: HTMLButtonElement | null) => {
         if (node) {
             optionsRef.current.set(optionValue, node);
         } else {
