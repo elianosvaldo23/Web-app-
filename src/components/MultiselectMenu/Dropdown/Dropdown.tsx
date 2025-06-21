@@ -18,18 +18,27 @@ type Props = {
     onSelect: (value: string | number) => void;
 };
 
-function getThreeLetterLangCode(localeCode: string): string {
-    if (!interfaceLanguages || interfaceLanguages.length === 0) {
-        console.warn('Interface languages are not defined or empty. Falling back to "eng".');
-        return 'eng';
-    }
-    const language = interfaceLanguages.find(lang => lang.codes.includes(localeCode));
+function normalizeLanguageCode(langCode: string): string {
+    const language = interfaceLanguages.find((lang) => lang.codes.includes(langCode));
     if (!language) {
-        console.warn(`Unknown language code: ${localeCode}. Falling back to 'eng'.`);
+        console.warn(`Unknown language code: ${langCode}. Falling back to 'eng'.`);
         return 'eng';
     }
     return language.codes[1];
 }
+
+function getOptionLanguageCode(option: MultiselectMenuOption) {
+    if (option.label === 'None') {
+        return 'None';
+    }
+    if (!option || !option.value) {
+        console.warn('Invalid option or option value:', option);
+        return 'eng';
+    }
+    const optionValue = String(option.value);
+    return optionValue.length === 3 ? optionValue : normalizeLanguageCode(optionValue) || 'eng';
+}
+
 const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props) => {
     const { t } = useTranslation();
     const optionsRef = useRef(new Map());
@@ -61,23 +70,28 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
         }
     }, [menuOpen, selectedOption]);
 
-    const navigatorLanguageFourLetterCode = navigator.language || 'en-US';
-    const navigatorLanguageThreeLetterCode:string = getThreeLetterLangCode(navigatorLanguageFourLetterCode) || 'eng';
+    const browserLocale = navigator.language || 'eng-US';
+    const userLanguageCode = normalizeLanguageCode(browserLocale) || 'eng';
 
-    const getPriority = (option: MultiselectMenuOption) => {
-        if (!option || !option.value) {
-            console.warn('Invalid option or option value:', option);    
-            return 3;
-        }
-        const optionValue = String(option.value);
-        const LangThreeLetterCode = optionValue.length === 3 ? optionValue : getThreeLetterLangCode(optionValue) || 'eng';
+    const priorityLanguage = userLanguageCode === 'eng'
+        ? ['eng', 'None']
+        : [userLanguageCode, 'eng', 'None'];
 
-        if (LangThreeLetterCode === navigatorLanguageThreeLetterCode) return 1;
-        if (LangThreeLetterCode === 'eng') return 2;
-        if (LangThreeLetterCode === 'None') return 3;
-        return 4;
+    const isPriorityLanguage = (option: MultiselectMenuOption) => {
+        return priorityLanguage.includes(getOptionLanguageCode(option));
     };
 
+    const visibleOptions = options.filter((option: MultiselectMenuOption) => !option.hidden);
+
+    const sortedOptions = [
+
+        ...priorityLanguage.flatMap((lang) =>
+            visibleOptions.filter((option) => getOptionLanguageCode(option) === lang)),
+
+        ...visibleOptions
+            .filter((option) => !isPriorityLanguage(option))
+            .sort((a, b) => a.label.localeCompare(b.label))
+    ];
     return (
         <div
             className={classNames(styles['dropdown'], { [styles['open']]: menuOpen })}
@@ -92,24 +106,8 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                 : null
             }
 
-                {options
-                    .filter((option: MultiselectMenuOption) => !option.hidden)
-                    .sort((a, b) => {
-                        
-                        // Sort by priority first
-                        const aPriority = getPriority(a);
-                        const bPriority = getPriority(b);
-                        
-                        //Lowest number is ranked highest
-                        if (aPriority !== bPriority) {
-                            return aPriority - bPriority;
-                        }
-                       
-                        // Same priority = alphabetical by label eg "english", "french"
-                        return a.label.localeCompare(b.label);
-                    })
-                .map((option: MultiselectMenuOption) => (
-                    <div 
+            {sortedOptions.map((option: MultiselectMenuOption) => (
+                <div
                     key={`${String(option.label)}-${String(option.value)}`}>
                     <Option
                         key={option.value}
@@ -118,9 +116,8 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                         onSelect={onSelect}
                         selectedValue={value}
                     />
-                    </div>
-                ))
-            }
+                </div>
+            ))}
         </div>
     );
 };
