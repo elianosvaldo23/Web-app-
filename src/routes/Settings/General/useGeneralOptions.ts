@@ -1,15 +1,20 @@
 import { useMemo } from 'react';
-import { interfaceLanguages } from 'stremio/common';
+import { interfaceLanguages, useLanguageSorting } from 'stremio/common';
 import { useServices } from 'stremio/services';
 
 const useGeneralOptions = (profile: Profile) => {
     const { core } = useServices();
 
-    const interfaceLanguageSelect = useMemo(() => ({
-        options: interfaceLanguages.map(({ name, codes }) => ({
+    const interfaceLanguageOptions = useMemo(() => 
+        interfaceLanguages.map(({ name, codes }) => ({
             value: codes[0],
             label: name,
-        })),
+        })), []);
+
+    const { sortedOptions } = useLanguageSorting(interfaceLanguageOptions);
+
+    const interfaceLanguageSelect = useMemo(() => ({
+        options: sortedOptions,
         value: interfaceLanguages.find(({ codes }) => codes[1] === profile.settings.interfaceLanguage)?.codes?.[0] || profile.settings.interfaceLanguage,
         onSelect: (value: string) => {
             core.transport.dispatch({
@@ -23,7 +28,7 @@ const useGeneralOptions = (profile: Profile) => {
                 }
             });
         }
-    }), [profile.settings]);
+    }), [profile.settings, sortedOptions]);
 
     const escExitFullscreenToggle = useMemo(() => ({
         checked: profile.settings.escExitFullscreen,

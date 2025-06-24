@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import Option from './Option';
 import Icon from '@stremio/stremio-icons/react';
 import styles from './Dropdown.less';
-import useLanguageSorting from './useLanguageSorting';
 
 type Props = {
     options: MultiselectMenuOption[];
@@ -20,7 +19,6 @@ type Props = {
 
 const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props) => {
     const { t } = useTranslation();
-    const { isLanguageDropdown, sortedOptions } = useLanguageSorting(options);
     const optionsRef = useRef(new Map());
     const containerRef = useRef(null);
 
@@ -63,8 +61,8 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                 </Button>
                 : null
             }
-            {(isLanguageDropdown ? sortedOptions : options)
-                ?.filter((option: MultiselectMenuOption) => !option.hidden)
+            {options
+                .filter((option: MultiselectMenuOption) => !option.hidden)
                 .map((option: MultiselectMenuOption) => (
                     <Option
                         key={option.value}

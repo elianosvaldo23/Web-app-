@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import interfaceLanguages from 'stremio/common/interfaceLanguages.json';
 
-const useLanguageSorting = (options?: MultiselectMenuOption[]) => {
+const useLanguageSorting = (options: MultiselectMenuOption[]) => {
     const userLangCode = useMemo(() => {
         const lang = interfaceLanguages.find((l) => l.codes.includes(navigator.language || 'en-US'));
         if (lang) {
@@ -17,8 +17,6 @@ const useLanguageSorting = (options?: MultiselectMenuOption[]) => {
     }, [options]);
 
     const sortedOptions = useMemo(() => {
-        if (!isLanguageDropdown || !options) return options;
-
         const matchingIndex = options.findIndex((opt) => {
             const lang = interfaceLanguages.find((l) => l.name === opt.label);
             return userLangCode.some((code) => lang?.codes.includes(code));
