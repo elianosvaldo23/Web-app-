@@ -18,8 +18,13 @@ const styles = require('./styles');
 const { AddonPlaceholder } = require('./AddonPlaceholder');
 
 const Addons = () => {
-    const urlParams = useParams();
+    const { type, transportUrl, catalogId } = useParams();
     const [queryParams] = useSearchParams();
+    const urlParams = React.useMemo(() => ({
+        type,
+        transportUrl,
+        catalogId
+    }), [type, transportUrl, catalogId]);
     const { t } = useTranslation();
     const platform = usePlatform();
     const { core } = useServices();

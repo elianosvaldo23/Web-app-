@@ -15,7 +15,11 @@ import styles from './Calendar.less';
 import classNames from 'classnames';
 
 const Calendar = () => {
-    const urlParams = useParams();
+    const { year, month } = useParams();
+    const urlParams = React.useMemo(() => ({
+        year,
+        month
+    }), [year, month]);
     const calendar = useCalendar(urlParams);
     const profile = useProfile();
 

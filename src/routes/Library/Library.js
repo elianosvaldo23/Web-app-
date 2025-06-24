@@ -41,7 +41,10 @@ function withModel(Library, useLocation) {
 }
 
 const Library = ({ model }) => {
-    const urlParams = useParams();
+    const { type } = useParams();
+    const urlParams = React.useMemo(() => ({
+        type
+    }), [type]);
     const [queryParams] = useSearchParams();
     const navigate = useNavigate();
     const { t } = useTranslation();

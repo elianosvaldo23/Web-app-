@@ -31,7 +31,15 @@ const Video = require('./Video');
 const { default: Indicator } = require('./Indicator/Indicator');
 
 const Player = () => {
-    const urlParams = useParams();
+    const { stream, streamTransportUrl, metaTransportUrl, type, id, videoId } = useParams();
+    const urlParams = React.useMemo(() => ({
+        stream,
+        streamTransportUrl,
+        metaTransportUrl,
+        type,
+        id,
+        videoId
+    }), [stream, streamTransportUrl, metaTransportUrl, type, id, videoId]);
     const [queryParams] = useSearchParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
