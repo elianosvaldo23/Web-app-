@@ -26,11 +26,11 @@ const useGeneralOptions = (profile: Profile) => {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        interfaceLanguage: value,
-                    },
-                },
+                        interfaceLanguage: value
+                    }
+                }
             });
-        },
+        }
     }), [profile.settings, sortedOptions]);
 
     const escExitFullscreenToggle = useMemo(() => ({
@@ -43,10 +43,10 @@ const useGeneralOptions = (profile: Profile) => {
                     args: {
                         ...profile.settings,
                         escExitFullscreen: !profile.settings.escExitFullscreen,
-                    },
-                },
+                    }
+                }
             });
-        },
+        }
     }), [profile.settings]);
 
     const quitOnCloseToggle = useMemo(() => ({
@@ -59,10 +59,10 @@ const useGeneralOptions = (profile: Profile) => {
                     args: {
                         ...profile.settings,
                         quitOnClose: !profile.settings.quitOnClose,
-                    },
-                },
+                    }
+                }
             });
-        },
+        }
     }), [profile.settings]);
 
     const hideSpoilersToggle = useMemo(() => ({
@@ -75,10 +75,10 @@ const useGeneralOptions = (profile: Profile) => {
                     args: {
                         ...profile.settings,
                         hideSpoilers: !profile.settings.hideSpoilers,
-                    },
-                },
+                    }
+                }
             });
-        },
+        }
     }), [profile.settings]);
 
     return {
