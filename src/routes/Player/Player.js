@@ -127,17 +127,22 @@ const Player = () => {
     }, []);
 
     const onEnded = React.useCallback(() => {
+        // here we need to explicitly check for isNavigating.current
+        // the ended event can be called multiple times by MPV inside Shell
         if (isNavigating.current) {
             return;
         }
 
         ended();
-        if (player.nextVideo !== null) {
-            onNextVideoRequested();
+        if (window.playerNextVideo !== null) {
+            nextVideo();
+
+            const deepLinks = window.playerNextVideo.deepLinks;
+            handleNextVideoNavigation(deepLinks);
         } else {
             navigate(-1);
         }
-    }, [player.nextVideo, onNextVideoRequested]);
+    }, []);
 
     const onError = React.useCallback((error) => {
         console.error('Player', error);
@@ -417,6 +422,14 @@ const Player = () => {
                 closeNextVideoPopup();
             }
         }
+        if (player.nextVideo) {
+            // This is a workaround for the fact that when we call onEnded nextVideo from the player is already set to null since core unloads the stream
+            // we explicitly set it to a global variable so we can access it in the onEnded function
+            // this is not a good solution but it works for now
+            window.playerNextVideo = player.nextVideo;
+        } else {
+            window.playerNextVideo = null;
+        }
     }, [player.nextVideo, video.state.time, video.state.duration]);
 
     React.useEffect(() => {
@@ -459,6 +472,9 @@ const Player = () => {
         defaultSubtitlesSelected.current = false;
         defaultAudioTrackSelected.current = false;
         nextVideoPopupDismissed.current = false;
+        // we need a timeout here to make sure that previous page unloads and the new one loads
+        // avoiding race conditions and flickering
+        setTimeout(() => isNavigating.current = false, 1000);
     }, [video.state.stream]);
 
     React.useEffect(() => {
@@ -844,6 +860,7 @@ const Player = () => {
                     metaItem={player.metaItem?.content}
                     seriesInfo={player.seriesInfo}
                     closeSideDrawer={closeSideDrawer}
+                    selected={player.selected?.streamRequest.path.id}
                 />
             </Transition>
             {
