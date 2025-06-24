@@ -36,7 +36,7 @@ const usePlayerOptions = (profile: Profile) => {
                 }
             });
         }
-    }), [profile.settings, sortedLanguageOptions, t]);
+    }), [profile.settings, sortedLanguageOptions]);
 
     const subtitlesSizeSelect = useMemo(() => ({
         options: CONSTANTS.SUBTITLES_SIZES.map((size) => ({
