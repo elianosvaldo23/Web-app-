@@ -42,7 +42,7 @@ const useGeneralOptions = (profile: Profile) => {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        escExitFullscreen: !profile.settings.escExitFullscreen,
+                        escExitFullscreen: !profile.settings.escExitFullscreen
                     }
                 }
             });
@@ -58,7 +58,7 @@ const useGeneralOptions = (profile: Profile) => {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        quitOnClose: !profile.settings.quitOnClose,
+                        quitOnClose: !profile.settings.quitOnClose
                     }
                 }
             });
@@ -74,7 +74,7 @@ const useGeneralOptions = (profile: Profile) => {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        hideSpoilers: !profile.settings.hideSpoilers,
+                        hideSpoilers: !profile.settings.hideSpoilers
                     }
                 }
             });
