@@ -5,17 +5,20 @@ import { useServices } from 'stremio/services';
 const useGeneralOptions = (profile: Profile) => {
     const { core } = useServices();
 
-    const interfaceLanguageOptions = useMemo(() => 
+    const interfaceLanguageOptions = useMemo(() =>
         interfaceLanguages.map(({ name, codes }) => ({
             value: codes[0],
             label: name,
-        })), []);
+        })),
+    []);
 
     const { sortedOptions } = useLanguageSorting(interfaceLanguageOptions);
 
     const interfaceLanguageSelect = useMemo(() => ({
         options: sortedOptions,
-        value: interfaceLanguages.find(({ codes }) => codes[1] === profile.settings.interfaceLanguage)?.codes?.[0] || profile.settings.interfaceLanguage,
+        value:
+            interfaceLanguages.find(({ codes }) => codes[1] === profile.settings.interfaceLanguage)?.codes?.[0] ||
+            profile.settings.interfaceLanguage,
         onSelect: (value: string) => {
             core.transport.dispatch({
                 action: 'Ctx',
@@ -23,11 +26,11 @@ const useGeneralOptions = (profile: Profile) => {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        interfaceLanguage: value
-                    }
-                }
+                        interfaceLanguage: value,
+                    },
+                },
             });
-        }
+        },
     }), [profile.settings, sortedOptions]);
 
     const escExitFullscreenToggle = useMemo(() => ({
@@ -39,11 +42,11 @@ const useGeneralOptions = (profile: Profile) => {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        escExitFullscreen: !profile.settings.escExitFullscreen
-                    }
-                }
+                        escExitFullscreen: !profile.settings.escExitFullscreen,
+                    },
+                },
             });
-        }
+        },
     }), [profile.settings]);
 
     const quitOnCloseToggle = useMemo(() => ({
@@ -55,11 +58,11 @@ const useGeneralOptions = (profile: Profile) => {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        quitOnClose: !profile.settings.quitOnClose
-                    }
-                }
+                        quitOnClose: !profile.settings.quitOnClose,
+                    },
+                },
             });
-        }
+        },
     }), [profile.settings]);
 
     const hideSpoilersToggle = useMemo(() => ({
@@ -71,11 +74,11 @@ const useGeneralOptions = (profile: Profile) => {
                     action: 'UpdateSettings',
                     args: {
                         ...profile.settings,
-                        hideSpoilers: !profile.settings.hideSpoilers
-                    }
-                }
+                        hideSpoilers: !profile.settings.hideSpoilers,
+                    },
+                },
             });
-        }
+        },
     }), [profile.settings]);
 
     return {

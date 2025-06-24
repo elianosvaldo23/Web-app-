@@ -10,7 +10,7 @@ const usePlayerOptions = (profile: Profile) => {
     const { core } = useServices();
     const platform = usePlatform();
 
-    const languageOptions = useMemo(() => 
+    const languageOptions = useMemo(() =>
         Object.keys(LANGUAGES_NAMES).map((code) => ({
             value: code,
             label: LANGUAGES_NAMES[code]
