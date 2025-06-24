@@ -12,10 +12,10 @@ const useProfile = require('stremio/common/useProfile');
 const VideoPlaceholder = require('./VideoPlaceholder');
 const styles = require('./styles');
 
-const Video = ({ className, id, title, thumbnail, season, episode, released, upcoming, watched, progress, scheduled, seasonWatched, deepLinks, onMarkVideoAsWatched, onMarkSeasonAsWatched, ...props }) => {
-    const { t } = useTranslation();
+const Video = React.forwardRef(({ className, id, title, thumbnail, season, episode, released, upcoming, watched, progress, scheduled, seasonWatched, deepLinks, onMarkVideoAsWatched, onMarkSeasonAsWatched, ...props }, ref) => {
     const routeFocused = useRouteFocused();
     const profile = useProfile();
+    const { t } = useTranslation();
     const [menuOpen, , closeMenu, toggleMenu] = useBinaryState(false);
     const popupLabelOnMouseUp = React.useCallback((event) => {
         if (!event.nativeEvent.togglePopupPrevented) {
@@ -71,7 +71,7 @@ const Video = ({ className, id, title, thumbnail, season, episode, released, upc
     const renderLabel = React.useMemo(() => function renderLabel({ className, id, title, thumbnail, episode, released, upcoming, watched, progress, scheduled, children, ...props }) {
         const blurThumbnail = profile.settings.hideSpoilers && season && episode && !watched;
         return (
-            <Button {...props} className={classnames(className, styles['video-container'])} title={title}>
+            <Button {...props} className={classnames(className, styles['video-container'])} title={title} ref={ref}>
                 {
                     typeof thumbnail === 'string' && thumbnail.length > 0 ?
                         <div className={styles['thumbnail-container']}>
@@ -186,7 +186,7 @@ const Video = ({ className, id, title, thumbnail, season, episode, released, upc
             renderMenu={renderMenu}
         />
     );
-};
+});
 
 Video.Placeholder = VideoPlaceholder;
 
