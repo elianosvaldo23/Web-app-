@@ -4,7 +4,6 @@ const React = require('react');
 const { useNavigate } = require('react-router');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
-const { t } = require('i18next');
 const { default: useRouteFocused } = require('stremio/common/useRouteFocused');
 const { default: Icon } = require('@stremio/stremio-icons/react');
 const { Button, Image, Popup } = require('stremio/components');
@@ -12,12 +11,14 @@ const useBinaryState = require('stremio/common/useBinaryState');
 const useProfile = require('stremio/common/useProfile');
 const VideoPlaceholder = require('./VideoPlaceholder');
 const styles = require('./styles');
+const { useTranslation } = require('react-i18next');
 
 const Video = React.forwardRef(({ className, id, title, thumbnail, season, episode, released, upcoming, watched, progress, scheduled, seasonWatched, deepLinks, onMarkVideoAsWatched, onMarkSeasonAsWatched, ...props }, ref) => {
     const routeFocused = useRouteFocused();
     const profile = useProfile();
     const navigate = useNavigate();
     const { t } = useTranslation();
+
     const [menuOpen, , closeMenu, toggleMenu] = useBinaryState(false);
     const popupLabelOnMouseUp = React.useCallback((event) => {
         if (!event.nativeEvent.togglePopupPrevented) {
