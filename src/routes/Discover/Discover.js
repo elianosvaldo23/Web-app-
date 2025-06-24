@@ -16,7 +16,12 @@ const styles = require('./styles');
 const SCROLL_TO_BOTTOM_THRESHOLD = 400;
 
 const Discover = () => {
-    const urlParams = useParams();
+    const { type, transportUrl, catalogId } = useParams();
+    const urlParams = React.useMemo(() => ({
+        type,
+        transportUrl,
+        catalogId
+    }), [type, transportUrl, catalogId]);
     const [queryParams] = useSearchParams();
     const { t } = useTranslation();
     const { core } = useServices();
