@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import Option from './Option';
 import Icon from '@stremio/stremio-icons/react';
 import styles from './Dropdown.less';
-import interfaceLanguages from '../../../common/interfaceLanguages.json';
+import useLanguageSorting from './useLanguageSorting';
 
 type Props = {
     options: MultiselectMenuOption[];
@@ -18,29 +18,9 @@ type Props = {
     onSelect: (value: any) => void;
 };
 
-function normalizeLanguageCode(langCode: string): string {
-    const language = interfaceLanguages.find((lang) => lang.codes.includes(langCode));
-    if (!language) {
-        console.warn(`Unknown language code: ${langCode}. Falling back to 'eng'.`);
-        return 'eng';
-    }
-    return language.codes[1];
-}
-
-function getOptionLanguageCode(option: MultiselectMenuOption) {
-    if (option.label === 'None') {
-        return 'None';
-    }
-    if (!option || !option.value) {
-        console.warn('Invalid option or option value:', option);
-        return 'eng';
-    }
-    const optionValue = String(option.value);
-    return optionValue.length === 3 ? optionValue : normalizeLanguageCode(optionValue) || 'eng';
-}
-
 const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props) => {
     const { t } = useTranslation();
+    const { isLanguageDropdown, sortedOptions } = useLanguageSorting(options);
     const optionsRef = useRef(new Map());
     const containerRef = useRef(null);
 
@@ -70,28 +50,6 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
         }
     }, [menuOpen, selectedOption]);
 
-    const browserLocale = navigator.language || 'eng-US';
-    const userLanguageCode = normalizeLanguageCode(browserLocale) || 'eng';
-
-    const priorityLanguage = userLanguageCode === 'eng'
-        ? ['eng', 'None']
-        : [userLanguageCode, 'eng', 'None'];
-
-    const isPriorityLanguage = (option: MultiselectMenuOption) => {
-        return priorityLanguage.includes(getOptionLanguageCode(option));
-    };
-
-    const visibleOptions = options.filter((option: MultiselectMenuOption) => !option.hidden);
-
-    const sortedOptions = [
-
-        ...priorityLanguage.flatMap((lang) =>
-            visibleOptions.filter((option) => getOptionLanguageCode(option) === lang)),
-
-        ...visibleOptions
-            .filter((option) => !isPriorityLanguage(option))
-            .sort((a, b) => a.label.localeCompare(b.label))
-    ];
     return (
         <div
             className={classNames(styles['dropdown'], { [styles['open']]: menuOpen })}
@@ -105,10 +63,9 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                 </Button>
                 : null
             }
-
-            {sortedOptions.map((option: MultiselectMenuOption) => (
-                <div
-                    key={`${String(option.label)}-${String(option.value)}`}>
+            {(isLanguageDropdown ? sortedOptions : options)
+                ?.filter((option: MultiselectMenuOption) => !option.hidden)
+                .map((option: MultiselectMenuOption) => (
                     <Option
                         key={option.value}
                         ref={handleSetOptionRef(option.value)}
@@ -116,8 +73,8 @@ const Dropdown = ({ level, setLevel, options, onSelect, value, menuOpen }: Props
                         onSelect={onSelect}
                         selectedValue={value}
                     />
-                </div>
-            ))}
+                ))
+            }
         </div>
     );
 };
