@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useServices } from 'stremio/services';
-import { CONSTANTS, languageNames, usePlatform } from 'stremio/common';
+import { CONSTANTS, languageNames, usePlatform, useLanguageSorting } from 'stremio/common';
 
 const LANGUAGES_NAMES: Record<string, string> = languageNames;
 
@@ -10,13 +10,18 @@ const usePlayerOptions = (profile: Profile) => {
     const { core } = useServices();
     const platform = usePlatform();
 
+    const languageOptions = useMemo(() =>
+        Object.keys(LANGUAGES_NAMES).map((code) => ({
+            value: code,
+            label: LANGUAGES_NAMES[code]
+        })), []);
+
+    const { sortedOptions: sortedLanguageOptions } = useLanguageSorting(languageOptions);
+
     const subtitlesLanguageSelect = useMemo(() => ({
         options: [
             { value: null, label: t('NONE') },
-            ...Object.keys(LANGUAGES_NAMES).map((code) => ({
-                value: code,
-                label: LANGUAGES_NAMES[code]
-            }))
+            ...sortedLanguageOptions
         ],
         value: profile.settings.subtitlesLanguage,
         onSelect: (value: string) => {
@@ -31,7 +36,7 @@ const usePlayerOptions = (profile: Profile) => {
                 }
             });
         }
-    }), [profile.settings]);
+    }), [profile.settings, sortedLanguageOptions]);
 
     const subtitlesSizeSelect = useMemo(() => ({
         options: CONSTANTS.SUBTITLES_SIZES.map((size) => ({
@@ -105,10 +110,7 @@ const usePlayerOptions = (profile: Profile) => {
     }), [profile.settings]);
 
     const audioLanguageSelect = useMemo(() => ({
-        options: Object.keys(LANGUAGES_NAMES).map((code) => ({
-            value: code,
-            label: LANGUAGES_NAMES [code]
-        })),
+        options: sortedLanguageOptions,
         value: profile.settings.audioLanguage,
         onSelect: (value: string) => {
             core.transport.dispatch({
@@ -122,7 +124,7 @@ const usePlayerOptions = (profile: Profile) => {
                 }
             });
         }
-    }), [profile.settings]);
+    }), [profile.settings, sortedLanguageOptions]);
 
     const surroundSoundToggle = useMemo(() => ({
         checked: profile.settings.surroundSound,
