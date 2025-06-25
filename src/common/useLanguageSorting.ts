@@ -22,10 +22,12 @@ const useLanguageSorting = (options: MultiselectMenuOption[]) => {
             return userLangCode.some((code) => lang?.codes.includes(code));
         });
 
-        if (matchingIndex === -1) return options;
+        if (matchingIndex === -1) {
+            return [...options].sort((a, b) => a.label.localeCompare(b.label));
+        }
 
         const matchingOption = options[matchingIndex];
-        const otherOptions = options.filter((_, index) => index !== matchingIndex);
+        const otherOptions = options.filter((_, idx) => idx !== matchingIndex).sort((a, b) => a.label.localeCompare(b.label));
 
         return [matchingOption, ...otherOptions];
     }, [options, userLangCode, isLanguageDropdown]);

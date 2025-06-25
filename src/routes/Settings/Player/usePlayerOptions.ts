@@ -20,7 +20,7 @@ const usePlayerOptions = (profile: Profile) => {
     const subtitlesLanguageSelect = useMemo(() => ({
         options: [
             { value: null, label: t('NONE') },
-            ...sortedLanguageOptions.sort((a, b) => a.label.localeCompare(b.label))
+            ...sortedLanguageOptions
         ],
         value: profile.settings.subtitlesLanguage,
         onSelect: (value: string) => {
@@ -109,7 +109,7 @@ const usePlayerOptions = (profile: Profile) => {
     }), [profile.settings]);
 
     const audioLanguageSelect = useMemo(() => ({
-        options: sortedLanguageOptions.sort((a, b) => a.label.localeCompare(b.label)),
+        options: sortedLanguageOptions,
         value: profile.settings.audioLanguage,
         onSelect: (value: string) => {
             core.transport.dispatch({
