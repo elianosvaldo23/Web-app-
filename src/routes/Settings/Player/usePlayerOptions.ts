@@ -10,18 +10,17 @@ const usePlayerOptions = (profile: Profile) => {
     const { core } = useServices();
     const platform = usePlatform();
 
-    const languageOptions = useMemo(() =>
-        Object.keys(LANGUAGES_NAMES).map((code) => ({
-            value: code,
-            label: LANGUAGES_NAMES[code]
-        })), []);
+    const languageOptions = useMemo(() => Object.keys(LANGUAGES_NAMES).map((code) => ({
+        value: code,
+        label: LANGUAGES_NAMES[code]
+    })), []);
 
     const { sortedOptions: sortedLanguageOptions } = useLanguageSorting(languageOptions);
 
     const subtitlesLanguageSelect = useMemo(() => ({
         options: [
             { value: null, label: t('NONE') },
-            ...sortedLanguageOptions
+            ...sortedLanguageOptions.sort((a, b) => a.label.localeCompare(b.label))
         ],
         value: profile.settings.subtitlesLanguage,
         onSelect: (value: string) => {
@@ -110,7 +109,7 @@ const usePlayerOptions = (profile: Profile) => {
     }), [profile.settings]);
 
     const audioLanguageSelect = useMemo(() => ({
-        options: sortedLanguageOptions,
+        options: sortedLanguageOptions.sort((a, b) => a.label.localeCompare(b.label)),
         value: profile.settings.audioLanguage,
         onSelect: (value: string) => {
             core.transport.dispatch({
