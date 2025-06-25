@@ -21,7 +21,6 @@ const mapSelectableInputs = (discover, t) => {
             window.location = value;
         }
     };
-    const selectedCatalog = discover.selectable.catalogs.find(({ selected }) => selected);
     const catalogSelect = {
         options: discover.selectable.catalogs
             .map(({ id, name, addon, deepLinks }) => ({
@@ -29,9 +28,9 @@ const mapSelectableInputs = (discover, t) => {
                 label: t.catalogTitle({ addon, id, name }),
                 title: `${name} (${addon.manifest.name})`
             })),
-        value: discover.selected?.request.path.id
-            ? selectedCatalog.deepLinks.discover
-            : undefined,
+        value: discover.selectable.catalogs
+            .filter(({ selected }) => selected)
+            .map(({ deepLinks }) => deepLinks.discover),
         title: discover.selected !== null
             ? () => {
                 const selectableCatalog = discover.selectable.catalogs
