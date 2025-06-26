@@ -193,6 +193,8 @@ const Discover = ({ urlParams, queryParams }) => {
                             trailerStreams={selectedMetaItem.trailerStreams}
                             inLibrary={selectedMetaItem.inLibrary}
                             toggleInLibrary={selectedMetaItem.inLibrary ? removeFromLibrary : addToLibrary}
+                            metaId={selectedMetaItem.id}
+                            like={selectedMetaItem.like}
                         />
                         :
                         discover.catalog !== null && discover.catalog.content.type === 'Loading' ?
