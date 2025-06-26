@@ -6,7 +6,7 @@ import { useServices } from 'stremio/services';
 const useRating = (ratingInfo?: Loadable<RatingInfo>) => {
     const { core } = useServices();
 
-    const setRating = useCallback((status: RatingStatus) => {
+    const setRating = useCallback((status: Rating) => {
         core.transport.dispatch({
             action: 'MetaDetails',
             args: {

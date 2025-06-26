@@ -69,9 +69,9 @@ type AudioTrack = {
     origin: string,
 };
 
-type RatingStatus = 'liked' | 'loved' | null;
+type Rating = 'liked' | 'loved' | null;
 
 type RatingInfo = {
     metaId: string,
-    status: RatingStatus,
+    status: Rating,
 };
