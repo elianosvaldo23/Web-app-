@@ -68,10 +68,27 @@ const Video = React.forwardRef(({ className, id, title, thumbnail, season, episo
             }
         }
     }, [deepLinks]);
-    const renderLabel = React.useMemo(() => function renderLabel({ className, id, title, thumbnail, episode, released, upcoming, watched, progress, scheduled, children, ...props }) {
+    const renderLabel = React.useMemo(() => function renderLabel({ className, id, title, thumbnail, episode, released, upcoming, watched, progress, scheduled, children, ref: popupRef, ...props }) {
         const blurThumbnail = profile.settings.hideSpoilers && season && episode && !watched;
+        const handleRef = React.useCallback((node) => {
+            if (popupRef) {
+                if (typeof popupRef === 'function') {
+                    popupRef(node);
+                } else {
+                    popupRef.current = node;
+                }
+            }
+            if (ref) {
+                if (typeof ref === 'function') {
+                    ref(node);
+                } else {
+                    ref.current = node;
+                }
+            }
+        }, [popupRef]);
+        
         return (
-            <Button {...props} className={classnames(className, styles['video-container'])} title={title} ref={ref}>
+            <Button {...props} className={classnames(className, styles['video-container'])} title={title} ref={handleRef}>
                 {
                     typeof thumbnail === 'string' && thumbnail.length > 0 ?
                         <div className={styles['thumbnail-container']}>
