@@ -86,7 +86,7 @@ const Video = React.forwardRef(({ className, id, title, thumbnail, season, episo
                 }
             }
         }, [popupRef]);
-        
+
         return (
             <Button {...props} className={classnames(className, styles['video-container'])} title={title} ref={handleRef}>
                 {
