@@ -848,7 +848,7 @@ const Player = ({ urlParams, queryParams }) => {
                     metaItem={player.metaItem?.content}
                     seriesInfo={player.seriesInfo}
                     closeSideDrawer={closeSideDrawer}
-                    selected={player.selected?.streamRequest.path.id}
+                    selected={player.selected?.streamRequest?.path.id}
                 />
             </Transition>
             {
