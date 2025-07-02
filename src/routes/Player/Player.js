@@ -766,6 +766,8 @@ const Player = ({ urlParams, queryParams }) => {
                     className={classnames(styles['layer'], styles['menu-layer'])}
                     stream={player?.selected?.stream}
                     playbackDevices={playbackDevices}
+                    extraSubtitlesTracks={video.state.extraSubtitlesTracks}
+                    selectedExtraSubtitlesTrackId={video.state.selectedExtraSubtitlesTrackId}
                 />
             </ContextMenu>
             <HorizontalNavBar
@@ -902,6 +904,8 @@ const Player = ({ urlParams, queryParams }) => {
                         className={classnames(styles['layer'], styles['menu-layer'])}
                         stream={player.selected.stream}
                         playbackDevices={playbackDevices}
+                        extraSubtitlesTracks={video.state.extraSubtitlesTracks}
+                        selectedExtraSubtitlesTrackId={video.state.selectedExtraSubtitlesTrackId}
                     />
                     :
                     null
