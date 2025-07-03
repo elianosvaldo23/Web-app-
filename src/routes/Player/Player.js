@@ -820,6 +820,7 @@ const Player = ({ urlParams, queryParams }) => {
             <Indicator
                 className={classnames(styles['layer'], styles['indicator-layer'])}
                 videoState={video.state}
+                disabled={subtitlesMenuOpen}
             />
             {
                 nextVideoPopupOpen ?
