@@ -4,7 +4,7 @@ from typing import Optional
 
 class Config:
     # Bot Configuration
-    BOT_TOKEN = "8063509725:AAFZIEmk0eNZ5Z56_HYOz_bnwyg2rytPB-k"
+    BOT_TOKEN = "8063509725:AAHsa32julaJ4fst2OWhgj7lkL_HdA5ALN4"
     ADMIN_ID = 1742433244
     
     # Database Configuration
