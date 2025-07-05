@@ -156,8 +156,9 @@ class TaskGramApp {
         document.getElementById('gemsBalance').textContent = 
             `${this.user.gems_balance.toLocaleString()} 💎`;
         
-        document.getElementById('tonBalance').textContent = 
-            `${this.user.ton_balance.toFixed(4)} ⚡`;
+        // Update TON balance with custom icon
+        const tonBalanceElement = document.getElementById('tonBalance');
+        tonBalanceElement.innerHTML = `${this.user.ton_balance.toFixed(4)} <span class="ton-icon ml-2"></span>`;
         
         document.getElementById('totalEarned').textContent = 
             this.user.total_earned.toLocaleString();
@@ -226,8 +227,8 @@ class TaskGramApp {
             task: [
                 {
                     _id: '1',
-                    title: 'Seguir en Twitter',
-                    description: 'Sigue nuestra cuenta oficial de Twitter',
+                    title: 'Síguenos en X',
+                    description: 'Sigue @TaskGram en X (Twitter)',
                     url: 'https://twitter.com/taskgram',
                     reward: 5000,
                     completed: false,
@@ -235,34 +236,61 @@ class TaskGramApp {
                 },
                 {
                     _id: '2',
-                    title: 'Unirse al Canal de Telegram',
-                    description: 'Únete a nuestro canal oficial para recibir actualizaciones',
+                    title: 'Canal Telegram',
+                    description: 'Únete a nuestro canal oficial',
                     url: 'https://t.me/taskgram_official',
                     reward: 5000,
                     completed: false,
                     completed_count: 2100
+                },
+                {
+                    _id: '3',
+                    title: 'Share Instagram',
+                    description: 'Comparte en tu historia de Instagram',
+                    url: 'https://instagram.com',
+                    reward: 7500,
+                    completed: false,
+                    completed_count: 890
                 }
             ],
             mission: [
                 {
-                    _id: '3',
-                    title: 'Misión Semanal',
+                    _id: '4',
+                    title: 'Misión 10x',
                     description: 'Completa 10 tareas esta semana',
                     url: '#',
                     reward: 25000,
                     completed: false,
                     completed_count: 450
+                },
+                {
+                    _id: '5',
+                    title: 'TON Master',
+                    description: 'Convierte 50,000 💎 a TON',
+                    url: '#',
+                    reward: 15000,
+                    completed: false,
+                    completed_count: 234
                 }
             ],
             intervention: [
                 {
-                    _id: '4',
-                    title: 'Reporte de Bug',
-                    description: 'Reporta un bug en la aplicación',
+                    _id: '6',
+                    title: 'Bug Report',
+                    description: 'Reporta errores y mejora la app',
                     url: 'https://forms.gle/example',
                     reward: 10000,
                     completed: false,
                     completed_count: 89
+                },
+                {
+                    _id: '7',
+                    title: 'Feedback',
+                    description: 'Comparte tu opinión sobre TaskGram',
+                    url: 'https://forms.gle/feedback',
+                    reward: 8000,
+                    completed: false,
+                    completed_count: 156
                 }
             ]
         };
@@ -275,40 +303,48 @@ class TaskGramApp {
         
         if (tasks.length === 0) {
             container.innerHTML = `
-                <div class="text-center py-8 text-gray-500">
-                    <i class="fas fa-inbox text-4xl mb-4"></i>
-                    <p>No hay ${type === 'task' ? 'tareas' : type === 'mission' ? 'misiones' : 'intervenciones'} disponibles</p>
+                <div class="text-center py-12 text-white fade-in">
+                    <i class="fas fa-inbox text-6xl mb-6 opacity-50"></i>
+                    <p class="text-xl">No hay ${type === 'task' ? 'tareas' : type === 'mission' ? 'misiones' : 'soporte'} disponibles</p>
+                    <p class="text-blue-200 mt-2">¡Vuelve pronto para más oportunidades!</p>
                 </div>
             `;
             return;
         }
 
-        container.innerHTML = tasks.map(task => `
-            <div class="task-card bg-white rounded-xl p-4 shadow-sm cursor-pointer" data-task-id="${task._id}">
-                <div class="flex items-start justify-between mb-3">
+        container.innerHTML = tasks.map((task, index) => `
+            <div class="task-card glass rounded-2xl p-6 cursor-pointer text-white fade-in" 
+                 data-task-id="${task._id}" 
+                 style="animation-delay: ${index * 0.1}s">
+                <div class="flex items-start justify-between mb-4">
                     <div class="flex-1">
-                        <h3 class="font-semibold text-gray-800 mb-1">${task.title}</h3>
-                        <p class="text-gray-600 text-sm">${task.description}</p>
+                        <h3 class="font-bold text-xl mb-2">${task.title}</h3>
+                        <p class="text-blue-100 text-sm leading-relaxed">${task.description}</p>
                     </div>
-                    <div class="ml-4 text-right">
-                        <div class="text-lg font-bold text-green-500">${task.reward.toLocaleString()} 💎</div>
+                    <div class="ml-6 text-right">
+                        <div class="text-2xl font-bold text-yellow-300 mb-2">${task.reward.toLocaleString()} 💎</div>
                         ${task.completed ? 
-                            '<span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">Completada</span>' :
-                            '<span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">Disponible</span>'
+                            '<span class="text-xs bg-green-500 bg-opacity-80 text-white px-3 py-1 rounded-full">✓ Completada</span>' :
+                            '<span class="text-xs bg-blue-500 bg-opacity-80 text-white px-3 py-1 rounded-full pulse-glow">Disponible</span>'
                         }
                     </div>
                 </div>
-                <div class="flex items-center justify-between text-sm text-gray-500">
-                    <span><i class="fas fa-users mr-1"></i>${task.completed_count} completadas</span>
-                    <button class="text-blue-500 hover:text-blue-600 font-medium">
-                        ${task.completed ? 'Ver detalles' : 'Completar tarea'}
+                <div class="flex items-center justify-between text-sm text-blue-200 pt-4 border-t border-white border-opacity-20">
+                    <span><i class="fas fa-users mr-2"></i>${task.completed_count.toLocaleString()} completadas</span>
+                    <button class="btn-ton px-4 py-2 rounded-lg text-white font-medium hover:scale-105 transition-all">
+                        ${task.completed ? 'Ver detalles' : 'Completar →'}
                     </button>
                 </div>
             </div>
         `).join('');
 
-        // Add click listeners
-        container.querySelectorAll('.task-card').forEach(card => {
+        // Add click listeners with animation
+        container.querySelectorAll('.task-card').forEach((card, index) => {
+            // Add staggered animation
+            setTimeout(() => {
+                card.classList.add('slide-up');
+            }, index * 100);
+            
             card.addEventListener('click', () => {
                 const taskId = card.dataset.taskId;
                 const task = tasks.find(t => t._id === taskId);
@@ -602,20 +638,29 @@ class TaskGramApp {
         
         toastMessage.textContent = message;
         
-        // Set color based on type
-        toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg transform transition-transform z-50 ${
+        // Set color and icon based on type
+        const icon = type === 'success' ? 'fa-check-circle' : 
+                    type === 'error' ? 'fa-exclamation-circle' : 
+                    type === 'info' ? 'fa-info-circle' : 'fa-bell';
+        
+        toast.className = `fixed top-4 right-4 px-6 py-4 rounded-xl shadow-lg transform transition-all duration-300 z-50 ${
             type === 'success' ? 'bg-green-500' : 
             type === 'error' ? 'bg-red-500' : 
-            type === 'info' ? 'bg-blue-500' : 'bg-gray-500'
-        } text-white`;
+            type === 'info' ? 'ton-primary' : 'bg-gray-500'
+        } text-white slide-up`;
         
-        // Show toast
+        // Update icon
+        toast.querySelector('i').className = `fas ${icon} mr-3`;
+        
+        // Show toast with animation
         toast.style.transform = 'translateX(0)';
+        toast.classList.add('bounce-in');
         
-        // Hide after 3 seconds
+        // Hide after 4 seconds with animation
         setTimeout(() => {
             toast.style.transform = 'translateX(100%)';
-        }, 3000);
+            toast.classList.remove('bounce-in');
+        }, 4000);
     }
 
     hideLoading() {
