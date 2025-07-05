@@ -1,0 +1,30 @@
+nohup: ignoring input
+INFO:backend.database:Connected to MongoDB (async)
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Polling stopped
+Traceback (most recent call last):
+  File "/home/user/workspace/bot/bot.py", line 815, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/user/workspace/bot/bot.py", line 812, in main
+    await dp.start_polling(bot)
+  File "/home/user/.local/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 548, in start_polling
+    await asyncio.gather(*done)
+  File "/home/user/.local/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 339, in _polling
+    user: User = await bot.me()
+  File "/home/user/.local/lib/python3.10/site-packages/aiogram/client/bot.py", line 304, in me
+    self._me = await self.get_me()
+  File "/home/user/.local/lib/python3.10/site-packages/aiogram/client/bot.py", line 1755, in get_me
+    return await self(call, request_timeout=request_timeout)
+  File "/home/user/.local/lib/python3.10/site-packages/aiogram/client/bot.py", line 432, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+  File "/home/user/.local/lib/python3.10/site-packages/aiogram/client/session/base.py", line 257, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+  File "/home/user/.local/lib/python3.10/site-packages/aiogram/client/session/aiohttp.py", line 175, in make_request
+    response = self.check_response(
+  File "/home/user/.local/lib/python3.10/site-packages/aiogram/client/session/base.py", line 126, in check_response
+    raise TelegramUnauthorizedError(method=method, message=description)
+aiogram.exceptions.TelegramUnauthorizedError: Telegram server says - Unauthorized

@@ -1,0 +1,30 @@
+nohup: ignoring input
+INFO:backend.database:Connected to MongoDB (sync)
+ * Serving Flask app 'app'
+ * Debug mode: on
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with watchdog (inotify)
+INFO:backend.database:Connected to MongoDB (sync)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 145-379-277
+INFO:werkzeug:127.0.0.1 - - [05/Jul/2025 17:53:20] "HEAD / HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/home/user/workspace/config/config.py', reloading
+INFO:werkzeug: * Detected change in '/home/user/workspace/config/.backup.config.py', reloading
+INFO:werkzeug: * Detected change in '/home/user/workspace/config/.backup.config.py', reloading
+INFO:werkzeug: * Detected change in '/home/user/workspace/config/.backup.config.py', reloading
+INFO:werkzeug: * Restarting with watchdog (inotify)
+INFO:backend.database:Connected to MongoDB (sync)
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 145-379-277
+INFO:werkzeug:127.0.0.1 - - [05/Jul/2025 17:53:44] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [05/Jul/2025 17:53:44] "GET /static/js/app.js HTTP/1.1" 200 -
+ERROR:__main__:Auth verification error: not enough values to unpack (expected 2, got 1)
+INFO:werkzeug:127.0.0.1 - - [05/Jul/2025 17:53:45] "[31m[1mPOST /api/auth HTTP/1.1[0m" 401 -
+INFO:werkzeug:127.0.0.1 - - [05/Jul/2025 17:53:46] "[31m[1mGET /api/user/profile HTTP/1.1[0m" 401 -
+INFO:werkzeug:127.0.0.1 - - [05/Jul/2025 17:53:46] "[31m[1mGET /api/tasks?type=task HTTP/1.1[0m" 401 -
+INFO:werkzeug:127.0.0.1 - - [05/Jul/2025 17:53:59] "[31m[1mGET /api/tasks?type=mission HTTP/1.1[0m" 401 -
+INFO:werkzeug:127.0.0.1 - - [05/Jul/2025 17:54:09] "[31m[1mGET /api/transactions HTTP/1.1[0m" 401 -
