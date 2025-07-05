@@ -203,9 +203,12 @@ class TaskGramApp {
 
                 if (response.ok) {
                     tasks = await response.json();
+                } else {
+                    // Fallback to mock tasks if API fails
+                    tasks = this.getMockTasks(type);
                 }
             } else {
-                // Mock tasks for development
+                // Always load mock tasks when no auth token
                 tasks = this.getMockTasks(type);
             }
 
@@ -213,6 +216,7 @@ class TaskGramApp {
             
         } catch (error) {
             console.error('Failed to load tasks:', error);
+            // Always fallback to mock tasks on error
             this.renderTasks(this.getMockTasks(type), type);
         }
     }
