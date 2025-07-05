@@ -12,7 +12,7 @@ class Config:
     DB_NAME = "zoolbot"
     
     # Mini App Configuration
-    WEBAPP_URL = "http://a7e49360dea28053b7.blackbx.ai"  # Updated with actual URL
+    WEBAPP_URL = "http://a22328e0b7e3ff9643.blackbx.ai"  # Updated with new URL
     
     # Payment Configuration
     GEMS_TO_TON_RATE = 100000  # 100,000 💎 = 1 TON
