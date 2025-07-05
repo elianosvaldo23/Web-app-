@@ -135,6 +135,15 @@ async def start_command(message: Message):
         except ValueError:
             pass
     
+    # Ensure database is connected
+    if not db.db:
+        try:
+            db.connect()
+        except Exception as e:
+            logger.error(f"Database connection error: {e}")
+            await message.answer("❌ Error de conexión. Intenta de nuevo en unos momentos.")
+            return
+    
     # Check if user exists
     user = UserModel.get_user(user_id)
     if not user:
