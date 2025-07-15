@@ -102,7 +102,7 @@ const usePlayer = (urlParams) => {
                 args: {
                     action: 'TimeChanged',
                     args: {
-                        time: Math.round(time),
+                        time: Math.max(0, Math.round(time)),
                         duration,
                         device,
                     }
@@ -118,7 +118,7 @@ const usePlayer = (urlParams) => {
                 args: {
                     action: 'Seek',
                     args: {
-                        time: Math.round(time),
+                        time: Math.max(0, Math.round(time)),
                         duration,
                         device,
                     }
