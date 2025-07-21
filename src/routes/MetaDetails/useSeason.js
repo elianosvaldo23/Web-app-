@@ -14,7 +14,7 @@ const useSeason = (urlParams) => {
     const setSeason = React.useCallback((season) => {
         const nextQueryParams = new URLSearchParams(queryParams);
         nextQueryParams.set('season', season);
-        setQueryParams(nextQueryParams);
+        setQueryParams(nextQueryParams, { replace: true });
     }, [urlParams, queryParams]);
     return [season, setSeason];
 };

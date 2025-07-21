@@ -36,7 +36,7 @@ const StreamsList = ({ className, video, type, onEpisodeSearch, ...props }) => {
                 typeof video.season === 'number'
                     ? `?${new URLSearchParams({ 'season': video.season })}`
                     : ''}`;
-            navigate(navigateTo.replace('#', ''));
+            navigate(navigateTo.replace('#', ''), { replace: true });
         } else {
             navigate(-1);
         }
