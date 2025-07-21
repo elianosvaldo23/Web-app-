@@ -6,6 +6,7 @@ const { useTranslation } = require('react-i18next');
 const classnames = require('classnames');
 const { useServices } = require('stremio/services');
 const { withCoreSuspender } = require('stremio/common');
+const { useNavigateWithOrigin } = require('stremio/common/useNavigateWithOrigin');
 const { VerticalNavBar, HorizontalNavBar, DelayedRenderer, Image, MetaPreview, ModalDialog } = require('stremio/components');
 const StreamsList = require('./StreamsList');
 const VideosList = require('./VideosList');
@@ -18,6 +19,7 @@ const MetaDetails = () => {
     const { type, id, videoId } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
+    const { getStoredOrigin } = useNavigateWithOrigin();
     const { t } = useTranslation();
     const { core } = useServices();
     const urlParams = React.useMemo(() => ({
@@ -101,7 +103,7 @@ const MetaDetails = () => {
         typeof metaDetails.metaItem.content.content?.background === 'string' &&
         metaDetails.metaItem.content.content.background.length > 0
     ), [metaPath, metaDetails]);
-
+    const originPath = React.useMemo(() => getStoredOrigin(), [getStoredOrigin]);
     return (
         <div className={styles['metadetails-container']}>
             {
@@ -122,6 +124,7 @@ const MetaDetails = () => {
                 backButton={true}
                 fullscreenButton={true}
                 navMenu={true}
+                originPath={originPath}
             />
             <div className={styles['metadetails-content']}>
                 {

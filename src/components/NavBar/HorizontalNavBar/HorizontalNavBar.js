@@ -13,10 +13,14 @@ const NavMenu = require('./NavMenu');
 const styles = require('./styles');
 const { t } = require('i18next');
 
-const HorizontalNavBar = React.memo(({ className, route, query, title, backButton, searchBar, fullscreenButton, navMenu, ...props }) => {
+const HorizontalNavBar = React.memo(({ className, route, query, title, backButton, searchBar, fullscreenButton, navMenu, originPath, ...props }) => {
     const navigate = useNavigate();
     const backButtonOnClick = React.useCallback(() => {
-        navigate(-1);
+        if (originPath) {
+            navigate(originPath);
+        } else {
+            navigate(-1);
+        }
     }, []);
     const [fullscreen, requestFullscreen, exitFullscreen] = useFullscreen();
     const [isIOSPWA] = usePWA();
@@ -84,7 +88,8 @@ HorizontalNavBar.propTypes = {
     backButton: PropTypes.bool,
     searchBar: PropTypes.bool,
     fullscreenButton: PropTypes.bool,
-    navMenu: PropTypes.bool
+    navMenu: PropTypes.bool,
+    originPath: PropTypes.string,
 };
 
 module.exports = HorizontalNavBar;
