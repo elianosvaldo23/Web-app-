@@ -10,6 +10,7 @@ const { default: Icon } = require('@stremio/stremio-icons/react');
 const { Button, Image, Popup } = require('stremio/components');
 const useBinaryState = require('stremio/common/useBinaryState');
 const useProfile = require('stremio/common/useProfile');
+const { usePlatform } = require('stremio/common/Platform');
 const VideoPlaceholder = require('./VideoPlaceholder');
 const styles = require('./styles');
 
@@ -17,6 +18,7 @@ const Video = React.forwardRef(({ className, id, title, thumbnail, season, episo
     const routeFocused = useRouteFocused();
     const profile = useProfile();
     const navigate = useNavigate();
+    const platform = usePlatform();
     const { t } = useTranslation();
 
     const [menuOpen, , closeMenu, toggleMenu] = useBinaryState(false);
@@ -68,7 +70,7 @@ const Video = React.forwardRef(({ className, id, title, thumbnail, season, episo
                 // TODO: remove # from deeplinks in core
                 navigate(deepLinks.player.replace('#', ''));
             } else if (typeof deepLinks.metaDetailsStreams === 'string') {
-                navigate(deepLinks.metaDetailsStreams.replace('#', ''), { replace: true });
+                navigate(deepLinks.metaDetailsStreams.replace('#', ''), { replace: !platform.isMobile });
             }
         }
     }, [deepLinks]);
