@@ -92,7 +92,7 @@ const MetaDetails = () => {
         const searchVideoHash = encodeURIComponent(`${urlParams.id}:${season}:${episode}`);
         const url = location.pathname;
         const searchVideoPath = url.replace(encodeURIComponent(urlParams.videoId), searchVideoHash);
-        navigate(searchVideoPath);
+        navigate(searchVideoPath, { replace: true });
     }, [urlParams, location]);
 
     const renderBackgroundImageFallback = React.useCallback(() => null, []);
