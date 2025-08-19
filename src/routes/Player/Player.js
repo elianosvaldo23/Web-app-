@@ -248,6 +248,12 @@ const Player = () => {
         updateSettings({ subtitlesSize: size });
     }, [updateSettings]);
 
+    const onUpdateSubtitlesSize = React.useCallback((delta) => {
+        const sizeIndex = CONSTANTS.SUBTITLES_SIZES.indexOf(video.state.subtitlesSize);
+        const size = CONSTANTS.SUBTITLES_SIZES[Math.max(0, Math.min(CONSTANTS.SUBTITLES_SIZES.length - 1, sizeIndex + delta))];
+        onSubtitlesSizeChanged(size);
+    }, [video.state.subtitlesSize, onSubtitlesSizeChanged]);
+
     const onSubtitlesOffsetChanged = React.useCallback((offset) => {
         updateSettings({ subtitlesOffset: offset });
     }, [updateSettings]);
@@ -634,6 +640,14 @@ const Player = () => {
                     onIncreaseSubtitlesDelay();
                     break;
                 }
+                case 'Minus': {
+                    onUpdateSubtitlesSize(-1);
+                    break;
+                }
+                case 'Equal': {
+                    onUpdateSubtitlesSize(1);
+                    break;
+                }
                 case 'Escape': {
                     closeMenus();
                     !settings.escExitFullscreen && navigate(-1);
@@ -689,6 +703,7 @@ const Player = () => {
         toggleSideDrawer,
         onDecreaseSubtitlesDelay,
         onIncreaseSubtitlesDelay,
+        onUpdateSubtitlesSize,
     ]);
 
     React.useEffect(() => {
@@ -778,6 +793,8 @@ const Player = () => {
                     className={classnames(styles['layer'], styles['menu-layer'])}
                     stream={player?.selected?.stream}
                     playbackDevices={playbackDevices}
+                    extraSubtitlesTracks={video.state.extraSubtitlesTracks}
+                    selectedExtraSubtitlesTrackId={video.state.selectedExtraSubtitlesTrackId}
                 />
             </ContextMenu>
             <HorizontalNavBar
@@ -832,6 +849,7 @@ const Player = () => {
             <Indicator
                 className={classnames(styles['layer'], styles['indicator-layer'])}
                 videoState={video.state}
+                disabled={subtitlesMenuOpen}
             />
             {
                 nextVideoPopupOpen ?
@@ -914,6 +932,8 @@ const Player = () => {
                         className={classnames(styles['layer'], styles['menu-layer'])}
                         stream={player.selected.stream}
                         playbackDevices={playbackDevices}
+                        extraSubtitlesTracks={video.state.extraSubtitlesTracks}
+                        selectedExtraSubtitlesTrackId={video.state.selectedExtraSubtitlesTrackId}
                     />
                     :
                     null

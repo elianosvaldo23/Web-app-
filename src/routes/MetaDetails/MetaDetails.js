@@ -179,6 +179,8 @@ const MetaDetails = () => {
                                             trailerStreams={metaDetails.metaItem.content.content.trailerStreams}
                                             inLibrary={metaDetails.metaItem.content.content.inLibrary}
                                             toggleInLibrary={metaDetails.metaItem.content.content.inLibrary ? removeFromLibrary : addToLibrary}
+                                            metaId={metaDetails.metaItem.content.content.id}
+                                            ratingInfo={metaDetails.ratingInfo}
                                         />
                                     </React.Fragment>
                 }
