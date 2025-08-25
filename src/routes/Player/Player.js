@@ -117,12 +117,13 @@ const Player = () => {
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
     const handleNextVideoNavigation = React.useCallback((deepLinks) => {
+        // We use window.location.replace here instead navigate, to ensure complete player component remount
         if (deepLinks.player) {
             isNavigating.current = true;
-            navigate(deepLinks.player.replace('#', ''), { replace: true });
+            window.location.replace(deepLinks.player);
         } else if (deepLinks.metaDetailsStreams) {
             isNavigating.current = true;
-            navigate(deepLinks.metaDetailsStreams.replace('#', ''), { replace: true });
+            window.location.replace(deepLinks.metaDetailsStreams);
         }
     }, []);
 
