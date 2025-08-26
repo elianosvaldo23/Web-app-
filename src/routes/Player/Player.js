@@ -117,13 +117,12 @@ const Player = () => {
     }, [settings.subtitlesSize, settings.subtitlesOffset, settings.subtitlesTextColor, settings.subtitlesBackgroundColor, settings.subtitlesOutlineColor]);
 
     const handleNextVideoNavigation = React.useCallback((deepLinks) => {
-        // We use window.location.replace here instead navigate, to ensure complete player component remount
         if (deepLinks.player) {
             isNavigating.current = true;
-            window.location.replace(deepLinks.player);
+            navigate(deepLinks.player.replace('#', ''), { replace: true });
         } else if (deepLinks.metaDetailsStreams) {
             isNavigating.current = true;
-            window.location.replace(deepLinks.metaDetailsStreams);
+            navigate(deepLinks.metaDetailsStreams.replace('#', ''), { replace: true });
         }
     }, []);
 
@@ -408,7 +407,7 @@ const Player = () => {
     }, [settings.subtitlesOutlineColor]);
 
     React.useEffect(() => {
-        !seeking && timeChanged(video.state.time, video.state.duration, video.state.manifest?.name);
+        !isNavigating.current && !seeking && timeChanged(video.state.time, video.state.duration, video.state.manifest?.name);
     }, [video.state.time, video.state.duration, video.state.manifest, seeking]);
 
     React.useEffect(() => {
