@@ -45,7 +45,7 @@ const Player = ({ urlParams, queryParams }) => {
     const routeFocused = useRouteFocused();
     const toast = useToast();
 
-    const [volume, setVolume] = React.useState(video.state?.volume || 0);
+    const lastVolumeRef = React.useRef(video.state?.volume || 0);
     const [seeking, setSeeking] = React.useState(false);
 
     const [casting, setCasting] = React.useState(() => {
@@ -535,7 +535,7 @@ const Player = ({ urlParams, queryParams }) => {
 
     React.useEffect(() => {
         if (video?.state?.volume) {
-            setVolume(video.state.volume);
+            lastVolumeRef.current = video.state.volume;
         }
     }, [video.state.volume]);
 
@@ -640,7 +640,7 @@ const Player = ({ urlParams, queryParams }) => {
                         if (video.state.volume) {
                             onVolumeChangeRequested(0);
                         } else {
-                            onVolumeChangeRequested(volume);
+                            onVolumeChangeRequested(lastVolumeRef.current);
                         }
                     }
 
