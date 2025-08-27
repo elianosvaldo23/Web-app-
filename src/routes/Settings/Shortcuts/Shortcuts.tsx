@@ -41,6 +41,11 @@ const Shortcuts = forwardRef<HTMLDivElement>((_, ref) => {
                     <kbd>↓</kbd>
                 </div>
             </Option>
+            <Option label={'SETTINGS_SHORTCUT_MUTE'}>
+                <div className={styles['shortcut-container']}>
+                    <kbd>M</kbd>
+                </div>
+            </Option>
             <Option label={'SETTINGS_SHORTCUT_MENU_SUBTITLES'}>
                 <div className={styles['shortcut-container']}>
                     <kbd>S</kbd>
