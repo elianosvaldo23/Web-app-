@@ -45,6 +45,7 @@ const Player = ({ urlParams, queryParams }) => {
     const routeFocused = useRouteFocused();
     const toast = useToast();
 
+    const [volume, setVolume] = React.useState(video.state?.volume || 0);
     const [seeking, setSeeking] = React.useState(false);
 
     const [casting, setCasting] = React.useState(() => {
@@ -532,6 +533,12 @@ const Player = ({ urlParams, queryParams }) => {
         }
     }, [settings.pauseOnMinimize, shell.windowClosed, shell.windowHidden]);
 
+    React.useEffect(() => {
+        if (video?.state?.volume) {
+            setVolume(video.state.volume);
+        }
+    }, [video.state.volume]);
+
     React.useLayoutEffect(() => {
         const onKeyDown = (event) => {
             switch (event.code) {
@@ -626,6 +633,17 @@ const Player = ({ urlParams, queryParams }) => {
                 }
                 case 'KeyH': {
                     onIncreaseSubtitlesDelay();
+                    break;
+                }
+                case 'KeyM': {
+                    if (!menusOpen && !nextVideoPopupOpen && video.state.volume !== null) {
+                        if (video.state.volume) {
+                            onVolumeChangeRequested(0);
+                        } else {
+                            onVolumeChangeRequested(volume);
+                        }
+                    }
+
                     break;
                 }
                 case 'Minus': {
