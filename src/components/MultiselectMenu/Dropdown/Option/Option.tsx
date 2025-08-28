@@ -8,8 +8,8 @@ import Icon from '@stremio/stremio-icons/react';
 
 type Props = {
     option: MultiselectMenuOption;
-    selectedValue?: string | number;
-    onSelect: (value: string | number) => void;
+    selectedValue?: any;
+    onSelect: (value: any) => void;
 };
 
 const Option = forwardRef<HTMLButtonElement, Props>(({ option, selectedValue, onSelect }, ref) => {

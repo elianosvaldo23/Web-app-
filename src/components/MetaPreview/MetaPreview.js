@@ -17,6 +17,7 @@ const ActionButton = require('./ActionButton');
 const MetaLinks = require('./MetaLinks');
 const MetaPreviewPlaceholder = require('./MetaPreviewPlaceholder');
 const styles = require('./styles');
+const { Ratings } = require('./Ratings');
 
 const ALLOWED_LINK_REDIRECTS = [
     routesRegexp.search.regexp,
@@ -24,7 +25,7 @@ const ALLOWED_LINK_REDIRECTS = [
     routesRegexp.metadetails.regexp
 ];
 
-const MetaPreview = React.forwardRef(({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary }, ref) => {
+const MetaPreview = React.forwardRef(({ className, compact, name, logo, background, runtime, releaseInfo, released, description, deepLinks, links, trailerStreams, inLibrary, toggleInLibrary, ratingInfo }, ref) => {
     const { t } = useTranslation();
     const [shareModalOpen, openShareModal, closeShareModal] = useBinaryState(false);
     const linksGroups = React.useMemo(() => {
@@ -233,6 +234,15 @@ const MetaPreview = React.forwardRef(({ className, compact, name, logo, backgrou
                         null
                 }
                 {
+                    !compact && ratingInfo !== null ?
+                        <Ratings
+                            ratingInfo={ratingInfo}
+                            className={styles['ratings']}
+                        />
+                        :
+                        null
+                }
+                {
                     linksGroups.has(CONSTANTS.SHARE_LINK_CATEGORY) && !compact ?
                         <React.Fragment>
                             <ActionButton
@@ -287,7 +297,8 @@ MetaPreview.propTypes = {
     })),
     trailerStreams: PropTypes.array,
     inLibrary: PropTypes.bool,
-    toggleInLibrary: PropTypes.func
+    toggleInLibrary: PropTypes.func,
+    ratingInfo: PropTypes.object,
 };
 
 module.exports = MetaPreview;

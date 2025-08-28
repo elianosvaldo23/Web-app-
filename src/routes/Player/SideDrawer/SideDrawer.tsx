@@ -1,6 +1,6 @@
 // Copyright (C) 2017-2024 Smart code 203358507
 
-import React, { useMemo, useCallback, useState, forwardRef, memo } from 'react';
+import React, { useMemo, useCallback, useState, forwardRef, memo, useRef } from 'react';
 import classNames from 'classnames';
 import Icon from '@stremio/stremio-icons/react';
 import { useServices } from 'stremio/services';
@@ -14,11 +14,14 @@ type Props = {
     seriesInfo: SeriesInfo;
     metaItem: MetaItem;
     closeSideDrawer: () => void;
+    selected: string;
+    transitionEnded: boolean;
 };
 
-const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, className, closeSideDrawer, ...props }: Props, ref) => {
+const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, className, closeSideDrawer, selected, ...props }: Props, ref) => {
     const { core } = useServices();
     const [season, setSeason] = useState<number>(seriesInfo?.season);
+    const selectedVideoRef = useRef<HTMLDivElement>(null);
     const metaItem = useMemo(() => {
         return seriesInfo ?
             {
@@ -75,8 +78,14 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
         event.stopPropagation();
     };
 
+    const onTransitionEnd = () => {
+        selectedVideoRef.current?.scrollIntoView({
+            behavior: 'smooth',
+        });
+    };
+
     return (
-        <div ref={ref} className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown}>
+        <div ref={ref} className={classNames(styles['side-drawer'], className)} onMouseDown={onMouseDown} onTransitionEnd={onTransitionEnd}>
             <div className={styles['close-button']} onClick={closeSideDrawer}>
                 <Icon className={styles['icon']} name={'chevron-forward'} />
             </div>
@@ -105,6 +114,7 @@ const SideDrawer = memo(forwardRef<HTMLDivElement, Props>(({ seriesInfo, classNa
                             {videos.map((video, index) => (
                                 <Video
                                     key={index}
+                                    ref={video.id === selected ? selectedVideoRef : null}
                                     className={styles['video']}
                                     id={video.id}
                                     title={video.title}

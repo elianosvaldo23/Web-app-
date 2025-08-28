@@ -21,6 +21,7 @@ type Settings = {
     hardwareDecoding: boolean,
     escExitFullscreen: boolean,
     interfaceLanguage: string,
+    quitOnClose: boolean,
     hideSpoilers: boolean,
     gamepadSupport: boolean,
     nextVideoNotificationDuration: number,
@@ -42,6 +43,7 @@ type Settings = {
     subtitlesSize: number,
     subtitlesTextColor: string,
     surroundSound: boolean,
+    pauseOnMinimize: boolean,
 };
 
 type Profile = {

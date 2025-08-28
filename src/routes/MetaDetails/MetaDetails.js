@@ -1,6 +1,7 @@
 // Copyright (C) 2017-2023 Smart code 203358507
 
 const React = require('react');
+const { useTranslation } = require('react-i18next');
 const PropTypes = require('prop-types');
 const classnames = require('classnames');
 const { useServices, useContentGamepadNavigation } = require('stremio/services');
@@ -15,6 +16,7 @@ const styles = require('./styles');
 
 const MetaDetails = ({ urlParams, queryParams }) => {
     const contentRef = React.useRef(null);
+    const { t } = useTranslation();
     const { core } = useServices();
     const metaDetails = useMetaDetails(urlParams);
     const [season, setSeason] = useSeason(urlParams, queryParams);
@@ -131,20 +133,20 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                         <DelayedRenderer delay={500}>
                             <div className={styles['meta-message-container']}>
                                 <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                                <div className={styles['message-label']}>No meta was selected!</div>
+                                <div className={styles['message-label']}>{t('ERR_NO_META_SELECTED')}</div>
                             </div>
                         </DelayedRenderer>
                         :
                         metaDetails.metaItem === null ?
                             <div className={styles['meta-message-container']}>
                                 <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                                <div className={styles['message-label']}>No addons were requested for this meta!</div>
+                                <div className={styles['message-label']}>{t('ERR_NO_ADDONS_FOR_META')}</div>
                             </div>
                             :
                             metaDetails.metaItem.content.type === 'Err' ?
                                 <div className={styles['meta-message-container']}>
                                     <Image className={styles['image']} src={require('/images/empty.png')} alt={' '} />
-                                    <div className={styles['message-label']}>No metadata was found!</div>
+                                    <div className={styles['message-label']}>{t('ERR_NO_META_FOUND')}</div>
                                 </div>
                                 :
                                 metaDetails.metaItem.content.type === 'Loading' ?
@@ -168,6 +170,8 @@ const MetaDetails = ({ urlParams, queryParams }) => {
                                             trailerStreams={metaDetails.metaItem.content.content.trailerStreams}
                                             inLibrary={metaDetails.metaItem.content.content.inLibrary}
                                             toggleInLibrary={metaDetails.metaItem.content.content.inLibrary ? removeFromLibrary : addToLibrary}
+                                            metaId={metaDetails.metaItem.content.content.id}
+                                            ratingInfo={metaDetails.ratingInfo}
                                         />
                                     </React.Fragment>
                 }

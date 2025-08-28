@@ -21,7 +21,6 @@ const mapSelectableInputs = (discover, t) => {
             window.location = value;
         }
     };
-    const selectedCatalog = discover.selectable.catalogs.find(({ selected }) => selected);
     const catalogSelect = {
         options: discover.selectable.catalogs
             .map(({ id, name, addon, deepLinks }) => ({
@@ -29,9 +28,9 @@ const mapSelectableInputs = (discover, t) => {
                 label: t.catalogTitle({ addon, id, name }),
                 title: `${name} (${addon.manifest.name})`
             })),
-        value: discover.selected?.request.path.id
-            ? selectedCatalog.deepLinks.discover
-            : undefined,
+        value: discover.selectable.catalogs
+            .filter(({ selected }) => selected)
+            .map(({ deepLinks }) => deepLinks.discover),
         title: discover.selected !== null
             ? () => {
                 const selectableCatalog = discover.selectable.catalogs
@@ -49,7 +48,7 @@ const mapSelectableInputs = (discover, t) => {
         return {
             isRequired: isRequired,
             options: options.map(({ value, deepLinks }) => ({
-                label: typeof value === 'string' ? t.stringWithPrefix(value) : t.string('NONE'),
+                label: typeof value === 'string' ? t.string(value) : t.string('NONE'),
                 value: JSON.stringify({
                     href: deepLinks.discover,
                     value
@@ -60,8 +59,8 @@ const mapSelectableInputs = (discover, t) => {
                 value: selectedExtra.value,
             }),
             title: options.some(({ selected, value }) => selected && value === null) ?
-                () => t.stringWithPrefix(name, 'SELECT_')
-                : t.stringWithPrefix(selectedExtra.value),
+                () => t.string(name.toUpperCase())
+                : t.string(selectedExtra.value),
             onSelect: (value) => {
                 const { href } = JSON.parse(value);
                 window.location = href;
