@@ -287,6 +287,22 @@ const usePlayerOptions = (profile: Profile) => {
         }
     }), [profile.settings]);
 
+    const hardwareRenderingToggle = useMemo(() => ({
+        checked: profile.settings.hardwareRendering,
+        onClick: () => {
+            core.transport.dispatch({
+                action: 'Ctx',
+                args: {
+                    action: 'UpdateSettings',
+                    args: {
+                        ...profile.settings,
+                        hardwareRendering: !profile.settings.hardwareRendering
+                    }
+                }
+            });
+        }
+    }), [profile.settings]);
+
     const pauseOnMinimizeToggle = useMemo(() => ({
         checked: profile.settings.pauseOnMinimize,
         onClick: () => {
@@ -318,6 +334,7 @@ const usePlayerOptions = (profile: Profile) => {
         bingeWatchingToggle,
         playInBackgroundToggle,
         hardwareDecodingToggle,
+        hardwareRenderingToggle,
         pauseOnMinimizeToggle,
     };
 };

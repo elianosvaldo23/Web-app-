@@ -26,6 +26,7 @@ const Player = forwardRef<HTMLDivElement, Props>(({ profile }: Props, ref) => {
         bingeWatchingToggle,
         playInBackgroundToggle,
         hardwareDecodingToggle,
+        hardwareRenderingToggle,
         pauseOnMinimizeToggle,
     } = usePlayerOptions(profile);
 
@@ -126,6 +127,15 @@ const Player = forwardRef<HTMLDivElement, Props>(({ profile }: Props, ref) => {
                             <Toggle
                                 tabIndex={-1}
                                 {...hardwareDecodingToggle}
+                            />
+                        </Option>
+                }
+                {
+                    shell.active &&
+                        <Option label={'SETTINGS_HWREN'}>
+                            <Toggle
+                                tabIndex={-1}
+                                {...hardwareRenderingToggle}
                             />
                         </Option>
                 }
