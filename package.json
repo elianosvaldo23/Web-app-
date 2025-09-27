@@ -11,7 +11,7 @@
         "build": "webpack --mode production",
         "test": "jest",
         "lint": "eslint src",
-        "scan-translations": "npx jest ./tests/i18nScan.test.js"
+        "scan-translations": "pnpx jest ./tests/i18nScan.test.js"
     },
     "dependencies": {
         "@babel/runtime": "7.26.0",
