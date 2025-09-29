@@ -112,11 +112,11 @@ importers:
         specifier: ^9.16.0
         version: 9.36.0
       '@stylistic/eslint-plugin':
-        specifier: ^2.11.0
-        version: 2.13.0(eslint@9.36.0(jiti@1.21.7))(typescript@5.9.2)
+        specifier: ^5.4.0
+        version: 5.4.0(eslint@9.36.0(jiti@1.21.7))
       '@stylistic/eslint-plugin-jsx':
-        specifier: ^2.11.0
-        version: 2.13.0(eslint@9.36.0(jiti@1.21.7))
+        specifier: ^4.4.1
+        version: 4.4.1(eslint@9.36.0(jiti@1.21.7))
       '@types/hat':
         specifier: ^0.0.4
         version: 0.0.4
@@ -1311,17 +1311,17 @@ packages:
   '@stremio/stremio-video@0.0.62':
     resolution: {integrity: sha512-lzm1sWLVN9Z3qr8mZm3MRLw7S9v7QYIe6swWava3Ao4sjhVc8jVlwzF5un0LcHxY8hQe0OjK7TDCvPRbw+spBQ==}
 
-  '@stylistic/eslint-plugin-jsx@2.13.0':
-    resolution: {integrity: sha512-mRAJPYTASnjMZ3Z1hxMuRNI6xcvKNGvPN6oNiR30DG3CdIt/STWkDhVs+nrcdcKh7atGlK5yHhnCfkmoJmHTbw==}
+  '@stylistic/eslint-plugin-jsx@4.4.1':
+    resolution: {integrity: sha512-83SInq4u7z71vWwGG+6ViOtlOmZ6tSrDkMPhrvdBBTGMLA0gs22WSdhQ4vZP3oJ5Xg4ythvqeUiFSedvVxzhyA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
-      eslint: '>=8.40.0'
+      eslint: '>=9.0.0'
 
-  '@stylistic/eslint-plugin@2.13.0':
-    resolution: {integrity: sha512-RnO1SaiCFHn666wNz2QfZEFxvmiNRqhzaMXHXxXXKt+MEP7aajlPxUSMIQpKAaJfverpovEYqjBOXDq6dDcaOQ==}
+  '@stylistic/eslint-plugin@5.4.0':
+    resolution: {integrity: sha512-UG8hdElzuBDzIbjG1QDwnYH0MQ73YLXDFHgZzB4Zh/YJfnw8XNsloVtytqzx0I2Qky9THSdpTmi8Vjn/pf/Lew==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
-      eslint: '>=8.40.0'
+      eslint: '>=9.0.0'
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
     resolution: {integrity: sha512-lR8q/9W7hZpMWweNiAKU7NQerBnzQQLvi8qnTDU/fxItPhtZVMbPV3lbCwjhIlNBe9Bbr5V+KHshvWmVSG9cxQ==}
@@ -6581,7 +6581,7 @@ snapshots:
       video-name-parser: 1.4.6
       vtt.js: https://codeload.github.com/jaruba/vtt.js/tar.gz/84d33d157848407d790d78423dacc41a096294f0
 
-  '@stylistic/eslint-plugin-jsx@2.13.0(eslint@9.36.0(jiti@1.21.7))':
+  '@stylistic/eslint-plugin-jsx@4.4.1(eslint@9.36.0(jiti@1.21.7))':
     dependencies:
       eslint: 9.36.0(jiti@1.21.7)
       eslint-visitor-keys: 4.2.1
@@ -6589,17 +6589,15 @@ snapshots:
       estraverse: 5.3.0
       picomatch: 4.0.3
 
-  '@stylistic/eslint-plugin@2.13.0(eslint@9.36.0(jiti@1.21.7))(typescript@5.9.2)':
+  '@stylistic/eslint-plugin@5.4.0(eslint@9.36.0(jiti@1.21.7))':
     dependencies:
-      '@typescript-eslint/utils': 8.44.1(eslint@9.36.0(jiti@1.21.7))(typescript@5.9.2)
+      '@eslint-community/eslint-utils': 4.9.0(eslint@9.36.0(jiti@1.21.7))
+      '@typescript-eslint/types': 8.44.1
       eslint: 9.36.0(jiti@1.21.7)
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
       estraverse: 5.3.0
       picomatch: 4.0.3
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
     dependencies:
