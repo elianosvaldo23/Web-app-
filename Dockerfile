@@ -1,31 +1,58 @@
-# Stremio Node 20.x
-# the node version for running Stremio Web
+# Multi-stage build for Stremio Web
 ARG NODE_VERSION=20-alpine
 FROM node:$NODE_VERSION AS base
 
 # Meta
-LABEL Description="Stremio Web" Vendor="Smart Code OOD" Version="1.0.0"
+LABEL Description="Stremio Web - Railway Optimized" \
+      Vendor="Smart Code OOD" \
+      Version="5.0.0-beta.27" \
+      Maintainer="Railway Deployment"
 
-RUN mkdir -p /var/www/stremio-web
-WORKDIR /var/www/stremio-web
+# Set working directory
+WORKDIR /app
 
-# Install app dependencies
-FROM base AS prebuild
+# Install dependencies stage
+FROM base AS deps
+COPY package*.json ./
+COPY pnpm-lock.yaml* ./
+RUN apk add --no-cache git python3 make g++ && \
+    npm install -g pnpm && \
+    pnpm install --frozen-lockfile --production=false
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache git
-WORKDIR /var/www/stremio-web
+# Build stage
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm install
+
+# Build the application
 RUN npm run build
 
-# Bundle app source
-FROM base AS final
+# Production stage
+FROM base AS runner
+WORKDIR /app
 
-WORKDIR /var/www/stremio-web
-COPY . .
-COPY --from=prebuild /var/www/stremio-web/node_modules ./node_modules
-COPY --from=prebuild /var/www/stremio-web/build ./build
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 stremio
 
+# Copy built application
+COPY --from=builder --chown=stremio:nodejs /app/dist ./dist
+COPY --from=builder --chown=stremio:nodejs /app/server.js ./
+COPY --from=builder --chown=stremio:nodejs /app/package.json ./
+
+# Install only production dependencies
+COPY --from=deps /app/node_modules ./node_modules
+
+# Switch to non-root user
+USER stremio
+
+# Expose port (Railway will override with $PORT)
 EXPOSE 8080
-CMD ["node", "http_server.js"]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:8080/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Start command
+CMD ["node", "server.js"]

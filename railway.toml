@@ -1,0 +1,16 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npm run start-prod"
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+
+[variables]
+NODE_ENV = "production"
+PORT = "$PORT"
+
+[nixpacks]
+providers = ["node"]
