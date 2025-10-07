@@ -36,7 +36,7 @@ i18n
 const root = ReactDOM.createRoot(document.getElementById('app'));
 root.render(<App />);
 
-if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator && process.env.SERVICE_WORKER_DISABLED !== 'true') {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
             .catch((registrationError) => {
