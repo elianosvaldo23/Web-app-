@@ -30,6 +30,13 @@ npm start
 npm run build
 ```
 
+### Run with Docker
+
+```bash
+docker build -t stremio-web .
+docker run -p 8080:8080 stremio-web
+```
+
 ## Screenshots
 
 ### Board
